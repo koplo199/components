@@ -18,13 +18,22 @@ env:
             {repo: doitsujin/dxvk, workflow: artifacts.yml, branch: master}, 
             {repo: HansKristian-Work/vkd3d-proton, workflow: artifacts.yml, branch: master}, 
             {repo: koplo199/components,  workflow: blank.yml, branch: main} 
-          ]"
+            ]"
 
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
+  build-matrix:
+    runs-on: ubuntu-latest
+    steps:
+      - id: set-matrix
+        run: echo {{ env.MATRIX }}
+    outputs:
+      version_matrix: ${{ steps.set-matrix.outputs.version_matrix }}
+
   # This workflow contains a single job called "download"
   download:
+    needs: build-matrix
     strategy:
       matrix:
         components: ${{ env.MATRIX }}
