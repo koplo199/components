@@ -16,7 +16,7 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
-  build:
+  download:
     strategy:
       matrix:
         components: [ {repo: doitsujin/dxvk, workflow: artifacts.yml, branch: master}, {repo: HansKristian-Work/vkd3d-proton, workflow: artifacts.yml, branch: master} ]
@@ -26,7 +26,8 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: Download artifact
-        uses: dawidd6/action-download-artifact@v2
+        id: download-artifact
+        uses: koplo199/action-download-artifact@v2
         with:
           github_token: ${{secrets.GITHUB_TOKEN}}
           # Optional, workflow file name or ID
@@ -43,5 +44,11 @@ jobs:
           # default fail
           if_no_artifact_found: warn
 
+      - name : Print sha
+        run: echo ${{ steps.download-artifact.outputs.head_sha }}
+
+  # This workflow contains a single job called "build"
+  build:
+    needs: download
       - name: Display structure of downloaded files
         run: ls -la
