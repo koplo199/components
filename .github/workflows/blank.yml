@@ -41,7 +41,7 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
 
-    if: matrix.components.workflow != ""
+    if:  ${{ matrix.components.workflow }} != ""
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: Download artifact
