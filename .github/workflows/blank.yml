@@ -32,7 +32,7 @@ jobs:
           # Optional, will use the specified branch. Defaults to all branches
           branch: master
           # Optional, defaults to current repo
-          repo: https://github.com/doitsujin/dxvk
+          repo: "https://github.com/doitsujin/dxvk"
           # Optional, check the workflow run to whether it has an artifact
           # then will get the last available artifact from the previous workflow
           # default false, just try to download from the last one
