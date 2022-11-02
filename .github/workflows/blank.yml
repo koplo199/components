@@ -15,7 +15,7 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
+  # This workflow contains a single job called "download"
   download:
     strategy:
       matrix:
@@ -48,8 +48,9 @@ jobs:
         run: echo ${{ steps.download-artifact.outputs.head_sha }}
 
   # This workflow contains a single job called "build"
-  build:
+  upload:
+    runs-on: ubuntu-latest
     needs: download
-      steps:
+    steps:
       - name: Display structure of downloaded files
         run: ls -la
