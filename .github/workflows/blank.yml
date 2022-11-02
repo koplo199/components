@@ -60,17 +60,20 @@ jobs:
           # Optional, a directory where to extract artifact(s), defaults to the current directory
           path: ${{ matrix.components.name-prefix }}
 
-      - name: yq - portable yaml processor
-        uses: mikefarah/yq@v4.29.2
-
       - name: Check out repository code
         uses: actions/checkout@v3
         with:
           path: "repository"
 
+      - name: yq - portable yaml processor
+        uses: mikefarah/yq@v4.29.2
+        with:
+          cmd: yq -v
+
       - name : Print sha
         run: |
-          ls -la
+          ls -la dxvk
+          ls -la repository
           echo ${{ steps.download-artifact.outputs.head_sha }}
 
   # This workflow contains a single job called "build"
