@@ -41,8 +41,6 @@ jobs:
           # then will get the last available artifact from the previous workflow
           # default false, just try to download from the last one
           check_artifacts:  true
-          # default fail
-          if_no_artifact_found: warn
 
       - name : Print sha
         run: echo ${{ steps.download-artifact.outputs.head_sha }}
