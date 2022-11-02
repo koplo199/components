@@ -14,7 +14,7 @@ on:
   workflow_dispatch:
 
 env:
-  MATRIX: '[{\"repo\":\"doitsujin/dxvk\",\"workflow\":\"artifacts.yml\",\"branch\":\"master\"}]'
+  MATRIX: '[{"repo":"doitsujin/dxvk","workflow":"artifacts.yml","branch":"master"}]'
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - id: set-matrix
-        run: echo "version_matrix=${{ env.MATRIX }}" >> $GITHUB_OUTPUT
+        run: echo version_matrix=${{ env.MATRIX }} >> $GITHUB_OUTPUT
     outputs:
       version_matrix: ${{ steps.set-matrix.outputs.version_matrix }}
 
