@@ -83,7 +83,7 @@ jobs:
           ls -la our-repository
           ls -la other-repository
           cd other-repository
-          git merge-base --is-ancestor ${{ steps.download-artifact.outputs.head_sha }} v1.10.3; echo $?
+          git merge-base --is-ancestor ${{ steps.download-artifact.outputs.head_sha }} e4fd5e9e8d335e8a2c0814829207cbd421f7e40e; echo $?
           git merge-base --is-ancestor ${{ steps.download-artifact.outputs.head_sha }} master; echo $?
           echo ${{ steps.download-artifact.outputs.head_sha }}
 
