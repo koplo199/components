@@ -14,11 +14,10 @@ on:
   workflow_dispatch:
 
 env:
-  MATRIX: '[
-            {"repo" : "doitsujin/dxvk"                , "workflow": "artifacts.yml", "branch": "master"},
-            {"repo" : "HansKristian-Work/vkd3d-proton", "workflow": "artifacts.yml", "branch": "master"}, 
-            {"repo" : "koplo199/components"           , "workflow": "blank.yml"    , "branch": "main"},
-            {"repo" : "bottledevs/components"         , "workflow": ""             , "branch": "main"} 
+  COMPONENTS: '[
+            {"repo" : "doitsujin/dxvk"                , "workflow": "artifacts.yml", "branch": "master", "name-prefix": "dxvk"        , "Category": "dxvk" , "Sub-category": ""},
+            {"repo" : "HansKristian-Work/vkd3d-proton", "workflow": "artifacts.yml", "branch": "master", "name-prefix": "vkd3d-proton", "Category": "vkd3d", "Sub-category": ""}, 
+            {"repo" : "koplo199/components"           , "workflow": "blank.yml"    , "branch": "main"  , "name-prefix": ""            , "Category": ""     , "Sub-category": ""},
           ]'
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
@@ -27,7 +26,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - id: set-matrix
-        run: echo 'version_matrix=${{ env.MATRIX }}' >> $GITHUB_OUTPUT
+        run: echo 'version_matrix=${{ env.COMPONENTS }}' >> $GITHUB_OUTPUT
     outputs:
       version_matrix: ${{ steps.set-matrix.outputs.version_matrix }}
 
@@ -40,7 +39,6 @@ jobs:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
     continue-on-error: true
-
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: Download artifact
@@ -60,8 +58,16 @@ jobs:
           # default false, just try to download from the last one
           check_artifacts:  true
 
+      - name: yq - portable yaml processor
+        uses: mikefarah/yq@v4.29.2
+
+      - name: Check out repository code
+        uses: actions/checkout@v3
+
       - name : Print sha
-        run: echo ${{ steps.download-artifact.outputs.head_sha }}
+        run: |
+          ls -la
+          echo ${{ steps.download-artifact.outputs.head_sha }}
 
   # This workflow contains a single job called "build"
   upload:
