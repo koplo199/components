@@ -19,7 +19,7 @@ jobs:
   download:
     strategy:
       matrix:
-        components: [ {repo: doitsujin/dxvk, workflow: artifacts.yml, branch: master}, {repo: HansKristian-Work/vkd3d-proton, workflow: artifacts.yml, branch: master}, {repo: koplo199/components, workflow: artifacts.yml, branch: master} ]
+        components: [ {repo: doitsujin/dxvk, workflow: artifacts.yml, branch: master}, {repo: HansKristian-Work/vkd3d-proton, workflow: artifacts.yml, branch: master}, {repo: koplo199/components, workflow: blank.yml, branch: main} ]
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
