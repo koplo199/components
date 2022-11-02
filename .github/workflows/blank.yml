@@ -63,17 +63,28 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v3
         with:
-          path: "repository"
+          path: "our-repository"
 
-      - name: yq - portable yaml processor
-        uses: mikefarah/yq@v4.29.2
+      - name: Check out repository code
+        uses: actions/checkout@v3
         with:
-          cmd: yq -v
+          repository: ${{ matrix.components.repo }}
+          path: "other-repository"
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install python3-pip
+          pip3 install yq
 
       - name : Print sha
         run: |
           ls -la dxvk
-          ls -la repository
+          ls -la our-repository
+          ls -la other-repository
+          cd other-repository
+          git merge-base --is-ancestor ${{ steps.download-artifact.outputs.head_sha }} v10.1.3; echo $?
+          git merge-base --is-ancestor ${{ steps.download-artifact.outputs.head_sha }} master; echo $?
           echo ${{ steps.download-artifact.outputs.head_sha }}
 
   # This workflow contains a single job called "build"
