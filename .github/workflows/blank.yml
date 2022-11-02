@@ -22,6 +22,7 @@ jobs:
         components: [ {repo: doitsujin/dxvk, workflow: artifacts.yml, branch: master}, {repo: HansKristian-Work/vkd3d-proton, workflow: artifacts.yml, branch: master}, {repo: koplo199/components, workflow: blank.yml, branch: main} ]
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
+    continue-on-error: true
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
