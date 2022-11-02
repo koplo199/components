@@ -17,6 +17,9 @@ on:
 jobs:
   # This workflow contains a single job called "build"
   build:
+    strategy:
+      matrix:
+        components: [ {repo: doitsujin/dxvk, workflow: artifacts.yml, branch: master}, {repo: HansKristian-Work/vkd3d-proton, workflow: artifacts.yml, branch: master} ]
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
@@ -28,15 +31,17 @@ jobs:
           github_token: ${{secrets.GITHUB_TOKEN}}
           # Optional, workflow file name or ID
           # If not specified, will be inferred from run_id (if run_id is specified), or will be the current workflow
-          workflow: artifacts.yml 
+          workflow: ${{ matrix.components.workflow }}
           # Optional, will use the specified branch. Defaults to all branches
-          branch: master
+          branch: ${{ matrix.components.branch }}
           # Optional, defaults to current repo
-          repo: doitsujin/dxvk
+          repo: ${{ matrix.components.repo }}
           # Optional, check the workflow run to whether it has an artifact
           # then will get the last available artifact from the previous workflow
           # default false, just try to download from the last one
           check_artifacts:  true
+          # default fail
+          if_no_artifact_found: warn
 
       - name: Display structure of downloaded files
-        run: ls -R
+        run: ls -la
