@@ -57,12 +57,16 @@ jobs:
           # then will get the last available artifact from the previous workflow
           # default false, just try to download from the last one
           check_artifacts:  true
+          # Optional, a directory where to extract artifact(s), defaults to the current directory
+          path: ${{ matrix.components.name-prefix }}
 
       - name: yq - portable yaml processor
         uses: mikefarah/yq@v4.29.2
 
       - name: Check out repository code
         uses: actions/checkout@v3
+        with:
+          path: "repository"
 
       - name : Print sha
         run: |
