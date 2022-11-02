@@ -27,7 +27,7 @@ jobs:
     steps:
       - name: Download artifact
         id: download-artifact
-        uses: koplo199/action-download-artifact@v1.0
+        uses: koplo199/action-download-artifact@1.0
         with:
           github_token: ${{secrets.GITHUB_TOKEN}}
           # Optional, workflow file name or ID
