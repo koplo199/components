@@ -15,11 +15,13 @@ on:
 
 env:
   COMPONENTS: '[
-            {"repo" : "doitsujin/dxvk"                , "workflow": "artifacts.yml"          , "branch": "master", "name-prefix": "dxvk"        , "version-prefix": "v"    , "Category": "dxvk" , "Sub-category": ""},
-            {"repo" : "HansKristian-Work/vkd3d-proton", "workflow": "artifacts.yml"          , "branch": "master", "name-prefix": "vkd3d-proton", "version-prefix": "v"    , "Category": "vkd3d", "Sub-category": ""},
-            {"repo" : "bottlesdevs/wine"              , "workflow": "build-soda-arch.yml"    , "branch": "soda"  , "name-prefix": "soda"        , "version-prefix": "soda" , "Category": ""     , "Sub-category": ""},
-            {"repo" : "bottlesdevs/wine"              , "workflow": "build-caffe-arch.yml"   , "branch": "caffe" , "name-prefix": "caffe"       , "version-prefix": "caffe", "Category": ""     , "Sub-category": ""},
-            {"repo" : "koplo199/components"           , "workflow": "blank.yml"              , "branch": "main"  , "name-prefix": ""            , "version-prefix": ""     , "Category": ""     , "Sub-category": ""},
+            {"repo" : "doitsujin/dxvk"                  , "workflow": "artifacts.yml"          , "branch": "master", "name-prefix": "dxvk"        , "version-prefix": "v"    , "Category": "dxvk"   , "Sub-category": ""      },
+            {"repo" : "HansKristian-Work/vkd3d-proton"  , "workflow": "artifacts.yml"          , "branch": "master", "name-prefix": "vkd3d-proton", "version-prefix": "v"    , "Category": "vkd3d"  , "Sub-category": ""      },
+            {"repo" : "bottlesdevs/wine"                , "workflow": "build-soda-arch.yml"    , "branch": "soda"  , "name-prefix": "soda"        , "version-prefix": "soda" , "Category": "runners", "Sub-category": "wine"  },
+            {"repo" : "bottlesdevs/wine"                , "workflow": "build-caffe-arch.yml"   , "branch": "caffe" , "name-prefix": "caffe"       , "version-prefix": "caffe", "Category": "runners", "Sub-category": "wine"  },
+            {"repo" : "GloriousEggroll/wine-ge-custom"  , "workflow": ""                       , "branch": "master", "name-prefix": "wine"        , "version-prefix": ""     , "Category": "runners", "Sub-category": "wine"  },
+            {"repo" : "GloriousEggroll/proton-ge-custom", "workflow": ""                       , "branch": "master", "name-prefix": ""            , "version-prefix": ""     , "Category": "runners", "Sub-category": "proton"},
+            {"repo" : "koplo199/components"             , "workflow": "blank.yml"              , "branch": "main"  , "name-prefix": ""            , "version-prefix": ""     , "Category": ""       , "Sub-category": ""      },
           ]'
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
