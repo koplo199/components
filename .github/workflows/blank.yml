@@ -23,6 +23,7 @@ env:
             {"repo" : "GloriousEggroll/proton-ge-custom", "workflow": ""                       , "branch": "master", "name-prefix": ""            , "version-prefix": ""      , "Category": "runners"    , "Sub-category": "proton"},
             {"repo" : "ishitatsuyuki/LatencyFleX"       , "workflow": "artifact.yml"           , "branch": "master", "name-prefix": "latencyflex" , "version-prefix": ""      , "Category": "latencyflex", "Sub-category": ""      },
             {"repo" : "jp7677/dxvk-nvapi"               , "workflow": "artifacts.yml"          , "branch": "master", "name-prefix": "dxvk-nvapi"  , "version-prefix": ""      , "Category": "nvapi"      , "Sub-category": ""      },
+            {"repo" : "Sporif/dxvk-async"               , "workflow": ""                       , "branch": "master", "name-prefix": "dxvk-async"  , "version-prefix": ""      , "Category": "dxvk"       , "Sub-category": ""      },
             {"repo" : "koplo199/components"             , "workflow": "blank.yml"              , "branch": "main"  , "name-prefix": ""            , "version-prefix": ""      , "Category": ""           , "Sub-category": ""      },
           ]'
 
