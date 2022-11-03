@@ -53,7 +53,6 @@ jobs:
           repo: ${{ matrix.components.repo }}
           version: latest
           file: /${{ matrix.components.name-prefix }}.*tar.*/
-          prefix: ${{ matrix.components.version-prefix }}
 
       - name : Print url
         run: |
