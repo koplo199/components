@@ -46,6 +46,7 @@ jobs:
         id: check-release
         uses: koplo199/actions-download-asset@1.0
         with:
+          token: ${{secrets.GITHUB_TOKEN}}
           repo: ${{ matrix.components.repo }}
           version: latest
           file: /${{ matrix.components.name-prefix }}.*/
