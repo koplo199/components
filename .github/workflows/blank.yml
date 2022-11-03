@@ -54,7 +54,7 @@ jobs:
 
       - name : Print url
         run: |
-          echo ${{ steps.check-release.browser_download_url }}
+          echo ${{ steps.check-release.outputs.browser_download_url }}
 
       - name: Download artifact
         id: download-artifact
