@@ -51,6 +51,7 @@ jobs:
           version: latest
           file: /${{ matrix.components.name-prefix }}.*/
           prefix: ${{ matrix.components.name-prefix }}
+          out: release
 
       - name : Print url
         run: |
