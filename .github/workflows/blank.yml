@@ -15,10 +15,10 @@ on:
 
 env:
   COMPONENTS: '[
-            {"repo" : "doitsujin/dxvk"                , "workflow": "artifacts.yml"          , "branch": "master", "name-prefix": "dxvk"        , "Category": "dxvk" , "Sub-category": ""},
-            {"repo" : "HansKristian-Work/vkd3d-proton", "workflow": "artifacts.yml"          , "branch": "master", "name-prefix": "vkd3d-proton", "Category": "vkd3d", "Sub-category": ""},
-            {"repo" : "bottlesdevs/wine"              , "workflow": "build-soda-arch.yml"    , "branch": "soda"  , "name-prefix": "soda"        , "Category": ""     , "Sub-category": ""},
-            {"repo" : "koplo199/components"           , "workflow": "blank.yml"              , "branch": "main"  , "name-prefix": ""            , "Category": ""     , "Sub-category": ""},
+            {"repo" : "doitsujin/dxvk"                , "workflow": "artifacts.yml"          , "branch": "master", "name-prefix": "dxvk"        , "version-prefix": "v"    , "Category": "dxvk" , "Sub-category": ""},
+            {"repo" : "HansKristian-Work/vkd3d-proton", "workflow": "artifacts.yml"          , "branch": "master", "name-prefix": "vkd3d-proton", "version-prefix": "v"    , "Category": "vkd3d", "Sub-category": ""},
+            {"repo" : "bottlesdevs/wine"              , "workflow": "build-soda-arch.yml"    , "branch": "soda"  , "name-prefix": "soda"        , "version-prefix": "soda" , "Category": ""     , "Sub-category": ""},
+            {"repo" : "koplo199/components"           , "workflow": "blank.yml"              , "branch": "main"  , "name-prefix": ""            , "version-prefix": ""     , "Category": ""     , "Sub-category": ""},
           ]'
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
@@ -49,12 +49,13 @@ jobs:
           token: ${{secrets.GITHUB_TOKEN}}
           repo: ${{ matrix.components.repo }}
           version: latest
-          file: /${{ matrix.components.name-prefix }}.*/
-          prefix: ${{ matrix.components.name-prefix }}
+          file: /${{ matrix.components.name-prefix }}.*tar.*/
+          prefix: ${{ matrix.components.version-prefix }}
 
       - name : Print url
         run: |
           echo ${{ steps.check-release.outputs.browser_download_url }}
+          echo ${{ steps.check-release.outputs.version }}
 
       - name: Download artifact
         id: download-artifact
