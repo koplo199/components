@@ -13,6 +13,10 @@ winebridge-1.1.0: # core component
 
 # Soda
 # -----------------------
+soda-7.0-7:
+  Category: runners
+  Sub-category: wine
+  Channel: stable
 soda-7.0-4:
   Category: runners
   Sub-category: wine
@@ -36,6 +40,10 @@ soda-7.0:
 
 # Caffe
 # -----------------------
+caffe-7.20:
+  Category: runners
+  Sub-category: wine
+  Channel: stable
 caffe-7.18:
   Category: runners
   Sub-category: wine
@@ -547,6 +555,30 @@ Proton-4.11-GE-1:
 
 # Kron4ek
 # -----------------------
+kron4ek-wine-7.20-amd64:
+  Category: runners
+  Sub-category: wine
+  Channel: stable
+kron4ek-wine-7.20-staging-amd64:
+  Category: runners
+  Sub-category: wine
+  Channel: stable
+kron4ek-wine-7.20-staging-tkg-amd64:
+  Category: runners
+  Sub-category: wine
+  Channel: stable
+kron4ek-wine-7.20-staging-tkg-x86:
+  Category: runners
+  Sub-category: wine
+  Channel: stable
+kron4ek-wine-7.20-staging-x86:
+  Category: runners
+  Sub-category: wine
+  Channel: stable
+kron4ek-wine-7.20-x86:
+  Category: runners
+  Sub-category: wine
+  Channel: stable
 kron4ek-wine-7.19-amd64:
   Category: runners
   Sub-category: wine
