@@ -21,20 +21,20 @@ echo $repository
 if ! [ -f "$filename" ]; then
     touch $filename
     git add $filename
-    if [ -z "$subcategorie" ]; then
-        yq -n -i -y "{\"$nameprefix$version\": {\"Category\":\"$categorie\", \"Channel\": \"$channel\", \"Commit\": \"$commit_sha1\"}}" $filename
+    if [ -z "$subcategory" ]; then
+        yq -n -i -y "{\"$nameprefix$version\": {\"Category\":\"$category\", \"Channel\": \"$channel\", \"Commit\": \"$commit_sha1\"}}" $filename
     else
-        yq -n -i -y "{\"$nameprefix$version\": {\"Category\":\"$categorie\", \"Sub-category\":\"$subcategorie\", \"Channel\": \"$channel\", \"Commit\": \"$commit_sha1\"}}" $filename
+        yq -n -i -y "{\"$nameprefix$version\": {\"Category\":\"$category\", \"Sub-category\":\"$subcategory\", \"Channel\": \"$channel\", \"Commit\": \"$commit_sha1\"}}" $filename
     fi
 fi
 
 latest=$(yq -r 'path(.[])[0]' $filename | grep -m1 "$nameprefix")
 
 if [ -z "$latest" ]; then
-    if [ -z "$subcategorie" ]; then
-        yq -i -y "{\"$nameprefix$version\": {\"Category\":\"$categorie\", \"Channel\": \"$channel\", \"Commit\": \"$commit_sha1\"}} + ." $filename
+    if [ -z "$subcategory" ]; then
+        yq -i -y "{\"$nameprefix$version\": {\"Category\":\"$category\", \"Channel\": \"$channel\", \"Commit\": \"$commit_sha1\"}} + ." $filename
     else
-        yq -i -y "{\"$nameprefix$version\": {\"Category\":\"$categorie\", \"Sub-category\":\"$subcategorie\", \"Channel\": \"$channel\", \"Commit\": \"$commit_sha1\"}} + ." $filename
+        yq -i -y "{\"$nameprefix$version\": {\"Category\":\"$category\", \"Sub-category\":\"$subcategory\", \"Channel\": \"$channel\", \"Commit\": \"$commit_sha1\"}} + ." $filename
     fi
 fi
 
@@ -72,10 +72,10 @@ if [ "$channel" = "stable" ]; then
         exit 0
     fi
     if [ "$latest_channel" = "stable" ]; then
-        if [ -z "$subcategorie" ]; then
-            yq -i -y "{\"$nameprefix$version\": {\"Category\":\"$categorie\", \"Channel\": \"$channel\", \"Commit\": \"$commit_sha1\"}} + ." $filename
+        if [ -z "$subcategory" ]; then
+            yq -i -y "{\"$nameprefix$version\": {\"Category\":\"$category\", \"Channel\": \"$channel\", \"Commit\": \"$commit_sha1\"}} + ." $filename
         else
-            yq -i -y "{\"$nameprefix$version\": {\"Category\":\"$categorie\", \"Sub-category\":\"$subcategorie\", \"Channel\": \"$channel\", \"Commit\": \"$commit_sha1\"}} + ." $filename
+            yq -i -y "{\"$nameprefix$version\": {\"Category\":\"$category\", \"Sub-category\":\"$subcategory\", \"Channel\": \"$channel\", \"Commit\": \"$commit_sha1\"}} + ." $filename
         fi
     else
         yq -i -y "with_entries(if .key == \"$latest\" then .key = \"$nameprefix$version\" else . end) | .\"$nameprefix$version\".Channel = \"$channel\" | .\"$nameprefix$version\".Commit = \"$commit_sha1\"" $filename
@@ -86,10 +86,10 @@ else
         exit 0
     fi
     if [ "$latest_channel" = "stable" ]; then
-        if [ -z "$subcategorie" ]; then
-            yq -i -y "{\"$nameprefix$version-1-${commit_sha1::7}\": {\"Category\":\"$categorie\", \"Channel\": \"$channel\", \"Commit\": \"$commit_sha1\"}} + ." $filename
+        if [ -z "$subcategory" ]; then
+            yq -i -y "{\"$nameprefix$version-1-${commit_sha1::7}\": {\"Category\":\"$category\", \"Channel\": \"$channel\", \"Commit\": \"$commit_sha1\"}} + ." $filename
         else
-            yq -i -y "{\"$nameprefix$version-1-${commit_sha1::7}\": {\"Category\":\"$categorie\", \"Sub-category\":\"$subcategorie\", \"Channel\": \"$channel\", \"Commit\": \"$commit_sha1\"}} + ." $filename
+            yq -i -y "{\"$nameprefix$version-1-${commit_sha1::7}\": {\"Category\":\"$category\", \"Sub-category\":\"$subcategory\", \"Channel\": \"$channel\", \"Commit\": \"$commit_sha1\"}} + ." $filename
         fi
     else
         yq -i -y "with_entries(if .key == \"$latest\" then .key = \"$nameprefix$version-1-${commit_sha1::7}\" else . end) | .\"$nameprefix$version\".Commit = \"$commit_sha1\"" $filename

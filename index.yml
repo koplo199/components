@@ -95,14 +95,11 @@ caffe-6.23:
 
 # Wine GE
 # -----------------------
-wine-ge-7-33:
-  Category: runners
-  Sub-category: wine
-  Channel: stable
 wine-ge-7-32:
   Category: runners
   Sub-category: wine
   Channel: stable
+  Commit: 2fd5e9ca27fa431be70386b45eafef2986688bc6
 wine-ge-7-31:
   Category: runners
   Sub-category: wine
@@ -410,6 +407,7 @@ GE-Proton7-37:
   Category: runners
   Sub-category: proton
   Channel: stable
+  Commit: a807c65cde9732673a2e4bf6863df470e2b96203
 GE-Proton7-35:
   Category: runners
   Sub-category: proton
