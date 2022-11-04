@@ -63,7 +63,7 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v3
         with:
-          path: "our-repository"
+          path: "bottle-components-repository"
 
       - name: Check out repository code
         uses: actions/checkout@v3
@@ -80,14 +80,14 @@ jobs:
 
       - name: Update yml file if necessary
         id: update-yml
-        working-directory: "our-repository"
+        working-directory: "bottle-components-repository"
         run: |
-          component_repository=${{ github.workspace }}/other-repository
-          res=$(./input_files/update_yml_entries.sh "${{ matrix.components.name-prefix }}" "${{ steps.check-release.outputs.version }}" "${{ matrix.components.Category }}" "${{ matrix.components.Sub-category }}" "stable" "$(git -C $component_repository rev-list -n 1 ${{ matrix.components.version-prefix }}${{ steps.check-release.outputs.version }})" "$(pwd)/input_files/${{ matrix.components.yaml-file }}" "$component_repository")
+          res=$(./input_files/update_yml_entries.sh "${{ matrix.components.name-prefix }}" "${{ steps.check-release.outputs.version }}" "${{ matrix.components.Category }}" "${{ matrix.components.Sub-category }}" "stable" "$(git -C ${{ github.workspace }}/other-repository rev-list -n 1 ${{ matrix.components.version-prefix }}${{ steps.check-release.outputs.version }})" "$(pwd)/input_files/${{ matrix.components.yaml-file }}" "${{ github.workspace }}/other-repository")
           echo "updated=$([ "$res" = "Already up to date." ] && echo true || echo false)" >> $GITHUB_OUTPUT
 
       - name : Print url
-        if: steps.update-yml.outputs.updated
+        if: steps.update-yml.outputs.updated == 'true'
+        working-directory: "bottle-components-repository"
         run: |
           ls "${{ matrix.components.Category }}/${{ matrix.components.Sub-category }}"
           echo ${{ steps.check-release.outputs.browser_download_url }}
@@ -96,7 +96,7 @@ jobs:
 
       - name: Download artifact
         id: download-artifact
-        if: matrix.components.workflow != '' && !steps.update-yml.outputs.updated
+        if: matrix.components.workflow != '' && steps.update-yml.outputs.updated == 'false'
         uses: koplo199/action-download-artifact@1.0
         with:
           github_token: ${{secrets.GITHUB_TOKEN}}
