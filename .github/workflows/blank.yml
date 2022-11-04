@@ -112,7 +112,7 @@ jobs:
 
       - name: Release
         uses: softprops/action-gh-release@v1
-        if: steps.update-yml.outputs.upload_file =! ''
+        if: steps.update-yml.outputs.upload_file != ''
         with:
           files: |
             ${{ steps.update-yml.outputs.upload_file }}
