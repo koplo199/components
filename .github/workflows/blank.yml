@@ -57,6 +57,7 @@ jobs:
           version: latest
           file: /${{ matrix.components.name-prefix }}.*tar.*/
           prefix: ${{ matrix.components.version-prefix }}
+          unpack: false
           #    gz for gzip
           #    bz2 for bz2
           #    xz for lzma
