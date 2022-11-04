@@ -56,14 +56,17 @@ jobs:
           version: latest
           file: /${{ matrix.components.name-prefix }}.*tar.*/
           prefix: ${{ matrix.components.version-prefix }}
-          #    gz for gzip
-          #    bz2 for bz2
-          #    xz for lzma
 
       - name: Check out repository code
         uses: actions/checkout@v3
         with:
           path: "bottle-components-repository"
+
+      - name: Check out repository code
+        uses: actions/checkout@v3
+        with:
+          repository: bottlesdevs/tools
+          path: "tools"
 
       - name: Check out repository code
         uses: actions/checkout@v3
@@ -83,7 +86,18 @@ jobs:
         working-directory: "bottle-components-repository"
         run: |
           res=$(./input_files/update_yml_entries.sh "${{ matrix.components.name-prefix }}" "${{ steps.check-release.outputs.version }}" "${{ matrix.components.Category }}" "${{ matrix.components.Sub-category }}" "stable" "$(git -C ${{ github.workspace }}/other-repository rev-list -n 1 ${{ matrix.components.version-prefix }}${{ steps.check-release.outputs.version }})" "$(pwd)/input_files/${{ matrix.components.yaml-file }}" "${{ github.workspace }}/other-repository")
-          echo "updated=$([ \"$res\" = \"Already up to date.\" ] && echo true || echo false)" >> $GITHUB_OUTPUT
+          if [ "$res" = "Already up to date." ]; then
+            echo "updated=false" >> $GITHUB_OUTPUT
+          else
+            echo "updated=true" >> $GITHUB_OUTPUT
+            release_archive=${{ steps.check-release.outputs.out }}
+            if [[ $release_archive == *".tar.gz" ]] || [ $release_archive == *".tar.xz" ]] || [ $release_archive == *".tar.bz2" ]]; then
+              python "${{ github.workspace }}/tools/MaintainersHelpers/component-generator.py" "https://github.com/${{ matrix.components.repo }}" "${${{ matrix.components.repo }}%/*}" "${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}" "${${{ matrix.components.repo }}%/*}" "stable" "${{ steps.check-release.outputs.browser_download_url }}"
+              mv "${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}.yml" "${{ matrix.components.Category }}/${{ matrix.components.Sub-category }}"
+              git add "${{ matrix.components.Category }}/${{ matrix.components.Sub-category }}/{{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}.yml"
+              git diff
+            fi
+          fi
 
       - name : Print url
         if: steps.update-yml.outputs.updated == 'true'
