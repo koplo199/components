@@ -148,7 +148,7 @@ jobs:
           # default false, just try to download from the last one
           check_artifacts:  true
           # Optional, a directory where to extract artifact(s), defaults to the current directory
-          path: todo2
+          path: artifact
 
       - name : Print sha
         run: |
