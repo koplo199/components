@@ -114,6 +114,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         if: steps.update-yml.outputs.upload_file != ''
         with:
+          tag_name: "${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}"
           files: |
             ${{ steps.update-yml.outputs.upload_file }}
       
