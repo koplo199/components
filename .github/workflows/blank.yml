@@ -123,7 +123,7 @@ jobs:
         if: steps.update-yml.outputs.upload_file != ''
         working-directory: "bottle-components-repository"
         run: |
-          echo ${{ fromJson(steps.release.outputs.assets) }}
+          echo ${{ steps.release.outputs.assets }}
           repo=${{ matrix.components.repo }}
           mv "${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}.yml" "${{ matrix.components.Category }}/${{ matrix.components.Sub-category }}"
           git add "${{ matrix.components.Category }}/${{ matrix.components.Sub-category }}/${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}.yml"
