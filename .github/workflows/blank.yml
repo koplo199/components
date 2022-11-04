@@ -96,6 +96,7 @@ jobs:
               python "${{ github.workspace }}/tools/MaintainersHelpers/component-generator.py" "components" "${repo%/*}" "${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}" "${repo%/*}" "stable" "${{ steps.check-release.outputs.browser_download_url }}"
               mv "${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}.yml" "${{ matrix.components.Category }}/${{ matrix.components.Sub-category }}"
               git add "${{ matrix.components.Category }}/${{ matrix.components.Sub-category }}/${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}.yml"
+              git diff HEAD
             else
               case $release_archive in
                 *".tar.zst")
