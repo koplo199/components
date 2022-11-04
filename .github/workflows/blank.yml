@@ -94,7 +94,7 @@ jobs:
             if [[ $release_archive == *".tar.gz" ]] || [[ $release_archive == *".tar.xz" ]] || [[ $release_archive == *".tar.bz2" ]]; then
               python "${{ github.workspace }}/tools/MaintainersHelpers/component-generator.py" "components" "${${{ matrix.components.repo }}%/*}" "${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}" "${${{ matrix.components.repo }}%/*}" "stable" "${{ steps.check-release.outputs.browser_download_url }}"
               mv "${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}.yml" "${{ matrix.components.Category }}/${{ matrix.components.Sub-category }}"
-              git add "${{ matrix.components.Category }}/${{ matrix.components.Sub-category }}/{{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}.yml"
+              git add "${{ matrix.components.Category }}/${{ matrix.components.Sub-category }}/${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}.yml"
               git diff
             fi
           fi
