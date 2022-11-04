@@ -41,6 +41,8 @@ fi
 latest_channel=$(yq -r ".\"$latest\".Channel" $filename)
 latest_commit=$(yq -r ".\"$latest\".Commit" $filename)
 
+echo "latestcommit: $latest_commit"
+
 if [ -z "$latest_commit" ] || [ -z "$latest_channel" ]; then
     echo "Cannot find latest commit or channel. Something is wrong with the input file : $filename"
     exit 1
