@@ -111,6 +111,7 @@ jobs:
           fi
 
       - name: Release
+        id: release
         uses: softprops/action-gh-release@v1
         if: steps.update-yml.outputs.upload_file != ''
         with:
@@ -118,14 +119,12 @@ jobs:
           files: |
             ${{ steps.update-yml.outputs.upload_file }}
       
-      - name : Print url
-        if: steps.update-yml.outputs.updated == 'true'
+      - name : Generate release yml file
+        if: steps.update-yml.outputs.upload_file != ''
         working-directory: "bottle-components-repository"
         run: |
-          ls "${{ matrix.components.Category }}/${{ matrix.components.Sub-category }}"
-          echo ${{ steps.check-release.outputs.browser_download_url }}
-          echo ${{ steps.check-release.outputs.version }}
-          echo ${{ steps.check-release.outputs.out }}
+            repo=${{ matrix.components.repo }}
+            python "${{ github.workspace }}/tools/MaintainersHelpers/component-generator.py" "components" "${repo%/*}" "${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}" "${repo%/*}" "stable" "${{ fromJSON(steps.release.outputs.assets)[0].browser_download_url }}"
 
       - name: Download artifact
         id: download-artifact
