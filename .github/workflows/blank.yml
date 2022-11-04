@@ -86,7 +86,7 @@ jobs:
           echo "updated=$([ \"$res\" = \"Already up to date.\" ] && echo true || echo false)" >> $GITHUB_OUTPUT
 
       - name : Print url
-        if: steps.update-yml.outputs.updated
+        if: steps.update-yml.outputs.updated == 'true'
         working-directory: "bottle-components-repository"
         run: |
           ls "${{ matrix.components.Category }}/${{ matrix.components.Sub-category }}"
@@ -96,7 +96,7 @@ jobs:
 
       - name: Download artifact
         id: download-artifact
-        if: matrix.components.workflow != '' && !steps.update-yml.outputs.updated
+        if: matrix.components.workflow != '' && steps.update-yml.outputs.updated == 'false'
         uses: koplo199/action-download-artifact@1.0
         with:
           github_token: ${{secrets.GITHUB_TOKEN}}
