@@ -165,8 +165,8 @@ jobs:
             echo "upload_file=$(pwd)/${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}-${{ steps.download-artifact.outputs.head_sha }}.tar.gz" >> $GITHUB_OUTPUT
           fi
 
-      - name: Release
-        id: release
+      - name: Artifact
+        id: artufact
         uses: softprops/action-gh-release@cd28b0f5ee8571b76cfdaa62a30d51d752317477
         if: steps.update-artifact-yml.outputs.upload_file != ''
         with:
