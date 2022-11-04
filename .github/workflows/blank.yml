@@ -15,16 +15,15 @@ on:
 
 env:
   COMPONENTS: '[
-            {"repo" : "doitsujin/dxvk"                  , "workflow": "artifacts.yml"          , "branch": "master", "name-prefix": "dxvk-"        , "version-prefix": "v"        , "Category": "dxvk"       , "Sub-category": ""      },
-            {"repo" : "HansKristian-Work/vkd3d-proton"  , "workflow": "artifacts.yml"          , "branch": "master", "name-prefix": "vkd3d-proton-", "version-prefix": "v"        , "Category": "vkd3d"      , "Sub-category": ""      },
-            {"repo" : "bottlesdevs/wine"                , "workflow": "build-soda-arch.yml"    , "branch": "soda"  , "name-prefix": "soda-"        , "version-prefix": "soda-"    , "Category": "runners"    , "Sub-category": "wine"  },
-            {"repo" : "bottlesdevs/wine"                , "workflow": "build-caffe-arch.yml"   , "branch": "caffe" , "name-prefix": "caffe-"       , "version-prefix": "caffe-"   , "Category": "runners"    , "Sub-category": "wine"  },
-            {"repo" : "GloriousEggroll/wine-ge-custom"  , "workflow": ""                       , "branch": "master", "name-prefix": "wine-"        , "version-prefix": ""         , "Category": "runners"    , "Sub-category": "wine"  },
-            {"repo" : "GloriousEggroll/proton-ge-custom", "workflow": ""                       , "branch": "master", "name-prefix": "GE-Proton"    , "version-prefix": "GE-Proton", "Category": "runners"    , "Sub-category": "proton"},
-            {"repo" : "ishitatsuyuki/LatencyFleX"       , "workflow": "artifact.yml"           , "branch": "master", "name-prefix": "latencyflex-" , "version-prefix": ""         , "Category": "latencyflex", "Sub-category": ""      },
-            {"repo" : "jp7677/dxvk-nvapi"               , "workflow": "artifacts.yml"          , "branch": "master", "name-prefix": "dxvk-nvapi-"  , "version-prefix": ""         , "Category": "nvapi"      , "Sub-category": ""      },
-            {"repo" : "Sporif/dxvk-async"               , "workflow": ""                       , "branch": "master", "name-prefix": "dxvk-async-"  , "version-prefix": ""         , "Category": "dxvk"       , "Sub-category": ""      },
-            {"repo" : "koplo199/components"             , "workflow": "blank.yml"              , "branch": "main"  , "name-prefix": ""             , "version-prefix": ""         , "Category": ""           , "Sub-category": ""      },
+            {"repo" : "doitsujin/dxvk"                  , "workflow": "artifacts.yml"          , "branch": "master", "name-prefix": "dxvk-"        , "version-prefix": "v"        , "Category": "dxvk"       , "Sub-category": ""      , "yaml-file": "14_dxvk.yml"         },
+            {"repo" : "HansKristian-Work/vkd3d-proton"  , "workflow": "artifacts.yml"          , "branch": "master", "name-prefix": "vkd3d-proton-", "version-prefix": "v"        , "Category": "vkd3d"      , "Sub-category": ""      , "yaml-file": "13_vkd3d-proton.yml" },
+            {"repo" : "bottlesdevs/wine"                , "workflow": "build-soda-arch.yml"    , "branch": "soda"  , "name-prefix": "soda-"        , "version-prefix": "soda-"    , "Category": "runners"    , "Sub-category": "wine"  , "yaml-file": "3_soda.yml"          },
+            {"repo" : "bottlesdevs/wine"                , "workflow": "build-caffe-arch.yml"   , "branch": "caffe" , "name-prefix": "caffe-"       , "version-prefix": "caffe-"   , "Category": "runners"    , "Sub-category": "wine"  , "yaml-file": "4_caffe.yml"         },
+            {"repo" : "GloriousEggroll/wine-ge-custom"  , "workflow": ""                       , "branch": "master", "name-prefix": "wine-"        , "version-prefix": ""         , "Category": "runners"    , "Sub-category": "wine"  , "yaml-file": "5_wine-GE-Proton.yml"},
+            {"repo" : "GloriousEggroll/proton-ge-custom", "workflow": ""                       , "branch": "master", "name-prefix": "GE-Proton"    , "version-prefix": "GE-Proton", "Category": "runners"    , "Sub-category": "proton", "yaml-file": "10_GE-Proton.yml"    },
+            {"repo" : "ishitatsuyuki/LatencyFleX"       , "workflow": "artifact.yml"           , "branch": "master", "name-prefix": "latencyflex-" , "version-prefix": ""         , "Category": "latencyflex", "Sub-category": ""      , "yaml-file": "17_latencyflex.yml"  },
+            {"repo" : "jp7677/dxvk-nvapi"               , "workflow": "artifacts.yml"          , "branch": "master", "name-prefix": "dxvk-nvapi-"  , "version-prefix": ""         , "Category": "nvapi"      , "Sub-category": ""      , "yaml-file": "16_dxvk-nvapi.yml"   },
+            {"repo" : "Sporif/dxvk-async"               , "workflow": ""                       , "branch": "master", "name-prefix": "dxvk-async-"  , "version-prefix": ""         , "Category": "dxvk"       , "Sub-category": ""      , "yaml-file": "15_dxvk-async.yml"   },
           ]'
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
@@ -80,11 +79,11 @@ jobs:
           pip3 install yq
 
       - name: Update yml file if necessary
+        working-directory: "our-repository"
         run: |
-          repo=$(pwd)/other-repository
-          cd "our-repository"
-          ./input_files/update_yml_entries.sh "${{ matrix.components.name-prefix }}" "${{ steps.check-release.outputs.version }}" "${{ matrix.components.Category }}" "${{ matrix.components.Sub-category }}" "unstable" "$(git -C $repo rev-list -n 1 ${{ matrix.components.version-prefix }}${{ steps.check-release.outputs.version }})" "index.yml" "$repo"
-          cat index.yml
+          component_repository=${{ env.GITHUB_WORKSPACE }}/other-repository
+          ./input_files/update_yml_entries.sh "${{ matrix.components.name-prefix }}" "${{ steps.check-release.outputs.version }}" "${{ matrix.components.Category }}" "${{ matrix.components.Sub-category }}" "unstable" "$(git -C $component_repository rev-list -n 1 ${{ matrix.components.version-prefix }}${{ steps.check-release.outputs.version }})" "$(pwd)/input_files/${{ matrix.components.yaml-file }}" "$component_repository"
+          git diff "$(pwd)/input_files/${{ matrix.components.yaml-file }}"
       
       - name : Print url
         run: |
