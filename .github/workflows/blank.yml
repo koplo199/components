@@ -83,7 +83,7 @@ jobs:
         run: |
           repo=$(pwd)/other-repository
           cd "our-repository"
-          ./input_files/update_yml_entries.sh "${{ matrix.components.name-prefix }}" "${{ steps.check-release.outputs.version }}" "${{ matrix.components.Category }}" "${{ matrix.components.Sub-category }}" "stable" "$(git -C $repo rev-list -n 1 ${{ matrix.components.version-prefix }}${{ steps.check-release.outputs.version }})" "index.yml" "$repo"
+          ./input_files/update_yml_entries.sh "${{ matrix.components.name-prefix }}" "${{ steps.check-release.outputs.version }}" "${{ matrix.components.Category }}" "${{ matrix.components.Sub-category }}" "unstable" "$(git -C $repo rev-list -n 1 ${{ matrix.components.version-prefix }}${{ steps.check-release.outputs.version }})" "index.yml" "$repo"
           cat index.yml
       
       - name : Print url
