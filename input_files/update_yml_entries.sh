@@ -7,6 +7,7 @@ subcategory="$4"
 channel="$5"
 commit_sha1="$6"
 filename="$7"
+repository="$8"
 
 if ! [ -f "$filename" ]; then
     touch $filename
@@ -37,10 +38,10 @@ if [ -z "$latest_commit" ] || [ -z "$latest_channel" ]; then
 fi
 
 is_newer() {
-    git merge-base --is-ancestor $1 $2
+    git -C "$repository" merge-base --is-ancestor $1 $2
     new=$?
     if [ $new -eq 1 ]; then
-        git merge-base --is-ancestor $2 $1
+        git -C "$repository" merge-base --is-ancestor $2 $1
         if [ $? -eq 1 ]; then
             echo "The two commits are on separate branch. This should NOT have happened."
             exit 1
