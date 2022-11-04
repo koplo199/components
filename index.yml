@@ -1235,6 +1235,7 @@ dxvk-1.10.3:
 dxvk-1.10.2:
   Category: dxvk
   Channel: stable
+  Commit: 40e4ea1fce3a26af1ef6e28fc3aba7f8df4787e4
 dxvk-1.10.1:
   Category: dxvk
   Channel: stable

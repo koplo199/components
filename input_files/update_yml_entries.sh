@@ -41,9 +41,6 @@ fi
 latest_channel=$(yq -r ".\"$latest\".Channel" $filename)
 latest_commit=$(yq -r ".\"$latest\".Commit" $filename)
 
-    if [ -z "$subcategory" ]; then
-    echo YESSSS!!!!
-    fi
 if [ "$latest_commit" = "null" ] || [ "$latest_channel" = "null" ]; then
     echo "Cannot find latest commit or channel. Something is wrong with the input file : $filename"
     exit 1
@@ -52,6 +49,7 @@ fi
 is_newer() {
     git -C "$repository" merge-base --is-ancestor $1 $2
     new=$?
+    echo "new: $new"
     if [ $new -eq 1 ]; then
         git -C "$repository" merge-base --is-ancestor $2 $1
         if [ $? -eq 1 ]; then
@@ -63,7 +61,7 @@ is_newer() {
 }
 
 newer=$(is_newer "$commit_sha1" "$latest_commit")
-echo $newer
+echo "newer: $newer"
 # Special case : the build source is done elsewhere and the repository only serves to do releases.
 if [ "$latest_commit" != "$commit_sha1" ] && [ "$newer" -eq 0 ]; then
     echo "Something is wrong : this new release is based on an earlier commit than the previous one."
