@@ -9,6 +9,15 @@ commit_sha1="$6"
 filename="$7"
 repository="$8"
 
+echo $nameprefix
+echo $version
+echo $category
+echo $subcategory
+echo $channel
+echo $commit_sha1
+echo $filename
+echo $repository
+
 if ! [ -f "$filename" ]; then
     touch $filename
     git add $filename
