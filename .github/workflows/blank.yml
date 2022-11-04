@@ -112,7 +112,7 @@ jobs:
 
       - name: Release
         id: release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@cd28b0f5ee8571b76cfdaa62a30d51d752317477
         if: steps.update-yml.outputs.upload_file != ''
         with:
           tag_name: "${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}"
@@ -123,8 +123,8 @@ jobs:
         if: steps.update-yml.outputs.upload_file != ''
         working-directory: "bottle-components-repository"
         run: |
-          echo ${{ steps.release.outputs.assets }}
           repo=${{ matrix.components.repo }}
+          python "${{ github.workspace }}/tools/MaintainersHelpers/component-generator.py" "components" "${repo%/*}" "${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}" "${repo%/*}" "stable" "${{ fromJSON(steps.release.outputs.assets)[0].browser_download_url }}"
           mv "${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}.yml" "${{ matrix.components.Category }}/${{ matrix.components.Sub-category }}"
           git add "${{ matrix.components.Category }}/${{ matrix.components.Sub-category }}/${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}.yml"
           git diff HEAD
