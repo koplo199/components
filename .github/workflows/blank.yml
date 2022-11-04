@@ -85,6 +85,8 @@ jobs:
           echo ${{ steps.check-release.outputs.browser_download_url }}
           echo ${{ steps.check-release.outputs.version }}
           echo ${{ steps.check-release.outputs.out }}
+          file ${{ steps.check-release.outputs.out }}
+          ls -la ${{ steps.check-release.outputs.out }}
 
       - name: Download artifact
         id: download-artifact
