@@ -49,7 +49,6 @@ fi
 is_newer() {
     git -C "$repository" merge-base --is-ancestor $1 $2
     new=$?
-    echo "new: $new"
     if [ $new -eq 1 ]; then
         git -C "$repository" merge-base --is-ancestor $2 $1
         if [ $? -eq 1 ]; then
@@ -57,7 +56,7 @@ is_newer() {
             exit 1
         fi
     fi
-    return $new
+    echo $new
 }
 
 newer=$(is_newer "$commit_sha1" "$latest_commit")
