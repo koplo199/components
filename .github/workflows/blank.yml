@@ -81,7 +81,7 @@ jobs:
       - name: Update yml file if necessary
         working-directory: "our-repository"
         run: |
-          component_repository=${{ env.GITHUB_WORKSPACE }}/other-repository
+          component_repository=${{ GITHUB_WORKSPACE }}/other-repository
           ./input_files/update_yml_entries.sh "${{ matrix.components.name-prefix }}" "${{ steps.check-release.outputs.version }}" "${{ matrix.components.Category }}" "${{ matrix.components.Sub-category }}" "unstable" "$(git -C $component_repository rev-list -n 1 ${{ matrix.components.version-prefix }}${{ steps.check-release.outputs.version }})" "$(pwd)/input_files/${{ matrix.components.yaml-file }}" "$component_repository"
           git diff "$(pwd)/input_files/${{ matrix.components.yaml-file }}"
       
