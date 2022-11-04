@@ -123,7 +123,11 @@ jobs:
         if: steps.update-yml.outputs.upload_file != ''
         working-directory: "bottle-components-repository"
         run: |
+          echo ${{ fromJSON(steps.release.outputs.assets) }}
           repo=${{ matrix.components.repo }}
+          python "${{ github.workspace }}/tools/MaintainersHelpers/component-generator.py" "components" "${repo%/*}" "${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}" "${repo%/*}" "stable" "${{ fromJSON(steps.release.outputs.assets)[0].browser_download_url }}"
+          mv "${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}.yml" "${{ matrix.components.Category }}/${{ matrix.components.Sub-category }}"
+          git add "${{ matrix.components.Category }}/${{ matrix.components.Sub-category }}/${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}.yml"
           git diff HEAD
 
       - name: Download artifact
