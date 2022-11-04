@@ -57,10 +57,27 @@ jobs:
           version: latest
           file: /${{ matrix.components.name-prefix }}.*tar.*/
           prefix: ${{ matrix.components.version-prefix }}
-          out: todo
           #    gz for gzip
           #    bz2 for bz2
           #    xz for lzma
+
+      - name: Check out repository code
+        uses: actions/checkout@v3
+        with:
+          path: "our-repository"
+
+      - name: Check out repository code
+        uses: actions/checkout@v3
+        with:
+          repository: ${{ matrix.components.repo }}
+          path: "other-repository"
+          fetch-depth: 0
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install python3-pip
+          pip3 install yq
 
       - name : Print url
         run: |
@@ -70,6 +87,7 @@ jobs:
 
       - name: Download artifact
         id: download-artifact
+        if: matrix.components.workflow != ''
         uses: koplo199/action-download-artifact@1.0
         with:
           github_token: ${{secrets.GITHUB_TOKEN}}
@@ -86,18 +104,6 @@ jobs:
           check_artifacts:  true
           # Optional, a directory where to extract artifact(s), defaults to the current directory
           path: todo2
-
-      - name: Check out repository code
-        uses: actions/checkout@v3
-        with:
-          path: "our-repository"
-
-      - name: Check out repository code
-        uses: actions/checkout@v3
-        with:
-          repository: ${{ matrix.components.repo }}
-          path: "other-repository"
-          fetch-depth: 0
 
       - name : Print sha
         run: |
