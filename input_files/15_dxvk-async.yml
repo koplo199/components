@@ -1,6 +1,7 @@
 dxvk-async-1.10.3:
   Category: dxvk
   Channel: stable
+  Commit: 80435d945a2a03cc5a5bd773be63a5a351182a4f
 dxvk-async-1.10.2:
   Category: dxvk
   Channel: stable

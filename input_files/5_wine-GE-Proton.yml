@@ -2,6 +2,7 @@ wine-GE-Proton7-33:
   Category: runners
   Sub-category: wine
   Channel: stable
+  Commit: 8a7d5606ce9b8a4776cfc73c59690a723926cc0f
 wine-GE-Proton7-32:
   Category: runners
   Sub-category: wine

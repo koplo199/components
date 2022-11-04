@@ -2,6 +2,7 @@ caffe-7.20:
   Category: runners
   Sub-category: wine
   Channel: stable
+  Commit: 51619f87d790ef5460b97375bfe5859adb551507
 caffe-7.18:
   Category: runners
   Sub-category: wine

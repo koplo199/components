@@ -1,6 +1,7 @@
 dxvk-1.10.3:
   Category: dxvk
   Channel: stable
+  Commit: e4fd5e9e8d335e8a2c0814829207cbd421f7e40e
 dxvk-1.10.2:
   Category: dxvk
   Channel: stable
