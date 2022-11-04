@@ -19,7 +19,6 @@ echo $filename
 echo $repository
 
 if ! [ -f "$filename" ]; then
-    echo WTFFFF
     touch $filename
     git add $filename
     if [ -z "$subcategorie" ]; then
@@ -28,9 +27,9 @@ if ! [ -f "$filename" ]; then
         yq -n -i -y "{\"$nameprefix$version\": {\"Category\":\"$categorie\", \"Sub-category\":\"$subcategorie\", \"Channel\": \"$channel\", \"Commit\": \"$commit_sha1\"}}" $filename
     fi
 fi
-echo $filename
+
 latest=$(yq -r 'path(.[])[0]' $filename | grep -m1 "$nameprefix")
-echo $filename
+
 if [ -z "$latest" ]; then
     if [ -z "$subcategorie" ]; then
         yq -i -y "{\"$nameprefix$version\": {\"Category\":\"$categorie\", \"Channel\": \"$channel\", \"Commit\": \"$commit_sha1\"}} + ." $filename
@@ -38,10 +37,10 @@ if [ -z "$latest" ]; then
         yq -i -y "{\"$nameprefix$version\": {\"Category\":\"$categorie\", \"Sub-category\":\"$subcategorie\", \"Channel\": \"$channel\", \"Commit\": \"$commit_sha1\"}} + ." $filename
     fi
 fi
-echo $filename
+
 latest_channel=$(yq -r ".\"$latest\".Channel" $filename)
 latest_commit=$(yq -r ".\"$latest\".Commit" $filename)
-echo $filename
+
 if [ -z "$latest_commit" ] || [ -z "$latest_channel" ]; then
     echo "Cannot find latest commit or channel. Something is wrong with the input file : $filename"
     exit 1
