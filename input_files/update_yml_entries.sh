@@ -59,7 +59,7 @@ fi
 
 if [ "$channel" = "stable" ]; then
     if [ "$nameprefix$version" = "$latest" ]; then
-        echo "Already latest stable version."
+        echo "Already up to date."
         exit 0
     fi
     if [ "$latest_channel" = "stable" ]; then
@@ -73,7 +73,7 @@ if [ "$channel" = "stable" ]; then
     fi
 else
     if [ "$nameprefix$version-1-${commit_sha1::7}" = "$latest" ]; then
-        echo "Already latest unstable version."
+        echo "Already up to date."
         exit 0
     fi
     if [ "$latest_channel" = "stable" ]; then
