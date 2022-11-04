@@ -41,9 +41,10 @@ fi
 latest_channel=$(yq -r ".\"$latest\".Channel" $filename)
 latest_commit=$(yq -r ".\"$latest\".Commit" $filename)
 
-echo "latestcommit: $latest_commit"
-
-if [ -z "$latest_commit" ] || [ -z "$latest_channel" ]; then
+    if [ -z "$subcategorie" ]; then
+    echo YESSSS!!!!
+    fi
+if [ "$latest_commit" = "null" ] || [ "$latest_channel" = "null" ]; then
     echo "Cannot find latest commit or channel. Something is wrong with the input file : $filename"
     exit 1
 fi
@@ -61,8 +62,10 @@ is_newer() {
     return $new
 }
 
+newer=is_newer "$commit_sha1" "$latest_commit"
+echo $newer
 # Special case : the build source is done elsewhere and the repository only serves to do releases.
-if [ "$latest_commit" != "$commit_sha1" ] && [ is_newer $commit_sha1 $latest_commit -eq 0 ]; then
+if [ "$latest_commit" != "$commit_sha1" ] && [ "$newer" -eq 0 ]; then
     echo "Something is wrong : this new release is based on an earlier commit than the previous one."
     exit 1
 fi
