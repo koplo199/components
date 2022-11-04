@@ -81,8 +81,8 @@ jobs:
           sudo apt-get install python3-pip zstd
           pip3 install yq
 
-      - name: Update yml file if necessary
-        id: update-yml
+      - name: Update release input_files entries
+        id: update-release-yml
         working-directory: "bottle-components-repository"
         run: |
           res=$(./input_files/update_yml_entries.sh "${{ matrix.components.name-prefix }}" "${{ steps.check-release.outputs.version }}" "${{ matrix.components.Category }}" "${{ matrix.components.Sub-category }}" "stable" "$(git -C ${{ github.workspace }}/other-repository rev-list -n 1 ${{ matrix.components.version-prefix }}${{ steps.check-release.outputs.version }})" "$(pwd)/input_files/${{ matrix.components.yaml-file }}" "${{ github.workspace }}/other-repository")
@@ -106,7 +106,7 @@ jobs:
                   unzip $release_archive
                   ;;
               esac
-              tar zcvf "${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}.tar.gz" "${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}"
+              tar zcvf "${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}.tar.gz" "${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}/*"
               echo "upload_file=$(pwd)/${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}.tar.gz" >> $GITHUB_OUTPUT
             fi
           fi
@@ -114,14 +114,14 @@ jobs:
       - name: Release
         id: release
         uses: softprops/action-gh-release@cd28b0f5ee8571b76cfdaa62a30d51d752317477
-        if: steps.update-yml.outputs.upload_file != ''
+        if: steps.update-release-yml.outputs.upload_file != ''
         with:
           tag_name: "${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}"
           files: |
-            ${{ steps.update-yml.outputs.upload_file }}
+            ${{ steps.update-release-yml.outputs.upload_file }}
       
       - name : Generate release yml file
-        if: steps.update-yml.outputs.upload_file != ''
+        if: steps.update-release-yml.outputs.upload_file != ''
         working-directory: "bottle-components-repository"
         run: |
           repo=${{ matrix.components.repo }}
@@ -132,7 +132,7 @@ jobs:
 
       - name: Download artifact
         id: download-artifact
-        if: matrix.components.workflow != '' && steps.update-yml.outputs.updated == 'false'
+        if: matrix.components.workflow != '' && steps.update-release-yml.outputs.updated == 'false'
         uses: koplo199/action-download-artifact@1.0
         with:
           github_token: ${{secrets.GITHUB_TOKEN}}
@@ -150,10 +150,29 @@ jobs:
           # Optional, a directory where to extract artifact(s), defaults to the current directory
           path: artifact
 
-      - name : Print sha
+      - name: Update artifact input_files entries
+        id: update-artifact-yml
+        if: steps.update-release-yml.outputs.updated == 'false'
+        working-directory: "bottle-components-repository"
         run: |
-          ls -R
-          echo ${{ steps.download-artifact.outputs.head_sha }}
+          res=$(./input_files/update_yml_entries.sh "${{ matrix.components.name-prefix }}" "${{ steps.check-release.outputs.version }}" "${{ matrix.components.Category }}" "${{ matrix.components.Sub-category }}" "unstable" "${{ steps.download-artifact.outputs.head_sha }}" "$(pwd)/input_files/${{ matrix.components.yaml-file }}" "${{ github.workspace }}/other-repository")
+          if [ "$res" != "Already up to date." ]; then
+            folder=$(find "${{ github.workspace }}/artifact" -name "${{ matrix.components.name-prefix }}*")
+            if [[ "${{ matrix.components.name-prefix }}" == "dxvk"* ]]; then
+              rm -rf folder/usr
+            fi
+            tar zcvf "${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}-${{ steps.download-artifact.outputs.head_sha }}.tar.gz" "$folder/*"
+            echo "upload_file=$(pwd)/${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}-${{ steps.download-artifact.outputs.head_sha }}.tar.gz" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Release
+        id: release
+        uses: softprops/action-gh-release@cd28b0f5ee8571b76cfdaa62a30d51d752317477
+        if: steps.update-artifact-yml.outputs.upload_file != ''
+        with:
+          tag_name: "${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}-${{ steps.download-artifact.outputs.head_sha }}"
+          files: |
+            ${{ steps.update-artifact-yml.outputs.upload_file }}
 
   # This workflow contains a single job called "build"
   upload:
