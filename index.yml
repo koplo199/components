@@ -98,7 +98,7 @@ caffe-6.23:
 wine-ge-7-32:
   Category: runners
   Sub-category: wine
-  Channel: stable
+  Channel: unstable
   Commit: 2fd5e9ca27fa431be70386b45eafef2986688bc6
 wine-ge-7-31:
   Category: runners
