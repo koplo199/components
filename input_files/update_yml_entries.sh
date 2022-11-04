@@ -41,7 +41,7 @@ fi
 latest_channel=$(yq -r ".\"$latest\".Channel" $filename)
 latest_commit=$(yq -r ".\"$latest\".Commit" $filename)
 
-    if [ -z "$subcategorie" ]; then
+    if [ -z "$subcategory" ]; then
     echo YESSSS!!!!
     fi
 if [ "$latest_commit" = "null" ] || [ "$latest_channel" = "null" ]; then
@@ -62,7 +62,7 @@ is_newer() {
     return $new
 }
 
-newer=is_newer "$commit_sha1" "$latest_commit"
+newer=$(is_newer "$commit_sha1" "$latest_commit")
 echo $newer
 # Special case : the build source is done elsewhere and the repository only serves to do releases.
 if [ "$latest_commit" != "$commit_sha1" ] && [ "$newer" -eq 0 ]; then
