@@ -106,7 +106,7 @@ jobs:
                   unzip $release_archive
                   ;;
               esac
-              tar zcvf "${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}.tar.gz" "${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}/*"
+              tar zcvf "${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}.tar.gz" "${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}"/*
               echo "upload_file=$(pwd)/${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}.tar.gz" >> $GITHUB_OUTPUT
             fi
           fi
@@ -152,7 +152,7 @@ jobs:
 
       - name: Update artifact input_files entries
         id: update-artifact-yml
-        if: steps.update-release-yml.outputs.updated == 'false'
+        if: matrix.components.workflow != '' && steps.update-release-yml.outputs.updated == 'false'
         working-directory: "bottle-components-repository"
         run: |
           res=$(./input_files/update_yml_entries.sh "${{ matrix.components.name-prefix }}" "${{ steps.check-release.outputs.version }}" "${{ matrix.components.Category }}" "${{ matrix.components.Sub-category }}" "unstable" "${{ steps.download-artifact.outputs.head_sha }}" "$(pwd)/input_files/${{ matrix.components.yaml-file }}" "${{ github.workspace }}/other-repository")
@@ -161,7 +161,7 @@ jobs:
             if [[ "${{ matrix.components.name-prefix }}" == "dxvk"* ]]; then
               rm -rf $folder/usr
             fi
-            tar zcvf "${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}-${{ steps.download-artifact.outputs.head_sha }}.tar.gz" "$folder/*"
+            tar zcvf "${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}-${{ steps.download-artifact.outputs.head_sha }}.tar.gz" "$folder"/*
             echo "upload_file=$(pwd)/${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}-${{ steps.download-artifact.outputs.head_sha }}.tar.gz" >> $GITHUB_OUTPUT
           fi
 
