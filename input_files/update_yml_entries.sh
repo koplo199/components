@@ -60,7 +60,6 @@ is_newer() {
 }
 
 newer=$(is_newer "$commit_sha1" "$latest_commit")
-echo "newer: $newer"
 # Special case : the build source is done elsewhere and the repository only serves to do releases.
 if [ "$latest_commit" != "$commit_sha1" ] && [ "$newer" -eq 0 ]; then
     echo "Something is wrong : this new release is based on an earlier commit than the previous one."
