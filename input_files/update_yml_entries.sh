@@ -59,7 +59,7 @@ fi
 
 if [ "$channel" = "stable" ]; then
     already_exists=$(yq -r 'path(.[])[0]' $filename | grep -m1 "$nameprefix$version")
-    if [ "$already_exists" != "null" ]; then
+    if [ "$already_exists" != "" ]; then
         echo "Already up to date."
         exit 0
     fi
@@ -74,7 +74,7 @@ if [ "$channel" = "stable" ]; then
     fi
 else
     already_exists=$(yq -r 'path(.[])[0]' $filename | grep -m1 "$nameprefix$version-1-${commit_sha1::7}")
-    if [ "$already_exists" != "null" ]; then
+    if [ "$already_exists" != "" ]; then
         echo "Already up to date."
         exit 0
     fi
