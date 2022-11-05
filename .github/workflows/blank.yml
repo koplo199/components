@@ -82,7 +82,8 @@ jobs:
             release_archive=${{ steps.check-release.outputs.out }}
             if [[ $release_archive == *".tar.gz" ]] || [[ $release_archive == *".tar.xz" ]] || [[ $release_archive == *".tar.bz2" ]]; then
               repo=${{ matrix.components.repo }}
-              python "${{ github.workspace }}/tools/MaintainersHelpers/component-generator.py" "components" "${repo%/*}" "${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}" "${repo%/*}" "stable" "${{ steps.check-release.outputs.browser_download_url }}"
+              echo "${{ steps.check-release.outputs.asset }}"
+              python "${{ github.workspace }}/tools/MaintainersHelpers/component-generator.py" "components" "${repo%/*}" "${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}" "${repo%/*}" "stable" "${{ fromJSON(steps.check-release.outputs.asset).browser_download_url }}"
               mv "${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}.yml" "${{ matrix.components.Category }}/${{ matrix.components.Sub-category }}"
             else
               case $release_archive in
@@ -96,7 +97,6 @@ jobs:
               tar -C "${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}" -zcvf "${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}.tar.gz" $(ls ${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }})
               echo "upload_file=$(pwd)/${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}.tar.gz" >> $GITHUB_OUTPUT
             fi
-            git status
           fi
 
       - name: Upload release
@@ -175,7 +175,6 @@ jobs:
           commit_sha1=${{ fromJSON(steps.download-artifact.outputs.artifacts)[0].workflow_run.head_sha }}
           python "${{ github.workspace }}/tools/MaintainersHelpers/component-generator.py" "components" "${repo%/*}" "${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}-1-${commit_sha1::7}" "${repo%/*}" "unstable" "${{ fromJSON(steps.artifact.outputs.assets)[0].browser_download_url }}"
           mv "${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}-1-${commit_sha1::7}.yml" "${{ matrix.components.Category }}/${{ matrix.components.Sub-category }}"
-          git status
 
       - name : Commit changes
         if: steps.update-release-yml.outputs.updated == 'true' || steps.update-artifact-yml.outputs.updated == 'true'
