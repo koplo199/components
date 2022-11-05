@@ -142,6 +142,7 @@ jobs:
         working-directory: "bottle-components-repository"
         run: |
           echo "${{ steps.download-artifact.outputs.artifacts }}"
+          echo "${{ fromJSON(steps.download-artifact.outputs.artifacts)[0].workflow_run.head_sha }}"
           res=$(./input_files/update_yml_entries.sh "${{ matrix.components.name-prefix }}" "${{ steps.check-release.outputs.version }}" "${{ matrix.components.Category }}" "${{ matrix.components.Sub-category }}" "unstable" "${{ steps.download-artifact.outputs.head_sha }}" "$(pwd)/input_files/${{ matrix.components.yaml-file }}" "${{ github.workspace }}/other-repository")
           if [ "$res" != "Updated." ] || [ $? -ne 0 ]; then
             echo "updated=false" >> $GITHUB_OUTPUT
