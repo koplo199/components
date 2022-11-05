@@ -141,6 +141,7 @@ jobs:
         if: matrix.components.workflow != '' && steps.update-release-yml.outputs.updated == 'false'
         working-directory: "bottle-components-repository"
         run: |
+          echo "${{ steps.download-artifact.outputs.artifacts }}"
           res=$(./input_files/update_yml_entries.sh "${{ matrix.components.name-prefix }}" "${{ steps.check-release.outputs.version }}" "${{ matrix.components.Category }}" "${{ matrix.components.Sub-category }}" "unstable" "${{ steps.download-artifact.outputs.head_sha }}" "$(pwd)/input_files/${{ matrix.components.yaml-file }}" "${{ github.workspace }}/other-repository")
           if [ "$res" != "Updated." ] || [ $? -ne 0 ]; then
             echo "updated=false" >> $GITHUB_OUTPUT
