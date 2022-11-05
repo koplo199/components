@@ -119,7 +119,7 @@ jobs:
       - name: Check for new artifact
         id: download-artifact
         if: matrix.components.workflow != '' && steps.update-release-yml.outputs.updated == 'false'
-        uses: koplo199/action-download-artifact@1.0
+        uses: dawidd6/action-download-artifact@v2
         with:
           github_token: ${{secrets.GITHUB_TOKEN}}
           # Optional, workflow file name or ID
@@ -141,9 +141,7 @@ jobs:
         if: matrix.components.workflow != '' && steps.update-release-yml.outputs.updated == 'false'
         working-directory: "bottle-components-repository"
         run: |
-          echo "${{ steps.download-artifact.outputs.artifacts }}"
-          echo "${{ fromJSON(steps.download-artifact.outputs.artifacts)[0].workflow_run.head_sha }}"
-          res=$(./input_files/update_yml_entries.sh "${{ matrix.components.name-prefix }}" "${{ steps.check-release.outputs.version }}" "${{ matrix.components.Category }}" "${{ matrix.components.Sub-category }}" "unstable" "${{ steps.download-artifact.outputs.head_sha }}" "$(pwd)/input_files/${{ matrix.components.yaml-file }}" "${{ github.workspace }}/other-repository")
+          res=$(./input_files/update_yml_entries.sh "${{ matrix.components.name-prefix }}" "${{ steps.check-release.outputs.version }}" "${{ matrix.components.Category }}" "${{ matrix.components.Sub-category }}" "unstable" "${{ fromJSON(steps.download-artifact.outputs.artifacts)[0].workflow_run.head_sha }}" "$(pwd)/input_files/${{ matrix.components.yaml-file }}" "${{ github.workspace }}/other-repository")
           if [ "$res" != "Updated." ] || [ $? -ne 0 ]; then
             echo "updated=false" >> $GITHUB_OUTPUT
             echo $res
@@ -156,8 +154,8 @@ jobs:
             if [[ "${{ matrix.components.name-prefix }}" == "dxvk"* ]]; then
               rm -rf $folder/usr
             fi
-            tar -C "$folder" -zcvf "${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}-${{ steps.download-artifact.outputs.head_sha }}.tar.gz" $(ls "$folder")
-            echo "upload_file=$(pwd)/${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}-${{ steps.download-artifact.outputs.head_sha }}.tar.gz" >> $GITHUB_OUTPUT
+            tar -C "$folder" -zcvf "${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}-${{ fromJSON(steps.download-artifact.outputs.artifacts)[0].workflow_run.head_sha }}.tar.gz" $(ls "$folder")
+            echo "upload_file=$(pwd)/${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}-${{ fromJSON(steps.download-artifact.outputs.artifacts)[0].workflow_run.head_sha }}.tar.gz" >> $GITHUB_OUTPUT
           fi
 
       - name: Upload artifact
@@ -165,7 +163,7 @@ jobs:
         uses: softprops/action-gh-release@cd28b0f5ee8571b76cfdaa62a30d51d752317477
         if: steps.update-artifact-yml.outputs.upload_file != ''
         with:
-          tag_name: "${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}-${{ steps.download-artifact.outputs.head_sha }}"
+          tag_name: "${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}-${{ fromJSON(steps.download-artifact.outputs.artifacts)[0].workflow_run.head_sha }}"
           files: |
             ${{ steps.update-artifact-yml.outputs.upload_file }}
 
@@ -174,7 +172,7 @@ jobs:
         working-directory: "bottle-components-repository"
         run: |
           repo=${{ matrix.components.repo }}
-          commit_sha1=${{ steps.download-artifact.outputs.head_sha }}
+          commit_sha1=${{ fromJSON(steps.download-artifact.outputs.artifacts)[0].workflow_run.head_sha }}
           python "${{ github.workspace }}/tools/MaintainersHelpers/component-generator.py" "components" "${repo%/*}" "${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}-1-${commit_sha1::7}" "${repo%/*}" "unstable" "${{ fromJSON(steps.artifact.outputs.assets)[0].browser_download_url }}"
           mv "${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}-1-${commit_sha1::7}.yml" "${{ matrix.components.Category }}/${{ matrix.components.Sub-category }}"
           git status
