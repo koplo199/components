@@ -108,6 +108,7 @@ jobs:
               tar -C "${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}" -zcvf "${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}.tar.gz" $(ls ${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }})
               echo "upload_file=$(pwd)/${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}.tar.gz" >> $GITHUB_OUTPUT
             fi
+            git status
           fi
 
       - name: Release
@@ -184,13 +185,9 @@ jobs:
           python "${{ github.workspace }}/tools/MaintainersHelpers/component-generator.py" "components" "${repo%/*}" "${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}-1-${commit_sha1::7}" "${repo%/*}" "unstable" "${{ fromJSON(steps.artifact.outputs.assets)[0].browser_download_url }}"
           mv "${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}-1-${commit_sha1::7}.yml" "${{ matrix.components.Category }}/${{ matrix.components.Sub-category }}"
           git add "${{ matrix.components.Category }}/${{ matrix.components.Sub-category }}/${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}-1-${commit_sha1::7}.yml"
+          git status
 
-      - name : Commit changes
-        if: steps.update-release-yml.outputs.updated == 'true' || steps.update-artifact-yml.outputs.updated == 'true'
-        uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          repository: "bottle-components-repository"
-          commit_message: Apply ${{ matrix.components.yaml-file }} changes
+
 
   # This workflow contains a single job called "build"
   upload:
