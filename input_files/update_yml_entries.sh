@@ -50,6 +50,12 @@ is_newer() {
                 if [ $day_diff -lt 7 ]; then
                     newer=0
                 fi
+                echo $date_1
+                echo $date_2
+                echo $day_diff
+                echo $newer
+                echo $commit_sha1
+                echo $latest_commit
             fi
         fi
     fi
