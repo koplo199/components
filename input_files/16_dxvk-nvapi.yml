@@ -1,3 +1,7 @@
+dxvk-nvapi-v0.5.4-1-6fc2b68:
+  Category: nvapi
+  Channel: unstable
+  Commit: 6fc2b6832600423cab4b947cb697cba5631cc5ab
 dxvk-nvapi-v0.5.4:
   Category: nvapi
   Channel: stable

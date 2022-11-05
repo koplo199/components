@@ -1,3 +1,8 @@
+GE-Proton7-38:
+  Category: runners
+  Sub-category: proton
+  Channel: stable
+  Commit: 94c411cfaa4a3017246870ad978d8a495c9c1d89
 GE-Proton7-37:
   Category: runners
   Sub-category: proton
