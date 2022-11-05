@@ -38,18 +38,19 @@ fi
 
 is_newer() {
     git -C "$repository" merge-base --is-ancestor $1 $2
-    new=$?
-    if [ $new -eq 1 ]; then
+    res=$?
+    if [ $res -eq 1 ]; then
         git -C "$repository" merge-base --is-ancestor $2 $1
         if [ $? -eq 1 ]; then
             echo "The two commits are on separate branch. This should NOT have happened."
             exit 1
         fi
     fi
-    echo $new
+    $newer=$res
 }
 
-newer=$(is_newer "$commit_sha1" "$latest_commit")
+newer=0
+is_newer "$commit_sha1" "$latest_commit"
 # Special case : the build source is done elsewhere and the repository only serves to do releases.
 if [ "$latest_commit" != "$commit_sha1" ] && [ "$newer" -eq 0 ]; then
     echo "Something is wrong : this new release is based on an earlier commit than the previous one."
@@ -57,7 +58,9 @@ if [ "$latest_commit" != "$commit_sha1" ] && [ "$newer" -eq 0 ]; then
 fi
 
 if [ "$channel" = "stable" ]; then
-    if [ "$nameprefix$version" = "$latest" ]; then
+    already_exists=$(yq -r 'path(.[])[0]' $filename | grep -m1 "$nameprefix$version")
+    echo "ALREADY_EXISTS: $already_exists"
+    if [ "$already_exists" != "null" ]; then
         echo "Already up to date."
         exit 0
     fi
@@ -71,7 +74,9 @@ if [ "$channel" = "stable" ]; then
         yq -i -y "with_entries(if .key == \"$latest\" then .key = \"$nameprefix$version\" else . end) | .\"$nameprefix$version\".Channel = \"$channel\" | .\"$nameprefix$version\".Commit = \"$commit_sha1\"" $filename
     fi
 else
-    if [ "$nameprefix$version-1-${commit_sha1::7}" = "$latest" ]; then
+    already_exists=$(yq -r 'path(.[])[0]' $filename | grep -m1 "$nameprefix$version-1-${commit_sha1::7}")
+    echo "ALREADY_EXISTS: $already_exists"
+    if [ "$already_exists" != "null" ]; then
         echo "Already up to date."
         exit 0
     fi
