@@ -1,7 +1,5 @@
 # This is a basic workflow to help you get started with Actions
-
 name: CI
-
 # Controls when the workflow will run
 on:
   # Triggers the workflow on push or pull request events but only for the "main" branch
@@ -9,33 +7,10 @@ on:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
-
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
-
-env:
-  COMPONENTS: '[
-            {"repo" : "doitsujin/dxvk"                  , "workflow": "artifacts.yml"          , "branch": "master", "name-prefix": "dxvk-"        , "version-prefix": "v"        , "Category": "dxvk"       , "Sub-category": ""      , "yaml-file": "14_dxvk.yml"         },
-            {"repo" : "HansKristian-Work/vkd3d-proton"  , "workflow": "artifacts.yml"          , "branch": "master", "name-prefix": "vkd3d-proton-", "version-prefix": "v"        , "Category": "vkd3d"      , "Sub-category": ""      , "yaml-file": "13_vkd3d-proton.yml" },
-            {"repo" : "bottlesdevs/wine"                , "workflow": "build-soda-arch.yml"    , "branch": "soda"  , "name-prefix": "soda-"        , "version-prefix": "soda-"    , "Category": "runners"    , "Sub-category": "wine"  , "yaml-file": "3_soda.yml"          },
-            {"repo" : "bottlesdevs/wine"                , "workflow": "build-caffe-arch.yml"   , "branch": "caffe" , "name-prefix": "caffe-"       , "version-prefix": "caffe-"   , "Category": "runners"    , "Sub-category": "wine"  , "yaml-file": "4_caffe.yml"         },
-            {"repo" : "GloriousEggroll/wine-ge-custom"  , "workflow": ""                       , "branch": "master", "name-prefix": "wine-"        , "version-prefix": ""         , "Category": "runners"    , "Sub-category": "wine"  , "yaml-file": "5_wine-GE-Proton.yml"},
-            {"repo" : "GloriousEggroll/proton-ge-custom", "workflow": ""                       , "branch": "master", "name-prefix": "GE-Proton"    , "version-prefix": "GE-Proton", "Category": "runners"    , "Sub-category": "proton", "yaml-file": "10_GE-Proton.yml"    },
-            {"repo" : "ishitatsuyuki/LatencyFleX"       , "workflow": "artifact.yml"           , "branch": "master", "name-prefix": "latencyflex-" , "version-prefix": ""         , "Category": "latencyflex", "Sub-category": ""      , "yaml-file": "17_latencyflex.yml"  },
-            {"repo" : "jp7677/dxvk-nvapi"               , "workflow": "artifacts.yml"          , "branch": "master", "name-prefix": "dxvk-nvapi-"  , "version-prefix": ""         , "Category": "nvapi"      , "Sub-category": ""      , "yaml-file": "16_dxvk-nvapi.yml"   },
-            {"repo" : "Sporif/dxvk-async"               , "workflow": ""                       , "branch": "master", "name-prefix": "dxvk-async-"  , "version-prefix": ""         , "Category": "dxvk"       , "Sub-category": ""      , "yaml-file": "15_dxvk-async.yml"   },
-          ]'
-
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  build-matrix:
-    runs-on: ubuntu-latest
-    steps:
-      - id: set-matrix
-        run: echo 'version_matrix=${{ env.COMPONENTS }}' >> $GITHUB_OUTPUT
-    outputs:
-      version_matrix: ${{ steps.set-matrix.outputs.version_matrix }}
-
   # This workflow contains a single job called "download"
   download:
     needs: build-matrix
@@ -44,7 +19,17 @@ jobs:
     strategy:
       max-parallel: 1
       matrix:
-        components: ${{ fromJson(needs.build-matrix.outputs.version_matrix) }}
+        components: [
+            {repo : "doitsujin/dxvk"                  , workflow: "artifacts.yml"          , branch: "master", name-prefix: "dxvk-"        , version-prefix: "v"        , Category: "dxvk"       , Sub-category: ""      , yaml-file: "14_dxvk.yml"         },
+            {repo : "HansKristian-Work/vkd3d-proton"  , workflow: "artifacts.yml"          , branch: "master", name-prefix: "vkd3d-proton-", version-prefix: "v"        , Category: "vkd3d"      , Sub-category: ""      , yaml-file: "13_vkd3d-proton.yml" },
+            {repo : "bottlesdevs/wine"                , workflow: "build-soda-arch.yml"    , branch: "soda"  , name-prefix: "soda-"        , version-prefix: "soda-"    , Category: "runners"    , Sub-category: "wine"  , yaml-file: "3_soda.yml"          },
+            {repo : "bottlesdevs/wine"                , workflow: "build-caffe-arch.yml"   , branch: "caffe" , name-prefix: "caffe-"       , version-prefix: "caffe-"   , Category: "runners"    , Sub-category: "wine"  , yaml-file: "4_caffe.yml"         },
+            {repo : "GloriousEggroll/wine-ge-custom"  , workflow: ""                       , branch: "master", name-prefix: "wine-"        , version-prefix: ""         , Category: "runners"    , Sub-category: "wine"  , yaml-file: "5_wine-GE-Proton.yml"},
+            {repo : "GloriousEggroll/proton-ge-custom", workflow: ""                       , branch: "master", name-prefix: "GE-Proton"    , version-prefix: "GE-Proton", Category: "runners"    , Sub-category: "proton", yaml-file: "10_GE-Proton.yml"    },
+            {repo : "ishitatsuyuki/LatencyFleX"       , workflow: "artifact.yml"           , branch: "master", name-prefix: "latencyflex-" , version-prefix: ""         , Category: "latencyflex", Sub-category: ""      , yaml-file: "17_latencyflex.yml"  },
+            {repo : "jp7677/dxvk-nvapi"               , workflow: "artifacts.yml"          , branch: "master", name-prefix: "dxvk-nvapi-"  , version-prefix: ""         , Category: "nvapi"      , Sub-category: ""      , yaml-file: "16_dxvk-nvapi.yml"   },
+            {repo : "Sporif/dxvk-async"               , workflow: ""                       , branch: "master", name-prefix: "dxvk-async-"  , version-prefix: ""         , Category: "dxvk"       , Sub-category: ""      , yaml-file: "15_dxvk-async.yml"   },
+          ]
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
     continue-on-error: true
@@ -195,11 +180,3 @@ jobs:
           repository: "bottle-components-repository"
           file_pattern: "${{ matrix.components.Category }}/${{ matrix.components.Sub-category }}/*.yml input_files/${{ matrix.components.yaml-file }}"
           commit_message: Apply ${{ matrix.components.yaml-file }} changes
-
-  # This workflow contains a single job called "build"
-  upload:
-    runs-on: ubuntu-latest
-    needs: download
-    steps:
-      - name: Display structure of downloaded files
-        run: ls -la
