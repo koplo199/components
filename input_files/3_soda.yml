@@ -2,7 +2,7 @@ soda-7.0-7:
     Category: runners
     Sub-category: wine
     Channel: stable
-    Commit: 51619f87d790ef5460b97375bfe5859adb551507
+    Commit: 1eab691742a7cec87abf458d1fe91895e8b42d00
 soda-7.0-4:
     Category: runners
     Sub-category: wine

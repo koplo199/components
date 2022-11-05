@@ -34,7 +34,7 @@ jobs:
     continue-on-error: true
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - name: Check release
+      - name: Check for new release
         id: check-release
         uses: koplo199/actions-download-asset@1.0
         with:
@@ -66,7 +66,7 @@ jobs:
           sudo apt-get install python3-pip zstd
           pip3 install yq
 
-      - name: Update release input_files entries
+      - name: Update component stable input_file entry
         id: update-release-yml
         working-directory: "bottle-components-repository"
         run: |
@@ -99,7 +99,7 @@ jobs:
             git status
           fi
 
-      - name: Release
+      - name: Upload release
         id: release
         uses: softprops/action-gh-release@cd28b0f5ee8571b76cfdaa62a30d51d752317477
         if: steps.update-release-yml.outputs.upload_file != ''
@@ -116,7 +116,7 @@ jobs:
           python "${{ github.workspace }}/tools/MaintainersHelpers/component-generator.py" "components" "${repo%/*}" "${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}" "${repo%/*}" "stable" "${{ fromJSON(steps.release.outputs.assets)[0].browser_download_url }}"
           mv "${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}.yml" "${{ matrix.components.Category }}/${{ matrix.components.Sub-category }}"
 
-      - name: Download artifact
+      - name: Check for new artifact
         id: download-artifact
         if: matrix.components.workflow != '' && steps.update-release-yml.outputs.updated == 'false'
         uses: koplo199/action-download-artifact@1.0
@@ -136,7 +136,7 @@ jobs:
           # Optional, a directory where to extract artifact(s), defaults to the current directory
           path: artifact
 
-      - name: Update artifact input_files entries
+      - name: Update component unstable input_file entry
         id: update-artifact-yml
         if: matrix.components.workflow != '' && steps.update-release-yml.outputs.updated == 'false'
         working-directory: "bottle-components-repository"
@@ -158,7 +158,7 @@ jobs:
             echo "upload_file=$(pwd)/${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}-${{ steps.download-artifact.outputs.head_sha }}.tar.gz" >> $GITHUB_OUTPUT
           fi
 
-      - name: Artifact
+      - name: Upload artifact
         id: artifact
         uses: softprops/action-gh-release@cd28b0f5ee8571b76cfdaa62a30d51d752317477
         if: steps.update-artifact-yml.outputs.upload_file != ''
