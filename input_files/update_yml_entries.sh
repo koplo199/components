@@ -38,15 +38,21 @@ fi
 
 is_newer() {
     git -C "$repository" merge-base --is-ancestor $1 $2
-    res=$?
-    if [ $res -eq 1 ]; then
+    newer=$?
+    if [ $newer -eq 1 ]; then
         git -C "$repository" merge-base --is-ancestor $2 $1
         if [ $? -eq 1 ]; then
-            echo "The two commits are on separate branch. This should NOT have happened."
-            exit 0
+            if [ "$channel" = "unstable" ] && [ "$latest_channel" = "stable" ]; then
+                date_1=$(git show --no-patch --no-notes --pretty='%cd' --date=format:'%Y%m%d' $1)
+                date_2=$(git show --no-patch --no-notes --pretty='%cd' --date=format:'%Y%m%d' $2)
+                let day_diff="$date_1-$date_2"
+                # Do not add unstable artifact if released less than a week compared to stable build
+                if [ $day_diff -lt 7 ]; then
+                    newer=0
+                fi
+            fi
         fi
     fi
-    newer=$res
 }
 
 newer=0
