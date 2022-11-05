@@ -45,7 +45,7 @@ is_newer() {
             if [ "$channel" = "unstable" ] && [ "$latest_channel" = "stable" ]; then
                 date_1=$(git show --no-patch --no-notes --pretty='%cd' --date=format:'%Y%m%d' $1)
                 date_2=$(git show --no-patch --no-notes --pretty='%cd' --date=format:'%Y%m%d' $2)
-                let day_diff="$date_1-$date_2"
+                ((day_diff=$date_1 - $date_2))
                 # Do not add unstable artifact if released less than a week compared to stable build
                 if [ $day_diff -lt 7 ]; then
                     newer=0
@@ -96,4 +96,3 @@ else
 fi
 
 echo "Updated."
-exit 0
