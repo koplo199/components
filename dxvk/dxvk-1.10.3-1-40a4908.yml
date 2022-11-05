@@ -5,6 +5,6 @@ Channel: unstable
 File:
 - file_name: dxvk-1.10.3-40a4908a2a72409d0176c2ea519d4132f8291833.tar.gz
   url: https://github.com/koplo199/components/releases/download/dxvk-1.10.3-40a4908a2a72409d0176c2ea519d4132f8291833/dxvk-1.10.3-40a4908a2a72409d0176c2ea519d4132f8291833.tar.gz
-  file_checksum: 6aa26f6030440f7a83f5454856489c38
-  file_size: 7620043
+  file_checksum: fc1420340e95e93a0704b109aeb25436
+  file_size: 7619952
   rename: dxvk-1.10.3-40a4908a2a72409d0176c2ea519d4132f8291833.tar.gz
