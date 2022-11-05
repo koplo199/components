@@ -1,8 +1,10 @@
 Name: vkd3d-proton-2.7
-Provider: bottles
+Provider: HansKristian-Work
+Maintainer: HansKristian-Work
 Channel: stable
 File:
-- file_name: vkd3d-proton-2.7.tar.xz
-  url: https://github.com/bottlesdevs/vkd3d-proton/releases/download/vkd3d-proton-2.7/vkd3d-proton-2.7.tar.xz
-  file_checksum: 538168a0090edcf5cd5b9d0b5e06a1f5
-  rename: vkd3d-proton-2.7.tar.xz
+- file_name: vkd3d-proton-2.7.tar.gz
+  url: https://github.com/koplo199/components/releases/download/vkd3d-proton-2.7/vkd3d-proton-2.7.tar.gz
+  file_checksum: f81b1aab5240b823055a4bff97f7ef94
+  file_size: 2338305
+  rename: vkd3d-proton-2.7.tar.gz
