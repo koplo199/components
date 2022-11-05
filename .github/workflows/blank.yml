@@ -71,8 +71,12 @@ jobs:
         working-directory: "bottle-components-repository"
         run: |
           res=$(./input_files/update_yml_entries.sh "${{ matrix.components.name-prefix }}" "${{ steps.check-release.outputs.version }}" "${{ matrix.components.Category }}" "${{ matrix.components.Sub-category }}" "stable" "$(git -C ${{ github.workspace }}/other-repository rev-list -n 1 ${{ matrix.components.version-prefix }}${{ steps.check-release.outputs.version }})" "$(pwd)/input_files/${{ matrix.components.yaml-file }}" "${{ github.workspace }}/other-repository")
-          if [ "$res" = "Already up to date." ] || [ $? -ne 0 ]; then
+          if [ "$res" != "Updated." ]; then
             echo "updated=false" >> $GITHUB_OUTPUT
+            if [ "$res" != "Already up to date." ]; then
+              echo $res
+              exit 1
+            fi
           else
             echo "updated=true" >> $GITHUB_OUTPUT
             release_archive=${{ steps.check-release.outputs.out }}
@@ -138,8 +142,12 @@ jobs:
         working-directory: "bottle-components-repository"
         run: |
           res=$(./input_files/update_yml_entries.sh "${{ matrix.components.name-prefix }}" "${{ steps.check-release.outputs.version }}" "${{ matrix.components.Category }}" "${{ matrix.components.Sub-category }}" "unstable" "${{ steps.download-artifact.outputs.head_sha }}" "$(pwd)/input_files/${{ matrix.components.yaml-file }}" "${{ github.workspace }}/other-repository")
-          if [ "$res" = "Already up to date." ] || [ $? -ne 0 ]; then
+          if [ "$res" != "Updated." ]; then
             echo "updated=false" >> $GITHUB_OUTPUT
+            if [ "$res" != "Already up to date." ]; then
+              echo $res
+              exit 1
+            fi
           else
             echo "updated=true" >> $GITHUB_OUTPUT
             folder=$(find "${{ github.workspace }}/artifact" -name "${{ matrix.components.name-prefix }}*")

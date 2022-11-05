@@ -33,7 +33,7 @@ latest_commit=$(yq -r ".\"$latest\".Commit" $filename)
 
 if [ "$latest_commit" = "null" ] || [ "$latest_channel" = "null" ]; then
     echo "Cannot find latest commit or channel. Something is wrong with the input file : $filename"
-    exit 1
+    exit 0
 fi
 
 is_newer() {
@@ -43,7 +43,7 @@ is_newer() {
         git -C "$repository" merge-base --is-ancestor $2 $1
         if [ $? -eq 1 ]; then
             echo "The two commits are on separate branch. This should NOT have happened."
-            exit 1
+            exit 0
         fi
     fi
     newer=$res
@@ -54,12 +54,11 @@ is_newer "$commit_sha1" "$latest_commit"
 # Special case : the build source is done elsewhere and the repository only serves to do releases.
 if [ "$latest_commit" != "$commit_sha1" ] && [ "$newer" -eq 0 ]; then
     echo "Something is wrong : this new release is based on an earlier commit than the previous one."
-    exit 1
+    exit 0
 fi
 
 if [ "$channel" = "stable" ]; then
     already_exists=$(yq -r 'path(.[])[0]' $filename | grep -m1 "$nameprefix$version")
-    echo "ALREADY_EXISTS: $already_exists"
     if [ "$already_exists" != "null" ]; then
         echo "Already up to date."
         exit 0
@@ -75,7 +74,6 @@ if [ "$channel" = "stable" ]; then
     fi
 else
     already_exists=$(yq -r 'path(.[])[0]' $filename | grep -m1 "$nameprefix$version-1-${commit_sha1::7}")
-    echo "ALREADY_EXISTS: $already_exists"
     if [ "$already_exists" != "null" ]; then
         echo "Already up to date."
         exit 0
@@ -90,3 +88,6 @@ else
         yq -i -y "with_entries(if .key == \"$latest\" then .key = \"$nameprefix$version-1-${commit_sha1::7}\" else . end) | .\"$nameprefix$version\".Commit = \"$commit_sha1\"" $filename
     fi
 fi
+
+echo "Updated."
+exit 0
