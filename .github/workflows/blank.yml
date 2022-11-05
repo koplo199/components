@@ -40,6 +40,7 @@ jobs:
   download:
     needs: build-matrix
     strategy:
+      max-parallel: 1
       matrix:
         components: ${{ fromJson(needs.build-matrix.outputs.version_matrix) }}
     # The type of runner that the job will run on
@@ -95,7 +96,6 @@ jobs:
               repo=${{ matrix.components.repo }}
               python "${{ github.workspace }}/tools/MaintainersHelpers/component-generator.py" "components" "${repo%/*}" "${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}" "${repo%/*}" "stable" "${{ steps.check-release.outputs.browser_download_url }}"
               mv "${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}.yml" "${{ matrix.components.Category }}/${{ matrix.components.Sub-category }}"
-              git add "${{ matrix.components.Category }}/${{ matrix.components.Sub-category }}/${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}.yml"
             else
               case $release_archive in
                 *".tar.zst")
@@ -127,7 +127,6 @@ jobs:
           repo=${{ matrix.components.repo }}
           python "${{ github.workspace }}/tools/MaintainersHelpers/component-generator.py" "components" "${repo%/*}" "${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}" "${repo%/*}" "stable" "${{ fromJSON(steps.release.outputs.assets)[0].browser_download_url }}"
           mv "${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}.yml" "${{ matrix.components.Category }}/${{ matrix.components.Sub-category }}"
-          git add "${{ matrix.components.Category }}/${{ matrix.components.Sub-category }}/${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}.yml"
 
       - name: Download artifact
         id: download-artifact
@@ -184,10 +183,15 @@ jobs:
           commit_sha1=${{ steps.download-artifact.outputs.head_sha }}
           python "${{ github.workspace }}/tools/MaintainersHelpers/component-generator.py" "components" "${repo%/*}" "${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}-1-${commit_sha1::7}" "${repo%/*}" "unstable" "${{ fromJSON(steps.artifact.outputs.assets)[0].browser_download_url }}"
           mv "${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}-1-${commit_sha1::7}.yml" "${{ matrix.components.Category }}/${{ matrix.components.Sub-category }}"
-          git add "${{ matrix.components.Category }}/${{ matrix.components.Sub-category }}/${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}-1-${commit_sha1::7}.yml"
           git status
 
-
+      - name : Commit changes
+        if: steps.update-release-yml.outputs.updated == 'true' || steps.update-artifact-yml.outputs.updated == 'true'
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          repository: "bottle-components-repository"
+          file_pattern: "${{ matrix.components.Category }}/${{ matrix.components.Sub-category }}/*.yml input_files/{{ matrix.components.yaml-file }}"
+          commit_message: Apply ${{ matrix.components.yaml-file }} changes
 
   # This workflow contains a single job called "build"
   upload:
