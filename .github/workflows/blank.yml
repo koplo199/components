@@ -189,6 +189,7 @@ jobs:
         if: steps.update-release-yml.outputs.updated == 'true' || steps.update-artifact-yml.outputs.updated == 'true'
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
+          repository: "bottle-components-repository"
           commit_message: Apply ${{ matrix.components.yaml-file }} changes
 
   # This workflow contains a single job called "build"
