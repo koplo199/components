@@ -13,7 +13,6 @@ on:
 jobs:
   # This workflow contains a single job called "download"
   download:
-    needs: build-matrix
     concurrency: 
       group: ${{ github.workflow }}
     strategy:
