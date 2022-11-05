@@ -11,7 +11,6 @@ repository="$8"
 
 if ! [ -f "$filename" ]; then
     touch $filename
-    git add $filename
     if [ -z "$subcategory" ]; then
         yq -n -i -y "{\"$nameprefix$version\": {\"Category\":\"$category\", \"Channel\": \"$channel\", \"Commit\": \"$commit_sha1\"}}" $filename
     else

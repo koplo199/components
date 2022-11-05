@@ -39,6 +39,8 @@ jobs:
   # This workflow contains a single job called "download"
   download:
     needs: build-matrix
+    concurrency: 
+      group: ${{ github.workflow }}
     strategy:
       max-parallel: 1
       matrix:
@@ -190,7 +192,7 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
           repository: "bottle-components-repository"
-          file_pattern: "${{ matrix.components.Category }}/${{ matrix.components.Sub-category }}/*.yml input_files/{{ matrix.components.yaml-file }}"
+          file_pattern: "${{ matrix.components.Category }}/${{ matrix.components.Sub-category }}/*.yml input_files/${{ matrix.components.yaml-file }}"
           commit_message: Apply ${{ matrix.components.yaml-file }} changes
 
   # This workflow contains a single job called "build"
