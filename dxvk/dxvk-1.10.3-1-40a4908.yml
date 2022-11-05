@@ -1,0 +1,10 @@
+Name: dxvk-1.10.3-1-40a4908
+Provider: doitsujin
+Maintainer: doitsujin
+Channel: unstable
+File:
+- file_name: dxvk-1.10.3-40a4908a2a72409d0176c2ea519d4132f8291833.tar.gz
+  url: https://github.com/koplo199/components/releases/download/dxvk-1.10.3-40a4908a2a72409d0176c2ea519d4132f8291833/dxvk-1.10.3-40a4908a2a72409d0176c2ea519d4132f8291833.tar.gz
+  file_checksum: 5840de66814427735148de33bbbd0205
+  file_size: 7619947
+  rename: dxvk-1.10.3-40a4908a2a72409d0176c2ea519d4132f8291833.tar.gz
