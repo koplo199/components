@@ -44,20 +44,18 @@ jobs:
           file: /${{ matrix.components.name-prefix }}.*tar.*/
           prefix: ${{ matrix.components.version-prefix }}
 
-      - name: Check out repository code
+      - name: Check out repositories
         uses: actions/checkout@v3
         with:
           path: "bottle-components-repository"
           ref: ${{ github.event.repository.default_branch }}
 
-      - name: Check out repository code
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
         with:
           repository: bottlesdevs/tools
           path: "tools"
 
-      - name: Check out repository code
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
         with:
           repository: ${{ matrix.components.repo }}
           path: "other-repository"
