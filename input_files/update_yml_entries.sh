@@ -46,7 +46,7 @@ is_newer() {
             exit 1
         fi
     fi
-    $newer=$res
+    newer=$res
 }
 
 newer=0
