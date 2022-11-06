@@ -11,8 +11,6 @@ created_at="$8"
 
 created_at=$(date -d "$created_at" +%s)
 
-echo "mdrrr"
-exit 0
 if [ "$channel" = "stable" ]; then
     name="$nameprefix$version"
 else
