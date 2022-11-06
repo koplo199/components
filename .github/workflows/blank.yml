@@ -64,7 +64,7 @@ jobs:
         id: update-release-yml
         working-directory: "bottle-components-repository"
         run: |
-          res=$(./input_files/update_yml_entries.sh "${{ matrix.components.name-prefix }}" "${{ steps.check-release.outputs.version }}" "${{ matrix.components.Category }}" "${{ matrix.components.Sub-category }}" "stable" "" "${{ fromJSON(steps.check-release.outputs.asset).created_at }}")
+          res=$(./input_files/update_yml_entries.sh "${{ matrix.components.name-prefix }}" "${{ steps.check-release.outputs.version }}" "${{ matrix.components.Category }}" "${{ matrix.components.Sub-category }}" "stable" "" "$(pwd)/input_files/${{ matrix.components.yaml-file }}" "${{ fromJSON(steps.check-release.outputs.asset).created_at }}")
           if [ "$res" != "Updated." ] || [ $? -ne 0 ]; then
             echo "updated=false" >> $GITHUB_OUTPUT
             echo $res

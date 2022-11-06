@@ -1,11 +1,7 @@
-dxvk-1.10.3-1-40a4908:
-  Category: dxvk
-  Channel: unstable
-  Commit: 40a4908a2a72409d0176c2ea519d4132f8291833
 dxvk-1.10.3:
   Category: dxvk
   Channel: stable
-  Commit: e4fd5e9e8d335e8a2c0814829207cbd421f7e40e
+  Date: 1667692800
 dxvk-1.10.2:
   Category: dxvk
   Channel: stable
