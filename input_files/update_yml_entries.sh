@@ -94,7 +94,5 @@ else
     fi
 fi
 
-git status
-git diff HEAD
 echo "Updated."
 exit 0
