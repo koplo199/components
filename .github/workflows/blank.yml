@@ -54,11 +54,6 @@ jobs:
           repository: bottlesdevs/tools
           path: "tools"
 
-      - uses: actions/checkout@v3
-        with:
-          repository: ${{ matrix.components.repo }}
-          path: "other-repository"
-
       - name: Install dependencies
         run: |
           sudo apt-get update
@@ -69,7 +64,7 @@ jobs:
         id: update-release-yml
         working-directory: "bottle-components-repository"
         run: |
-          res=$(./input_files/update_yml_entries.sh "${{ matrix.components.name-prefix }}" "${{ steps.check-release.outputs.version }}" "${{ matrix.components.Category }}" "${{ matrix.components.Sub-category }}" "stable" "$(git -C ${{ github.workspace }}/other-repository rev-list -n 1 ${{ matrix.components.version-prefix }}${{ steps.check-release.outputs.version }})" "$(pwd)/input_files/${{ matrix.components.yaml-file }}" "${{ github.workspace }}/other-repository")
+          res=$(./input_files/update_yml_entries.sh "${{ matrix.components.name-prefix }}" "${{ steps.check-release.outputs.version }}" "${{ matrix.components.Category }}" "${{ matrix.components.Sub-category }}" "stable" "" "${{ fromJSON(steps.check-release.outputs.asset).created_at }}")
           if [ "$res" != "Updated." ] || [ $? -ne 0 ]; then
             echo "updated=false" >> $GITHUB_OUTPUT
             echo $res
@@ -139,7 +134,7 @@ jobs:
         if: matrix.components.workflow != '' && steps.update-release-yml.outputs.updated == 'false'
         working-directory: "bottle-components-repository"
         run: |
-          res=$(./input_files/update_yml_entries.sh "${{ matrix.components.name-prefix }}" "${{ steps.check-release.outputs.version }}" "${{ matrix.components.Category }}" "${{ matrix.components.Sub-category }}" "unstable" "${{ fromJSON(steps.download-artifact.outputs.artifacts)[0].workflow_run.head_sha }}" "$(pwd)/input_files/${{ matrix.components.yaml-file }}" "${{ github.workspace }}/other-repository")
+          res=$(./input_files/update_yml_entries.sh "${{ matrix.components.name-prefix }}" "${{ steps.check-release.outputs.version }}" "${{ matrix.components.Category }}" "${{ matrix.components.Sub-category }}" "unstable" "${{ fromJSON(steps.download-artifact.outputs.artifacts)[0].workflow_run.head_sha }}" "$(pwd)/input_files/${{ matrix.components.yaml-file }}" "${{ fromJSON(steps.download-artifact.outputs.artifacts)[0].created_at }}"
           if [ "$res" != "Updated." ] || [ $? -ne 0 ]; then
             echo "updated=false" >> $GITHUB_OUTPUT
             echo $res

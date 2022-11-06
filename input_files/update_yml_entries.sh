@@ -7,80 +7,91 @@ subcategory="$4"
 channel="$5"
 commit_sha1="$6"
 filename="$7"
-repository="$8"
+created_at="$8"
+
+created_at=$(date -d "$created_at" +%s)
+echo $created_at
+
+if [ "$channel" = "stable" ]; then
+    name="$nameprefix$version"
+else
+    name="$nameprefix$version-1-${commit_sha1::7}"
+fi
 
 if ! [ -f "$filename" ]; then
     touch $filename
     if [ -z "$subcategory" ]; then
-        yq -n -i -y "{\"$nameprefix$version\": {\"Category\":\"$category\", \"Channel\": \"$channel\", \"Commit\": \"$commit_sha1\"}}" $filename
+        yq -n -i -y "{\"$name\": {\"Category\":\"$category\", \"Channel\": \"$channel\", \"Date\": \"$created_at\"}}" $filename
     else
-        yq -n -i -y "{\"$nameprefix$version\": {\"Category\":\"$category\", \"Sub-category\":\"$subcategory\", \"Channel\": \"$channel\", \"Commit\": \"$commit_sha1\"}}" $filename
+        yq -n -i -y "{\"$name\": {\"Category\":\"$category\", \"Sub-category\":\"$subcategory\", \"Channel\": \"$channel\", \"Date\": \"$created_at\"}}" $filename
     fi
+    exit 0
 fi
 
 latest=$(yq -r 'path(.[])[0]' $filename | grep -m1 "$nameprefix")
 
 if [ -z "$latest" ]; then
     if [ -z "$subcategory" ]; then
-        yq -i -y "{\"$nameprefix$version\": {\"Category\":\"$category\", \"Channel\": \"$channel\", \"Commit\": \"$commit_sha1\"}} + ." $filename
+        yq -i -y "{\"$name\": {\"Category\":\"$category\", \"Channel\": \"$channel\", \"Date\": \"$created_at\"}} + ." $filename
     else
-        yq -i -y "{\"$nameprefix$version\": {\"Category\":\"$category\", \"Sub-category\":\"$subcategory\", \"Channel\": \"$channel\", \"Commit\": \"$commit_sha1\"}} + ." $filename
+        yq -i -y "{\"$name\": {\"Category\":\"$category\", \"Sub-category\":\"$subcategory\", \"Channel\": \"$channel\", \"Date\": \"$created_at\"}} + ." $filename
     fi
+    exit 0
+fi
+
+already_exists=$(yq -r 'path(.[])[0]' $filename | grep -m1 "$name")
+if [ "$already_exists" != "" ]; then
+    echo "Already up to date."
+    exit 0
 fi
 
 latest_channel=$(yq -r ".\"$latest\".Channel" $filename)
-latest_commit=$(yq -r ".\"$latest\".Commit" $filename)
+latest_date=$(yq -r ".\"$latest\".Date" $filename)
 
-if [ "$latest_commit" = "null" ] || [ "$latest_channel" = "null" ]; then
+if [ "$latest_date" = "null" ] || [ "$latest_channel" = "null" ]; then
     echo "Cannot find latest commit or channel. Something is wrong with the input file : $filename"
     exit 0
 fi
 
-is_newer() {
-    git -C "$repository" merge-base --is-ancestor $1 $2 2> /dev/null
-    newer=$?
-    if [ $newer -eq 128 ]; then
-        # Different branch, todo
-    fi
-}
-
 newer=0
-is_newer "$commit_sha1" "$latest_commit"
+if [ "$channel" = "stable" ] && [ "$latest_channel" = "unstable" ]; then
+    # Always superseed an unstable build by a stable one
+    newer=1
+else
+    ((time_diff=$created_at - $latest_date))
+    # Do not add unstable artifact if released less than a week compared to stable build
+    if [ $time_diff -lt 0 ] || ([ "$channel" = "unstable" ] && [ "$latest_channel" = "stable" ] && [ $time_diff -lt $((60 * 60 * 24 * 7)) ]); then
+        newer=0
+    else
+        newer=1
+    fi
+fi
+
 # Special case : the build source is done elsewhere and the repository only serves to do releases.
-if [ "$latest_commit" != "$commit_sha1" ] && [ "$newer" -eq 0 ]; then
+if [ "$newer" -eq 0 ]; then
     echo "Something is wrong : this new release is based on an earlier commit than the previous one."
     exit 0
 fi
 
 if [ "$channel" = "stable" ]; then
-    already_exists=$(yq -r 'path(.[])[0]' $filename | grep -m1 "$nameprefix$version")
-    if [ "$already_exists" != "" ]; then
-        echo "Already up to date."
-        exit 0
-    fi
     if [ "$latest_channel" = "stable" ]; then
         if [ -z "$subcategory" ]; then
-            yq -i -y "{\"$nameprefix$version\": {\"Category\":\"$category\", \"Channel\": \"$channel\", \"Commit\": \"$commit_sha1\"}} + ." $filename
+            yq -i -y "{\"$name\": {\"Category\":\"$category\", \"Channel\": \"$channel\", \"Date\": \"$created_at\"}} + ." $filename
         else
-            yq -i -y "{\"$nameprefix$version\": {\"Category\":\"$category\", \"Sub-category\":\"$subcategory\", \"Channel\": \"$channel\", \"Commit\": \"$commit_sha1\"}} + ." $filename
+            yq -i -y "{\"$name\": {\"Category\":\"$category\", \"Sub-category\":\"$subcategory\", \"Channel\": \"$channel\", \"Date\": \"$created_at\"}} + ." $filename
         fi
     else
-        yq -i -y "with_entries(if .key == \"$latest\" then .key = \"$nameprefix$version\" else . end) | .\"$nameprefix$version\".Channel = \"$channel\" | .\"$nameprefix$version\".Commit = \"$commit_sha1\"" $filename
+        yq -i -y "with_entries(if .key == \"$latest\" then .key = \"$name\" else . end) | .\"$name\".Channel = \"$channel\" | .\"$name\".Date = \"$created_at\"" $filename
     fi
 else
-    already_exists=$(yq -r 'path(.[])[0]' $filename | grep -m1 "$nameprefix$version-1-${commit_sha1::7}")
-    if [ "$already_exists" != "" ]; then
-        echo "Already up to date."
-        exit 0
-    fi
     if [ "$latest_channel" = "stable" ]; then
         if [ -z "$subcategory" ]; then
-            yq -i -y "{\"$nameprefix$version-1-${commit_sha1::7}\": {\"Category\":\"$category\", \"Channel\": \"$channel\", \"Commit\": \"$commit_sha1\"}} + ." $filename
+            yq -i -y "{\"$name\": {\"Category\":\"$category\", \"Channel\": \"$channel\", \"Date\": \"$created_at\"}} + ." $filename
         else
-            yq -i -y "{\"$nameprefix$version-1-${commit_sha1::7}\": {\"Category\":\"$category\", \"Sub-category\":\"$subcategory\", \"Channel\": \"$channel\", \"Commit\": \"$commit_sha1\"}} + ." $filename
+            yq -i -y "{\"$name\": {\"Category\":\"$category\", \"Sub-category\":\"$subcategory\", \"Channel\": \"$channel\", \"Date\": \"$created_at\"}} + ." $filename
         fi
     else
-        yq -i -y "with_entries(if .key == \"$latest\" then .key = \"$nameprefix$version-1-${commit_sha1::7}\" else . end) | .\"$nameprefix$version\".Commit = \"$commit_sha1\"" $filename
+        yq -i -y "with_entries(if .key == \"$latest\" then .key = \"$name\" else . end) | .\"$name\".Date = \"$created_at\"" $filename
     fi
 fi
 
