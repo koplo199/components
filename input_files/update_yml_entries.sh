@@ -10,7 +10,7 @@ filename="$7"
 created_at="$8"
 
 created_at=$(date -d "$created_at" +%s)
-
+exit 1
 if [ "$channel" = "stable" ]; then
     name="$nameprefix$version"
 else
@@ -52,8 +52,8 @@ if [ "$channel" = "stable" ] && [ "$latest_channel" = "unstable" ]; then
     newer=1
 else
     ((time_diff=$created_at - $latest_date))
-    # Do not add unstable artifact if released less than a week compared to stable build
-    if [ $time_diff -lt 0 ] || ([ "$channel" = "unstable" ] && [ "$latest_channel" = "stable" ] && [ $time_diff -lt $((60 * 60 * 24 * 7)) ]); then
+    # For unstable build, update every week
+    if [ $time_diff -lt 0 ] || ([ "$channel" = "unstable" ] && [ $time_diff -lt $((60 * 60 * 24 * 7)) ]); then
         newer=0
     else
         newer=1

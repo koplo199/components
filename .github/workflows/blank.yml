@@ -17,6 +17,7 @@ jobs:
       group: ${{ github.workflow }}
     strategy:
       max-parallel: 1
+      fail-fast: false
       matrix:
         components: [
             {repo : "doitsujin/dxvk"                  , workflow: "artifacts.yml"          , branch: "master", name-prefix: "dxvk-"        , version-prefix: "v"        , Category: "dxvk"       , Sub-category: ""      , yaml-file: "14_dxvk.yml"         },
@@ -31,7 +32,6 @@ jobs:
           ]
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
-    continue-on-error: true
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: Check for new release
