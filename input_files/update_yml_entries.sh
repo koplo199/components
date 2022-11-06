@@ -37,27 +37,10 @@ if [ "$latest_commit" = "null" ] || [ "$latest_channel" = "null" ]; then
 fi
 
 is_newer() {
-    git -C "$repository" merge-base --is-ancestor $1 $2
+    git -C "$repository" merge-base --is-ancestor $1 $2 2> /dev/null
     newer=$?
-    if [ $newer -eq 1 ]; then
-        git -C "$repository" merge-base --is-ancestor $2 $1
-        if [ $? -eq 1 ]; then
-            if [ "$channel" = "unstable" ] && [ "$latest_channel" = "stable" ]; then
-                date_1=$(git -C "$repository" show --no-patch --no-notes --pretty='%cd' --date=format:'%Y%m%d' $1)
-                date_2=$(git -C "$repository" show --no-patch --no-notes --pretty='%cd' --date=format:'%Y%m%d' $2)
-                ((day_diff=$date_1 - $date_2))
-                # Do not add unstable artifact if released less than a week compared to stable build
-                if [ $day_diff -lt 7 ]; then
-                    newer=0
-                fi
-                echo $date_1
-                echo $date_2
-                echo $day_diff
-                echo $newer
-                echo $commit_sha1
-                echo $latest_commit
-            fi
-        fi
+    if [ $newer -eq 128 ]; then
+        # Different branch, todo
     fi
 }
 
