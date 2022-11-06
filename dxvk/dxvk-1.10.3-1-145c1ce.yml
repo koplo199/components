@@ -1,0 +1,10 @@
+Name: dxvk-1.10.3-1-145c1ce
+Provider: doitsujin
+Maintainer: doitsujin
+Channel: unstable
+File:
+- file_name: dxvk-1.10.3-145c1ce127fdcae160f3a64a979fe39402f3e328.tar.gz
+  url: https://github.com/koplo199/components/releases/download/dxvk-1.10.3-145c1ce127fdcae160f3a64a979fe39402f3e328/dxvk-1.10.3-145c1ce127fdcae160f3a64a979fe39402f3e328.tar.gz
+  file_checksum: e5d92c9d531ef63f8b8b40d40f4fe420
+  file_size: 7624035
+  rename: dxvk-1.10.3-145c1ce127fdcae160f3a64a979fe39402f3e328.tar.gz
