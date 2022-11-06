@@ -68,7 +68,7 @@ fi
 
 # Special case : the build source is done elsewhere and the repository only serves to do releases.
 if [ "$newer" -eq 0 ]; then
-    echo "Something is wrong : this new release is based on an earlier commit than the previous one."
+    echo "Something is wrong : this new entry is older than the previous one."
     exit 0
 fi
 

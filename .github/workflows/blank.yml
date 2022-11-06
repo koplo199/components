@@ -145,7 +145,6 @@ jobs:
             fi
           else
             echo "updated=true" >> $GITHUB_OUTPUT
-            echo "OK????"
             folder=$(find "${{ github.workspace }}/artifact" -name "${{ matrix.components.name-prefix }}*")
             if [[ "${{ matrix.components.name-prefix }}" == "dxvk"* ]]; then
               rm -rf $folder/usr
