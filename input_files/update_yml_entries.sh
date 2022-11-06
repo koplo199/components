@@ -11,6 +11,8 @@ created_at="$8"
 
 created_at=$(date -d "$created_at" +%s)
 
+echo "mdrrr"
+exit 0
 if [ "$channel" = "stable" ]; then
     name="$nameprefix$version"
 else
@@ -66,7 +68,6 @@ if [ "$already_exists" != "" ] || ([ "$newer" -eq 0 ] && [ "$channel" = "unstabl
     exit 0
 fi
 
-# Special case : the build source is done elsewhere and the repository only serves to do releases.
 if [ "$newer" -eq 0 ]; then
     echo "Something is wrong : this new entry is older than the previous one."
     exit 0
