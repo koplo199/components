@@ -65,7 +65,8 @@ jobs:
         working-directory: "bottle-components-repository"
         run: |
           res=$(./input_files/update_yml_entries.sh "${{ matrix.components.name-prefix }}" "${{ steps.check-release.outputs.version }}" "${{ matrix.components.Category }}" "${{ matrix.components.Sub-category }}" "stable" "" "$(pwd)/input_files/${{ matrix.components.yaml-file }}" "${{ fromJSON(steps.check-release.outputs.asset).created_at }}")
-          if [ "$res" != "Updated." ] || [ $? -ne 0 ]; then
+          exit_code="$?"
+          if [ "$res" != "Updated." ] || [ "$exit_code" -ne 0 ]; then
             echo "updated=false" >> $GITHUB_OUTPUT
             echo $res
             if [ "$res" != "Already up to date." ]; then
@@ -136,15 +137,7 @@ jobs:
         run: |
           res=$(./input_files/update_yml_entries.sh "${{ matrix.components.name-prefix }}" "${{ steps.check-release.outputs.version }}" "${{ matrix.components.Category }}" "${{ matrix.components.Sub-category }}" "unstable" "${{ fromJSON(steps.download-artifact.outputs.artifacts)[0].workflow_run.head_sha }}" "$(pwd)/input_files/${{ matrix.components.yaml-file }}" "${{ fromJSON(steps.download-artifact.outputs.artifacts)[0].created_at }}")
           exit_code="$?"
-          echo $exit_code
-          if [ "$res" != "Updated." ] || [ $exit_code -ne 0 ]; then
-            echo WTFFFF
-            if [ "$res" = "Updated." ]; then
-              echo WHAAAAAT
-            fi
-            if [ $exit_code -ne 0 ]; then
-              echo Mhhhhhh
-            fi
+          if [ "$res" != "Updated." ] || [ "$exit_code" -ne 0 ]; then
             echo "updated=false" >> $GITHUB_OUTPUT
             echo $res
             if [ "$res" != "Already up to date." ]; then
