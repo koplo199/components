@@ -135,7 +135,6 @@ jobs:
         working-directory: "bottle-components-repository"
         run: |
           res=$(./input_files/update_yml_entries.sh "${{ matrix.components.name-prefix }}" "${{ steps.check-release.outputs.version }}" "${{ matrix.components.Category }}" "${{ matrix.components.Sub-category }}" "unstable" "${{ fromJSON(steps.download-artifact.outputs.artifacts)[0].workflow_run.head_sha }}" "$(pwd)/input_files/${{ matrix.components.yaml-file }}" "${{ fromJSON(steps.download-artifact.outputs.artifacts)[0].created_at }}")
-          echo $?
           if [ "$res" != "Updated." ] || [ $? -ne 0 ]; then
             echo "updated=false" >> $GITHUB_OUTPUT
             echo $res
@@ -144,7 +143,8 @@ jobs:
             fi
           else
             echo "updated=true" >> $GITHUB_OUTPUT
-            folder=$(find "${{ github.workspace }}/artifact" -type d -name "${{ matrix.components.name-prefix }}*")
+            echo "OK????"
+            folder=$(find "${{ github.workspace }}/artifact" -name "${{ matrix.components.name-prefix }}*")
             if [[ "${{ matrix.components.name-prefix }}" == "dxvk"* ]]; then
               rm -rf $folder/usr
             fi
