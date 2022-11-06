@@ -1,11 +1,7 @@
-vkd3d-proton-2.7-1-4df3661:
-  Category: vkd3d
-  Channel: unstable
-  Commit: 4df366172e025c23621c8df5a794de90de165d97
 vkd3d-proton-2.7:
   Category: vkd3d
   Channel: stable
-  Commit: 4df366172e025c23621c8df5a794de90de165d97
+  Date: 1666883230
 vkd3d-proton-2.6:
   Category: vkd3d
   Channel: stable

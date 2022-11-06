@@ -10,8 +10,6 @@ filename="$7"
 created_at="$8"
 
 created_at=$(date -d "$created_at" +%s)
-echo $created_at
-exit 0
 
 if [ "$channel" = "stable" ]; then
     name="$nameprefix$version"
