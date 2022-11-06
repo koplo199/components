@@ -95,3 +95,4 @@ else
 fi
 
 echo "Updated."
+exit 0
