@@ -94,5 +94,7 @@ else
     fi
 fi
 
+git status
+
 echo "Updated."
 exit 0
