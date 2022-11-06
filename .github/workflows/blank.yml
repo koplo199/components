@@ -40,7 +40,7 @@ jobs:
           token: ${{secrets.GITHUB_TOKEN}}
           repo: ${{ matrix.components.repo }}
           version: latest
-          file: /${{ matrix.components.name-prefix }}.*${{ matrix.components.name-suffix }}\.tar.*/
+          file: /${{ matrix.components.name-prefix }}.*[0-9\-_.]+${{ matrix.components.name-suffix }}\.tar.*/
           prefix: ${{ matrix.components.version-prefix }}
 
       - uses: actions/checkout@v3
