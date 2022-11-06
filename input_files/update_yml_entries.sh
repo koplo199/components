@@ -38,12 +38,6 @@ if [ -z "$latest" ]; then
     exit 0
 fi
 
-already_exists=$(yq -r 'path(.[])[0]' $filename | grep -m1 "$name")
-if [ "$already_exists" != "" ]; then
-    echo "Already up to date."
-    exit 0
-fi
-
 latest_channel=$(yq -r ".\"$latest\".Channel" $filename)
 latest_date=$(yq -r ".\"$latest\".Date" $filename)
 
@@ -64,6 +58,12 @@ else
     else
         newer=1
     fi
+fi
+
+already_exists=$(yq -r 'path(.[])[0]' $filename | grep -m1 "$name")
+if [ "$already_exists" != "" ] || ([ "$newer" -eq 0 ] && [ "$channel" = "unstable" ]); then
+    echo "Already up to date."
+    exit 0
 fi
 
 # Special case : the build source is done elsewhere and the repository only serves to do releases.
