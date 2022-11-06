@@ -10,7 +10,7 @@ filename="$7"
 created_at="$8"
 
 created_at=$(date -d "$created_at" +%s)
-exit 1
+
 if [ "$channel" = "stable" ]; then
     name="$nameprefix$version"
 else
