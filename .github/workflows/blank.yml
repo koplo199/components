@@ -243,5 +243,5 @@ jobs:
           path: "bottle-components-repository"
           branch: pr-${{ env.PR_BRANCH }}
           delete-branch: true
-          title: Update available
+          title: "Update available :tada:"
           body: One or more components have been updated!
