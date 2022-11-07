@@ -232,13 +232,15 @@ jobs:
         run: |
           rm index.yml
           echo -e "# -----------------------" >> index.yml
-          echo -e "# DO NOT EDIT, THIS FILE HAS BEEN GENERATED AUTOMATICALLY" >> index.yml
-          echo -e "# DO YOUR MODIFICATION IN THE input_files DIRECTORY INSTEAD" >> index.yml
+          echo -e "# DO NOT EDIT !!!" 
+          echo -e "# THIS FILE HAS BEEN GENERATED AUTOMATICALLY" >> index.yml
+          echo -e "# DO YOUR MODIFICATION IN THE 'input_files' DIRECTORY INSTEAD" >> index.yml
           echo -e "# -----------------------" >> index.yml
-          for f in input_files/*.yml; do
-            echo -e "\n# $f" >> index.yml
+          readarray -d '' entries < <(printf '%s\0' *.yml | sort -zV)
+          for entry in "${entries[@]}"; do
+            echo -e "\n# $entry" >> index.yml
             echo -e "# -----------------------" >> index.yml
-            cat $f >> index.yml
+            cat "$entry" >> index.yml
           done
           git add index.yml
 
