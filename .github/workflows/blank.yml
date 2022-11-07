@@ -201,6 +201,7 @@ jobs:
         with:
           path: "bottle-components-repository"
           ref: ${{ env.PR_BRANCH }}
+          fetch-depth: 0
 
       - name: Fetch and checkout ${{ github.ref_name }}
         working-directory: "bottle-components-repository"
@@ -209,7 +210,7 @@ jobs:
           git checkout ${{ github.ref_name }}
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config user.name "github-actions[bot]"
-          git merge --no-commit --no-ff --allow-unrelated-histories ${{ env.PR_BRANCH }}
+          git merge --no-commit --no-ff ${{ env.PR_BRANCH }}
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v4
