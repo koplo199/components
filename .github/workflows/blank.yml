@@ -211,6 +211,8 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config user.name "github-actions[bot]"
           git merge --no-commit --no-ff ${{ env.PR_BRANCH }}
+          touch lol
+          git add lol
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v4
