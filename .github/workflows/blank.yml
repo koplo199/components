@@ -206,12 +206,16 @@ jobs:
         with:
           path: "bottle-components-repository"
           ref: ${{ env.PR_BRANCH }}
-          fetch-depth: 0
-      
+
+      - name: Create or reset pr-${{ env.PR_BRANCH }}
+        working-directory: "bottle-components-repository"
+        run: |
+          git checkout -B pr-${{ env.PR_BRANCH }}
+
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v4
         with:
           path: "bottle-components-repository"
           base: ${{ github.event.repository.default_branch }}
-          branch: pr-CI-${{ github.ref_name }}
+          branch: pr-${{ env.PR_BRANCH }}
           delete-branch: true
