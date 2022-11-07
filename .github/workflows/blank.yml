@@ -244,4 +244,4 @@ jobs:
           branch: pr-${{ env.PR_BRANCH }}
           delete-branch: true
           title: Update available
-          body: One or more components did get updated!
+          body: One or more components have been updated!
