@@ -206,7 +206,7 @@ jobs:
         run: |
           git checkout -B pr-${{ env.PR_BRANCH }}
           git push -f --set-upstream origin pr-${{ env.PR_BRANCH }}
-          git fetch origin/${{ github.ref_name }}
+          git fetch origin ${{ github.ref_name }}
           git checkout ${{ github.ref_name }}
 
       - name: Create Pull Request
