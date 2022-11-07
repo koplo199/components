@@ -109,7 +109,7 @@ jobs:
 
       - name: Upload release
         id: release
-        uses: softprops/action-gh-release@cd28b0f5ee8571b76cfdaa62a30d51d752317477
+        uses: koplo199/action-gh-release
         if: steps.update-release-yml.outputs.upload_file != ''
         with:
           tag_name: "${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}"
