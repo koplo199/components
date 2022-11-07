@@ -1,12 +1,8 @@
-wine-GE-Proton7-33:
-  Category: runners
-  Sub-category: wine
-  Channel: stable
-  Date: 0
 wine-GE-Proton7-32:
   Category: runners
   Sub-category: wine
   Channel: stable
+  Date: '0'
 wine-GE-Proton7-31:
   Category: runners
   Sub-category: wine

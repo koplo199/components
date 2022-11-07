@@ -41,7 +41,6 @@ jobs:
         components: [
 
             {repo : "GloriousEggroll/wine-ge-custom"  , workflow: ""                       , branch: "master", name-prefix: "wine-"        , version-prefix: ""         , Category: "runners"    , Sub-category: "wine"  , yaml-file: "5_wine-GE-Proton.yml"},
-
           ]
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
@@ -210,7 +209,7 @@ jobs:
           git checkout ${{ github.ref_name }}
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git config user.name "github-actions[bot]"
-          git merge --no-ff ${{ env.PR_BRANCH }}
+          git merge ${{ env.PR_BRANCH }}
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v4
