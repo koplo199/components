@@ -19,10 +19,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          path: "bottle-components-repository"
-          run: |
-            git checkout -B $PR_BRANCH
-            git push -f --set-upstream origin $PR_BRANCH
+      
+      - name: Create or reset $PR_BRANCH
+        run: |
+          git checkout -B $PR_BRANCH
+          git push -f --set-upstream origin $PR_BRANCH
 
   download:
     needs: prepare
