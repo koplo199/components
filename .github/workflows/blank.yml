@@ -14,7 +14,8 @@ env:
   PR_BRANCH: pr-CI-${{ github.ref_name }}
 
 concurrency: 
-  group: ${{ env.PR_BRANCH }}
+  # Github Actions does not support ${{ env.PR_BRANCH }} as group name...
+  group: pr-CI-${{ github.ref_name }}
   cancel-in-progress: true
 
 jobs:
