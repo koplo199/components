@@ -231,14 +231,14 @@ jobs:
         shell: bash {0} 
         run: |
           rm index.yml
-          echo "# -----------------------" >> index.yml
-          echo "# DO YOUR MODIFICATION IN THE input_files DIRECTORY" >> index.yml
-          echo "# DO NOT EDIT, THIS FILE HAS BEEN GENERATED AUTOMATICALLY" >> index.yml
-          echo "\n# -----------------------" >> index.yml
+          echo -e "# -----------------------" >> index.yml
+          echo -e "# DO NOT EDIT, THIS FILE HAS BEEN GENERATED AUTOMATICALLY" >> index.yml
+          echo -e "# DO YOUR MODIFICATION IN THE input_files DIRECTORY INSTEAD" >> index.yml
+          echo -e "# -----------------------" >> index.yml
           for f in input_files/*.yml; do
+            echo -e "\n# $f" >> index.yml
+            echo -e "# -----------------------" >> index.yml
             cat $f >> index.yml
-            echo "# -----------------------" >> index.yml
-            echo "\n# $f" >> index.yml
           done
           git add index.yml
 
