@@ -169,7 +169,7 @@ jobs:
 
       - name: Upload artifact
         id: artifact
-        uses: softprops/action-gh-release@cd28b0f5ee8571b76cfdaa62a30d51d752317477
+        uses: koplo199/action-gh-release@1.0
         if: steps.update-artifact-yml.outputs.upload_file != ''
         with:
           tag_name: "${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}-${{ fromJSON(steps.download-artifact.outputs.artifacts)[0].workflow_run.head_sha }}"
