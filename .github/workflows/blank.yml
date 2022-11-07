@@ -41,6 +41,7 @@ jobs:
         components: [
 
             {repo : "GloriousEggroll/wine-ge-custom"  , workflow: ""                       , branch: "master", name-prefix: "wine-"        , version-prefix: ""         , Category: "runners"    , Sub-category: "wine"  , yaml-file: "5_wine-GE-Proton.yml"},
+
           ]
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
@@ -201,13 +202,12 @@ jobs:
           path: "bottle-components-repository"
           ref: ${{ env.PR_BRANCH }}
 
-      - name: Create or reset pr-${{ env.PR_BRANCH }}
+      - name: Fetch and checkout ${{ github.ref_name }}
         working-directory: "bottle-components-repository"
         run: |
-          git checkout -B pr-${{ env.PR_BRANCH }}
-          git push -f --set-upstream origin pr-${{ env.PR_BRANCH }}
           git fetch origin ${{ github.ref_name }}
           git checkout ${{ github.ref_name }}
+          git merge ${{ env.PR_BRANCH }}
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v4
