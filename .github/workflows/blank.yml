@@ -207,7 +207,7 @@ jobs:
         run: |
           git fetch origin ${{ github.ref_name }}
           git checkout ${{ github.ref_name }}
-          git merge --no-commit --allow-unrelated-histories ${{ env.PR_BRANCH }}
+          git merge --no-commit --no-ff --allow-unrelated-histories ${{ env.PR_BRANCH }}
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v4
