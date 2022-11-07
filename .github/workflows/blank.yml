@@ -201,6 +201,7 @@ jobs:
   end:
     needs: download
     runs-on: ubuntu-latest
+    if: ${{ always }}
     steps:
       - uses: actions/checkout@v3
         with:
@@ -217,6 +218,5 @@ jobs:
         uses: peter-evans/create-pull-request@v4
         with:
           path: "bottle-components-repository"
-          base: ${{ github.event.repository.default_branch }}
           branch: pr-${{ env.PR_BRANCH }}
           delete-branch: true
