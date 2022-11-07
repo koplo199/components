@@ -10,8 +10,20 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
+env:
+  PR_BRANCH: pr-CI-branch
+
 jobs:
-  # This workflow contains a single job called "download"
+  prepare:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          path: "bottle-components-repository"
+          run: |
+            git checkout -B $PR_BRANCH
+            git push -f --set-upstream origin $PR_BRANCH
+
   download:
     concurrency: 
       group: ${{ github.workflow }}
@@ -21,21 +33,15 @@ jobs:
       fail-fast: false
       matrix:
         components: [
-            {repo : "doitsujin/dxvk"                  , workflow: "artifacts.yml"          , branch: "master", name-prefix: "dxvk-"        , name-suffix: ""                  , version-prefix: "v"        , Category: "dxvk"       , Sub-category: ""      , yaml-file: "14_dxvk.yml"         },
-            {repo : "HansKristian-Work/vkd3d-proton"  , workflow: "artifacts.yml"          , branch: "master", name-prefix: "vkd3d-proton-", name-suffix: ""                  , version-prefix: "v"        , Category: "vkd3d"      , Sub-category: ""      , yaml-file: "13_vkd3d-proton.yml" },
-            {repo : "bottlesdevs/wine"                , workflow: ""                       , branch: "soda"  , name-prefix: "soda-"        , name-suffix: ""                  , version-prefix: "soda-"    , Category: "runners"    , Sub-category: "wine"  , yaml-file: "3_soda.yml"          },
-            {repo : "bottlesdevs/wine"                , workflow: ""                       , branch: "caffe" , name-prefix: "caffe-"       , name-suffix: ""                  , version-prefix: "caffe-"   , Category: "runners"    , Sub-category: "wine"  , yaml-file: "4_caffe.yml"         },
-            {repo : "GloriousEggroll/wine-ge-custom"  , workflow: ""                       , branch: "master", name-prefix: "wine-"        , name-suffix: ""                  , version-prefix: ""         , Category: "runners"    , Sub-category: "wine"  , yaml-file: "5_wine-GE-Proton.yml"},
-            {repo : "GloriousEggroll/proton-ge-custom", workflow: ""                       , branch: "master", name-prefix: "GE-Proton"    , name-suffix: ""                  , version-prefix: "GE-Proton", Category: "runners"    , Sub-category: "proton", yaml-file: "10_GE-Proton.yml"    },
-            {repo : "ishitatsuyuki/LatencyFleX"       , workflow: "artifact.yml"           , branch: "master", name-prefix: "latencyflex-" , name-suffix: ""                  , version-prefix: ""         , Category: "latencyflex", Sub-category: ""      , yaml-file: "17_latencyflex.yml"  },
-            {repo : "jp7677/dxvk-nvapi"               , workflow: "artifacts.yml"          , branch: "master", name-prefix: "dxvk-nvapi-"  , name-suffix: ""                  , version-prefix: ""         , Category: "nvapi"      , Sub-category: ""      , yaml-file: "16_dxvk-nvapi.yml"   },
-            {repo : "Sporif/dxvk-async"               , workflow: ""                       , branch: "master", name-prefix: "dxvk-async-"  , name-suffix: ""                  , version-prefix: ""         , Category: "dxvk"       , Sub-category: ""      , yaml-file: "15_dxvk-async.yml"   },
-            {repo : "Kron4ek/Wine-Builds"             , workflow: ""                       , branch: "master", name-prefix: "wine-"        , name-suffix: "-x86"              , version-prefix: ""         , Category: "runners"    , Sub-category: "wine"  , yaml-file: "11_kron4ek.yml"      },
-            {repo : "Kron4ek/Wine-Builds"             , workflow: ""                       , branch: "master", name-prefix: "wine-"        , name-suffix: "-staging-x86"      , version-prefix: ""         , Category: "runners"    , Sub-category: "wine"  , yaml-file: "11_kron4ek.yml"      },
-            {repo : "Kron4ek/Wine-Builds"             , workflow: ""                       , branch: "master", name-prefix: "wine-"        , name-suffix: "-staging-tkg-x86"  , version-prefix: ""         , Category: "runners"    , Sub-category: "wine"  , yaml-file: "11_kron4ek.yml"      },
-            {repo : "Kron4ek/Wine-Builds"             , workflow: ""                       , branch: "master", name-prefix: "wine-"        , name-suffix: "-staging-tkg-amd64", version-prefix: ""         , Category: "runners"    , Sub-category: "wine"  , yaml-file: "11_kron4ek.yml"      },
-            {repo : "Kron4ek/Wine-Builds"             , workflow: ""                       , branch: "master", name-prefix: "wine-"        , name-suffix: "-staging-amd64"    , version-prefix: ""         , Category: "runners"    , Sub-category: "wine"  , yaml-file: "11_kron4ek.yml"      },
-            {repo : "Kron4ek/Wine-Builds"             , workflow: ""                       , branch: "master", name-prefix: "wine-"        , name-suffix: "-amd64"            , version-prefix: ""         , Category: "runners"    , Sub-category: "wine"  , yaml-file: "11_kron4ek.yml"      },
+            {repo : "doitsujin/dxvk"                  , workflow: "artifacts.yml"          , branch: "master", name-prefix: "dxvk-"        , version-prefix: "v"        , Category: "dxvk"       , Sub-category: ""      , yaml-file: "14_dxvk.yml"         },
+            {repo : "HansKristian-Work/vkd3d-proton"  , workflow: "artifacts.yml"          , branch: "master", name-prefix: "vkd3d-proton-", version-prefix: "v"        , Category: "vkd3d"      , Sub-category: ""      , yaml-file: "13_vkd3d-proton.yml" },
+            {repo : "bottlesdevs/wine"                , workflow: ""                       , branch: "soda"  , name-prefix: "soda-"        , version-prefix: "soda-"    , Category: "runners"    , Sub-category: "wine"  , yaml-file: "3_soda.yml"          },
+            {repo : "bottlesdevs/wine"                , workflow: ""                       , branch: "caffe" , name-prefix: "caffe-"       , version-prefix: "caffe-"   , Category: "runners"    , Sub-category: "wine"  , yaml-file: "4_caffe.yml"         },
+            {repo : "GloriousEggroll/wine-ge-custom"  , workflow: ""                       , branch: "master", name-prefix: "wine-"        , version-prefix: ""         , Category: "runners"    , Sub-category: "wine"  , yaml-file: "5_wine-GE-Proton.yml"},
+            {repo : "GloriousEggroll/proton-ge-custom", workflow: ""                       , branch: "master", name-prefix: "GE-Proton"    , version-prefix: "GE-Proton", Category: "runners"    , Sub-category: "proton", yaml-file: "10_GE-Proton.yml"    },
+            {repo : "ishitatsuyuki/LatencyFleX"       , workflow: "artifact.yml"           , branch: "master", name-prefix: "latencyflex-" , version-prefix: ""         , Category: "latencyflex", Sub-category: ""      , yaml-file: "17_latencyflex.yml"  },
+            {repo : "jp7677/dxvk-nvapi"               , workflow: "artifacts.yml"          , branch: "master", name-prefix: "dxvk-nvapi-"  , version-prefix: ""         , Category: "nvapi"      , Sub-category: ""      , yaml-file: "16_dxvk-nvapi.yml"   },
+            {repo : "Sporif/dxvk-async"               , workflow: ""                       , branch: "master", name-prefix: "dxvk-async-"  , version-prefix: ""         , Category: "dxvk"       , Sub-category: ""      , yaml-file: "15_dxvk-async.yml"   },
           ]
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
@@ -48,13 +54,13 @@ jobs:
           token: ${{secrets.GITHUB_TOKEN}}
           repo: ${{ matrix.components.repo }}
           version: latest
-          file: /${{ matrix.components.name-prefix }}.*[0-9\-_.]+${{ matrix.components.name-suffix }}\.tar.*/
+          file: /${{ matrix.components.name-prefix }}.*[0-9\-_.]+\.tar.*/
           prefix: ${{ matrix.components.version-prefix }}
 
       - uses: actions/checkout@v3
         with:
           path: "bottle-components-repository"
-          ref: ${{ github.event.repository.default_branch }}
+          ref: $PR_BRANCH
 
       - uses: actions/checkout@v3
         with:
@@ -185,3 +191,18 @@ jobs:
           repository: "bottle-components-repository"
           file_pattern: "${{ matrix.components.Category }}/${{ matrix.components.Sub-category }}/*.yml input_files/${{ matrix.components.yaml-file }}"
           commit_message: Apply ${{ matrix.components.yaml-file }} changes
+
+  end:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          path: "bottle-components-repository"
+          ref: $PR_BRANCH
+      
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v4
+        with:
+          path: "bottle-components-repository"
+          branch: $PR_BRANCH
+          base: ${{ github.event.repository.default_branch }}
