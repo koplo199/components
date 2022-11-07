@@ -206,6 +206,7 @@ jobs:
         with:
           path: "bottle-components-repository"
           ref: ${{ env.PR_BRANCH }}
+          fetch-depth: 0
       
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v4
