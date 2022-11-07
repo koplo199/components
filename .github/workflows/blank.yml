@@ -13,6 +13,10 @@ on:
 env:
   PR_BRANCH: pr-CI-${{ github.ref_name }}
 
+concurrency: 
+  group: ${{ env.PR_BRANCH }}
+  cancel-in-progress: true
+
 jobs:
   prepare:
     runs-on: ubuntu-latest
@@ -29,9 +33,6 @@ jobs:
 
   download:
     needs: prepare
-    concurrency: 
-      group: ${{ github.workflow }}
-      cancel-in-progress: true
     strategy:
       max-parallel: 1
       fail-fast: false
