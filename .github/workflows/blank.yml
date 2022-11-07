@@ -194,7 +194,7 @@ jobs:
   end:
     needs: download
     runs-on: ubuntu-latest
-    if: ${{ always }}
+    if: ${{ always() }}
     steps:
       - uses: actions/checkout@v3
         with:
