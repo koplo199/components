@@ -194,7 +194,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git add "${{ matrix.components.Category }}/${{ matrix.components.Sub-category }}/*.yml" "input_files/${{ matrix.components.yaml-file }}"
           git pull
-          git commit -m "Apply ${{ matrix.components.yaml-file }} changes"
+          git commit -m "Update ${{ matrix.components.yaml-file }}"
           git push
           success=$?
           until [ $success -eq 0 ]; do
@@ -243,3 +243,5 @@ jobs:
           path: "bottle-components-repository"
           branch: pr-${{ env.PR_BRANCH }}
           delete-branch: true
+          title: Update available
+          body: One or more components did get updated!
