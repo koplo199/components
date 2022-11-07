@@ -25,6 +25,7 @@ jobs:
             git push -f --set-upstream origin $PR_BRANCH
 
   download:
+    needs: prepare
     concurrency: 
       group: ${{ github.workflow }}
       cancel-in-progress: true
@@ -193,6 +194,7 @@ jobs:
           commit_message: Apply ${{ matrix.components.yaml-file }} changes
 
   end:
+    needs: download
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
