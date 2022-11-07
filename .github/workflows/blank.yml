@@ -226,6 +226,22 @@ jobs:
           git config user.name "github-actions[bot]"
           git merge ${{ env.PR_BRANCH }}
 
+      - name: Generate index.yml
+        working-directory: "bottle-components-repository"
+        shell: bash {0} 
+        run: |
+          rm index.yml
+          echo "# -----------------------" >> index.yml
+          echo "# DO YOUR MODIFICATION IN THE input_files DIRECTORY" >> index.yml
+          echo "# DO NOT EDIT, THIS FILE HAS BEEN GENERATED AUTOMATICALLY" >> index.yml
+          echo "\n# -----------------------" >> index.yml
+          for f in input_files/*.yml; do
+            cat $f >> index.yml
+            echo "# -----------------------" >> index.yml
+            echo "\n# $f" >> index.yml
+          done
+          git add index.yml
+
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v4
         with:
