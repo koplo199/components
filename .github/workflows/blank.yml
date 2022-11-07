@@ -201,7 +201,7 @@ jobs:
           git commit -m "Apply ${{ matrix.components.yaml-file }} changes"
           git push
           success=$?
-          until $success; do
+          until [ $success -eq 0 ]; do
             git pull --rebase;
             git push
             success=$?
