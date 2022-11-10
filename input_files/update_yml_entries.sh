@@ -17,6 +17,7 @@ if ! [ -f "$filename" ]; then
     else
         yq -n -i -y "{\"$component_name\": {\"Category\":\"$category\", \"Sub-category\":\"$subcategory\", \"Channel\": \"$channel\", \"Date\": \"$created_at\"}}" $filename
     fi
+    echo "Updated."
     exit 0
 fi
 
@@ -28,6 +29,7 @@ if [ -z "$latest" ]; then
     else
         yq -i -y "{\"$component_name\": {\"Category\":\"$category\", \"Sub-category\":\"$subcategory\", \"Channel\": \"$channel\", \"Date\": \"$created_at\"}} + ." $filename
     fi
+    echo "Updated."
     exit 0
 fi
 
@@ -36,7 +38,7 @@ latest_date=$(yq -r ".\"$latest\".Date" $filename)
 
 if [ "$latest_date" = "null" ] || [ "$latest_channel" = "null" ]; then
     echo "Cannot find latest commit or channel. Something is wrong with the input file : $filename"
-    exit 0
+    exit 1
 fi
 
 newer=0
@@ -61,7 +63,7 @@ fi
 
 if [ "$newer" -eq 0 ]; then
     echo "Something is wrong : this new entry is older than the previous one."
-    exit 0
+    exit 1
 fi
 
 if [ "$channel" = "stable" ]; then
