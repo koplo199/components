@@ -180,14 +180,14 @@ jobs:
         run: |
           repo=${{ matrix.components.repo }}
           if [ "${{ env.COMPONENT_CHANNEL }}" = "stable" ]; then
-            release_archive=${{ steps.check-release.outputs.out }}
+            release_archive="${{ steps.check-release.outputs.out }}"
             if [[ $release_archive == *".tar.gz" ]] || [[ $release_archive == *".tar.xz" ]] || [[ $release_archive == *".tar.bz2" ]]; then
-              url=${{ fromJSON(steps.check-release.outputs.asset).browser_download_url }}
+              url="${{ fromJSON(steps.check-release.outputs.asset).browser_download_url }}"
             else
-              url=${{ fromJSON(steps.release.outputs.assets)[0].browser_download_url }}
+              url="${{ fromJSON(steps.release.outputs.assets)[0].browser_download_url }}"
             fi
           else
-              url=${{ fromJSON(steps.artifact.outputs.assets)[0].browser_download_url }}
+              url="${{ fromJSON(steps.artifact.outputs.assets)[0].browser_download_url }}"
           fi
           python "${{ github.workspace }}/tools/MaintainersHelpers/component-generator.py" "components" "${repo%/*}" "${{ env.COMPONENT_NAME }}" "${repo%/*}" "${{ env.COMPONENT_CHANNEL }}" "$url"
           mv "${{ env.COMPONENT_NAME }}.yml" "${{ matrix.components.Category }}/${{ matrix.components.Sub-category }}"
