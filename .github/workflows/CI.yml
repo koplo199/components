@@ -170,7 +170,7 @@ jobs:
         if: steps.update-release-yml.outputs.updated == 'true' || steps.update-artifact-yml.outputs.updated == 'true'
         run: |
           if [ "${{ steps.component.outputs.assets }}" != "" ]; then
-              echo "COMPONENT_URL=${{ fromJSON(steps.component.outputs.assets)[0].browser_download_url }}" >> $GITHUB_ENV
+              echo "COMPONENT_URL=${{ steps.component.outputs.assets && fromJSON(steps.component.outputs.assets)[0].browser_download_url }}" >> $GITHUB_ENV
           else
               echo "COMPONENT_URL=${{ fromJSON(steps.check-release.outputs.asset).browser_download_url }}" >> $GITHUB_ENV
           fi
