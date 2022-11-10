@@ -1,28 +1,21 @@
 #!/bin/bash
 
 nameprefix="$1"
-release_name="$2"
+component_name="$2"
 category="$3"
 subcategory="$4"
 channel="$5"
-commit_sha1="$6"
-filename="$7"
-created_at="$8"
+filename="$6"
+created_at="$7"
 
 created_at=$(date -d "$created_at" +%s)
-
-if [ "$channel" = "stable" ]; then
-    name="$release_name"
-else
-    name="$release_name-1-${commit_sha1::7}"
-fi
 
 if ! [ -f "$filename" ]; then
     touch $filename
     if [ -z "$subcategory" ]; then
-        yq -n -i -y "{\"$name\": {\"Category\":\"$category\", \"Channel\": \"$channel\", \"Date\": \"$created_at\"}}" $filename
+        yq -n -i -y "{\"$component_name\": {\"Category\":\"$category\", \"Channel\": \"$channel\", \"Date\": \"$created_at\"}}" $filename
     else
-        yq -n -i -y "{\"$name\": {\"Category\":\"$category\", \"Sub-category\":\"$subcategory\", \"Channel\": \"$channel\", \"Date\": \"$created_at\"}}" $filename
+        yq -n -i -y "{\"$component_name\": {\"Category\":\"$category\", \"Sub-category\":\"$subcategory\", \"Channel\": \"$channel\", \"Date\": \"$created_at\"}}" $filename
     fi
     exit 0
 fi
@@ -31,9 +24,9 @@ latest=$(yq -r 'path(.[])[0]' $filename | grep -m1 "$nameprefix")
 
 if [ -z "$latest" ]; then
     if [ -z "$subcategory" ]; then
-        yq -i -y "{\"$name\": {\"Category\":\"$category\", \"Channel\": \"$channel\", \"Date\": \"$created_at\"}} + ." $filename
+        yq -i -y "{\"$component_name\": {\"Category\":\"$category\", \"Channel\": \"$channel\", \"Date\": \"$created_at\"}} + ." $filename
     else
-        yq -i -y "{\"$name\": {\"Category\":\"$category\", \"Sub-category\":\"$subcategory\", \"Channel\": \"$channel\", \"Date\": \"$created_at\"}} + ." $filename
+        yq -i -y "{\"$component_name\": {\"Category\":\"$category\", \"Sub-category\":\"$subcategory\", \"Channel\": \"$channel\", \"Date\": \"$created_at\"}} + ." $filename
     fi
     exit 0
 fi
@@ -60,7 +53,7 @@ else
     fi
 fi
 
-already_exists=$(yq -r 'path(.[])[0]' $filename | grep -m1 "$name")
+already_exists=$(yq -r 'path(.[])[0]' $filename | grep -m1 "$component_name")
 if [ "$already_exists" != "" ] || ([ "$newer" -eq 0 ] && [ "$channel" = "unstable" ]); then
     echo "Already up to date."
     exit 0
@@ -74,22 +67,22 @@ fi
 if [ "$channel" = "stable" ]; then
     if [ "$latest_channel" = "stable" ]; then
         if [ -z "$subcategory" ]; then
-            yq -i -y "{\"$name\": {\"Category\":\"$category\", \"Channel\": \"$channel\", \"Date\": \"$created_at\"}} + ." $filename
+            yq -i -y "{\"$component_name\": {\"Category\":\"$category\", \"Channel\": \"$channel\", \"Date\": \"$created_at\"}} + ." $filename
         else
-            yq -i -y "{\"$name\": {\"Category\":\"$category\", \"Sub-category\":\"$subcategory\", \"Channel\": \"$channel\", \"Date\": \"$created_at\"}} + ." $filename
+            yq -i -y "{\"$component_name\": {\"Category\":\"$category\", \"Sub-category\":\"$subcategory\", \"Channel\": \"$channel\", \"Date\": \"$created_at\"}} + ." $filename
         fi
     else
-        yq -i -y "with_entries(if .key == \"$latest\" then .key = \"$name\" else . end) | .\"$name\".Channel = \"$channel\" | .\"$name\".Date = \"$created_at\"" $filename
+        yq -i -y "with_entries(if .key == \"$latest\" then .key = \"$component_name\" else . end) | .\"$component_name\".Channel = \"$channel\" | .\"$component_name\".Date = \"$created_at\"" $filename
     fi
 else
     if [ "$latest_channel" = "stable" ]; then
         if [ -z "$subcategory" ]; then
-            yq -i -y "{\"$name\": {\"Category\":\"$category\", \"Channel\": \"$channel\", \"Date\": \"$created_at\"}} + ." $filename
+            yq -i -y "{\"$component_name\": {\"Category\":\"$category\", \"Channel\": \"$channel\", \"Date\": \"$created_at\"}} + ." $filename
         else
-            yq -i -y "{\"$name\": {\"Category\":\"$category\", \"Sub-category\":\"$subcategory\", \"Channel\": \"$channel\", \"Date\": \"$created_at\"}} + ." $filename
+            yq -i -y "{\"$component_name\": {\"Category\":\"$category\", \"Sub-category\":\"$subcategory\", \"Channel\": \"$channel\", \"Date\": \"$created_at\"}} + ." $filename
         fi
     else
-        yq -i -y "with_entries(if .key == \"$latest\" then .key = \"$name\" else . end) | .\"$name\".Date = \"$created_at\"" $filename
+        yq -i -y "with_entries(if .key == \"$latest\" then .key = \"$component_name\" else . end) | .\"$component_name\".Date = \"$created_at\"" $filename
     fi
 fi
 
