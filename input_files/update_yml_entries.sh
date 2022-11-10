@@ -1,7 +1,7 @@
 #!/bin/bash
 
 nameprefix="$1"
-version="$2"
+release_name="$2"
 category="$3"
 subcategory="$4"
 channel="$5"
@@ -12,9 +12,9 @@ created_at="$8"
 created_at=$(date -d "$created_at" +%s)
 
 if [ "$channel" = "stable" ]; then
-    name="$nameprefix$version"
+    name="$release_name"
 else
-    name="$nameprefix$version-1-${commit_sha1::7}"
+    name="$release_name-1-${commit_sha1::7}"
 fi
 
 if ! [ -f "$filename" ]; then
