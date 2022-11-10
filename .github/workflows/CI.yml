@@ -86,9 +86,7 @@ jobs:
         id: update-release-yml
         working-directory: "bottle-components-repository"
         run: |
-          lowercase_name_prefix=$(echo "${{ matrix.components.name-prefix }}" | tr "[:upper:]" "[:lower:]")
-          echo $lowercase_name_prefix
-          res=$(./input_files/update_yml_entries.sh "$lowercase_name_prefix" "${{ env.COMPONENT_NAME }}" "${{ matrix.components.Category }}" "${{ matrix.components.Sub-category }}" "stable" "$(pwd)/input_files/${{ matrix.components.yaml-file }}" "${{ fromJSON(steps.check-release.outputs.asset).created_at }}")
+          res=$(./input_files/update_yml_entries.sh "$(echo ${{ matrix.components.name-prefix }} | tr '[:upper:]' '[:lower:]')" "${{ env.COMPONENT_NAME }}" "${{ matrix.components.Category }}" "${{ matrix.components.Sub-category }}" "stable" "$(pwd)/input_files/${{ matrix.components.yaml-file }}" "${{ fromJSON(steps.check-release.outputs.asset).created_at }}")
           exit_code="$?"
           if [ "$res" != "Updated." ] || [ "$exit_code" -ne 0 ]; then
             echo $res
@@ -165,9 +163,7 @@ jobs:
         if: matrix.components.workflow != '' && steps.update-release-yml.outputs.updated != 'true'
         working-directory: "bottle-components-repository"
         run: |
-          lowercase_name_prefix=$(echo "${{ matrix.components.name-prefix }}" | tr "[:upper:]" "[:lower:]")
-          echo $lowercase_name_prefix
-          res=$(./input_files/update_yml_entries.sh "$lowercase_name_prefix" "${{ env.COMPONENT_NAME }}" "${{ matrix.components.Category }}" "${{ matrix.components.Sub-category }}" "unstable" "$(pwd)/input_files/${{ matrix.components.yaml-file }}" "${{ fromJSON(steps.download-artifact.outputs.artifacts)[0].created_at }}")
+          res=$(./input_files/update_yml_entries.sh "$(echo ${{ matrix.components.name-prefix }} | tr '[:upper:]' '[:lower:]')" "${{ env.COMPONENT_NAME }}" "${{ matrix.components.Category }}" "${{ matrix.components.Sub-category }}" "unstable" "$(pwd)/input_files/${{ matrix.components.yaml-file }}" "${{ fromJSON(steps.download-artifact.outputs.artifacts)[0].created_at }}")
           exit_code="$?"
           if [ "$res" != "Updated." ] || [ "$exit_code" -ne 0 ]; then
             echo $res
