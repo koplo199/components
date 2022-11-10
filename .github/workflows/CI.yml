@@ -79,7 +79,8 @@ jobs:
 
       - name: Define release environment variables
         run: |
-          echo "COMPONENT_NAME=${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}" >> $GITHUB_ENV
+          lowercase_component_name=$(echo "${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}" | tr "[:upper:]" "[:lower:]")
+          echo "COMPONENT_NAME=$lowercase_component_name" >> $GITHUB_ENV
 
       - name: Update component stable input_file entry
         id: update-release-yml
@@ -153,7 +154,8 @@ jobs:
       - name: Define artifact environment variables
         run: |
           commit_sha1=${{ fromJSON(steps.download-artifact.outputs.artifacts)[0].workflow_run.head_sha }}
-          echo "COMPONENT_NAME=${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}-1-${commit_sha1::7}" >> $GITHUB_ENV
+          lowercase_component_name=$(echo "${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}-1-${commit_sha1::7}" | tr "[:upper:]" "[:lower:]")
+          echo "COMPONENT_NAME=$lowercase_component_name" >> $GITHUB_ENV
 
       - name: Update component unstable input_file entry
         id: update-artifact-yml
