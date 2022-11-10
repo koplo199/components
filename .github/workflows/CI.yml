@@ -104,15 +104,6 @@ jobs:
               echo "upload_file=$(pwd)/${{ env.COMPONENT_NAME }}.tar.gz" >> $GITHUB_OUTPUT
             fi
           fi
-
-      - name: Upload release
-        id: release
-        uses: koplo199/action-gh-release@1.0
-        if: steps.update-release-yml.outputs.upload_file != ''
-        with:
-          tag_name: "${{ env.COMPONENT_NAME }}"
-          files: |
-            ${{ steps.update-release-yml.outputs.upload_file }}
       
       - name: Check for new artifact
         id: download-artifact
@@ -165,29 +156,25 @@ jobs:
             echo "upload_file=$(pwd)/${{ env.COMPONENT_NAME }}.tar.gz" >> $GITHUB_OUTPUT
           fi
 
-      - name: Upload artifact
-        id: artifact
+      - name: Upload component
+        id: component
         uses: koplo199/action-gh-release@1.0
-        if: steps.update-artifact-yml.outputs.upload_file != ''
+        if: steps.update-artifact-yml.outputs.upload_file != '' || steps.update-release-yml.outputs.upload_file != ''
         with:
           tag_name: "${{ env.COMPONENT_NAME }}"
           files: |
             ${{ steps.update-artifact-yml.outputs.upload_file }}
+            ${{ steps.update-release-yml.outputs.upload_file }}
 
       - name : Generate appropriate yml file
         if: steps.update-release-yml.outputs.updated == 'true' || steps.update-artifact-yml.outputs.updated == 'true'
         working-directory: "bottle-components-repository"
         run: |
           repo=${{ matrix.components.repo }}
-          if [ "${{ env.COMPONENT_CHANNEL }}" = "stable" ]; then
-            release_archive="${{ steps.check-release.outputs.out }}"
-            if [[ $release_archive == *".tar.gz" ]] || [[ $release_archive == *".tar.xz" ]] || [[ $release_archive == *".tar.bz2" ]]; then
-              url="${{ fromJSON(steps.check-release.outputs.asset).browser_download_url }}"
-            else
-              url="${{ fromJSON(steps.release.outputs.assets)[0].browser_download_url }}"
-            fi
-          else
-              url="${{ fromJSON(steps.artifact.outputs.assets)[0].browser_download_url }}"
+          url="${{ fromJSON(steps.component.outputs.assets)[0].browser_download_url }}"
+          release_archive="${{ steps.check-release.outputs.out }}"
+          if [ "${{ env.COMPONENT_CHANNEL }}" = "stable" ] && ([[ $release_archive == *".tar.gz" ]] || [[ $release_archive == *".tar.xz" ]] || [[ $release_archive == *".tar.bz2" ]]); then
+            url="${{ fromJSON(steps.check-release.outputs.asset).browser_download_url }}"
           fi
           python "${{ github.workspace }}/tools/MaintainersHelpers/component-generator.py" "components" "${repo%/*}" "${{ env.COMPONENT_NAME }}" "${repo%/*}" "${{ env.COMPONENT_CHANNEL }}" "$url"
           mv "${{ env.COMPONENT_NAME }}.yml" "${{ matrix.components.Category }}/${{ matrix.components.Sub-category }}"
