@@ -81,12 +81,14 @@ jobs:
         run: |
           lowercase_component_name=$(echo "${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}" | tr "[:upper:]" "[:lower:]")
           echo "COMPONENT_NAME=$lowercase_component_name" >> $GITHUB_ENV
+          echo "COMPONENT_CHANNEL=stable" >> $GITHUB_ENV
+          echo "COMPONENT_CREATED_AT=${{ fromJSON(steps.check-release.outputs.asset).created_at }}" >> $GITHUB_ENV
 
       - name: Update component stable input_file entry
         id: update-release-yml
         working-directory: "bottle-components-repository"
         run: |
-          res=$(./input_files/update_yml_entries.sh "$(echo ${{ matrix.components.name-prefix }} | tr '[:upper:]' '[:lower:]')" "${{ env.COMPONENT_NAME }}" "${{ matrix.components.Category }}" "${{ matrix.components.Sub-category }}" "stable" "$(pwd)/input_files/${{ matrix.components.yaml-file }}" "${{ fromJSON(steps.check-release.outputs.asset).created_at }}")
+          res=$(./input_files/update_yml_entries.sh "$(echo ${{ matrix.components.name-prefix }} | tr '[:upper:]' '[:lower:]')" "${{ env.COMPONENT_NAME }}" "${{ matrix.components.Category }}" "${{ matrix.components.Sub-category }}" "${{ env.COMPONENT_CHANNEL }}" "$(pwd)/input_files/${{ matrix.components.yaml-file }}" "${{ env.COMPONENT_CREATED_AT }}")
           exit_code="$?"
           if [ "$res" != "Updated." ] || [ "$exit_code" -ne 0 ]; then
             echo $res
@@ -96,19 +98,8 @@ jobs:
           else
             echo "updated=true" >> $GITHUB_OUTPUT
             release_archive=${{ steps.check-release.outputs.out }}
-            if [[ $release_archive == *".tar.gz" ]] || [[ $release_archive == *".tar.xz" ]] || [[ $release_archive == *".tar.bz2" ]]; then
-              repo=${{ matrix.components.repo }}
-              python "${{ github.workspace }}/tools/MaintainersHelpers/component-generator.py" "components" "${repo%/*}" "${{ env.COMPONENT_NAME }}" "${repo%/*}" "stable" "${{ fromJSON(steps.check-release.outputs.asset).browser_download_url }}"
-              mv "${{ env.COMPONENT_NAME }}.yml" "${{ matrix.components.Category }}/${{ matrix.components.Sub-category }}"
-            else
-              case $release_archive in
-                *".tar.zst")
-                  tar --use-compress-program=unzstd -xvf $release_archive
-                  ;;
-                *".zip")
-                  unzip $release_archive
-                  ;;
-              esac
+            if [[ $release_archive == *".tar.zst" ]]; then
+              tar --use-compress-program=unzstd -xvf $release_archive
               tar -C "${{ env.COMPONENT_NAME }}" -zcvf "${{ env.COMPONENT_NAME }}.tar.gz" $(ls ${{ env.COMPONENT_NAME }})
               echo "upload_file=$(pwd)/${{ env.COMPONENT_NAME }}.tar.gz" >> $GITHUB_OUTPUT
             fi
@@ -123,14 +114,6 @@ jobs:
           files: |
             ${{ steps.update-release-yml.outputs.upload_file }}
       
-      - name : Generate release yml file
-        if: steps.update-release-yml.outputs.upload_file != ''
-        working-directory: "bottle-components-repository"
-        run: |
-          repo=${{ matrix.components.repo }}
-          python "${{ github.workspace }}/tools/MaintainersHelpers/component-generator.py" "components" "${repo%/*}" "${{ env.COMPONENT_NAME }}" "${repo%/*}" "stable" "${{ fromJSON(steps.release.outputs.assets)[0].browser_download_url }}"
-          mv "${{ env.COMPONENT_NAME }}.yml" "${{ matrix.components.Category }}/${{ matrix.components.Sub-category }}"
-
       - name: Check for new artifact
         id: download-artifact
         if: matrix.components.workflow != '' && steps.update-release-yml.outputs.updated != 'true'
@@ -157,13 +140,15 @@ jobs:
           commit_sha1="${{ fromJSON(steps.download-artifact.outputs.artifacts)[0].workflow_run.head_sha }}"
           lowercase_component_name=$(echo "${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}-1-${commit_sha1::7}" | tr "[:upper:]" "[:lower:]")
           echo "COMPONENT_NAME=$lowercase_component_name" >> $GITHUB_ENV
+          echo "COMPONENT_CHANNEL=unstable" >> $GITHUB_ENV
+          echo "COMPONENT_CREATED_AT=${{ fromJSON(steps.download-artifact.outputs.artifacts)[0].created_at }}" >> $GITHUB_ENV
 
       - name: Update component unstable input_file entry
         id: update-artifact-yml
         if: matrix.components.workflow != '' && steps.update-release-yml.outputs.updated != 'true'
         working-directory: "bottle-components-repository"
         run: |
-          res=$(./input_files/update_yml_entries.sh "$(echo ${{ matrix.components.name-prefix }} | tr '[:upper:]' '[:lower:]')" "${{ env.COMPONENT_NAME }}" "${{ matrix.components.Category }}" "${{ matrix.components.Sub-category }}" "unstable" "$(pwd)/input_files/${{ matrix.components.yaml-file }}" "${{ fromJSON(steps.download-artifact.outputs.artifacts)[0].created_at }}")
+          res=$(./input_files/update_yml_entries.sh "$(echo ${{ matrix.components.name-prefix }} | tr '[:upper:]' '[:lower:]')" "${{ env.COMPONENT_NAME }}" "${{ matrix.components.Category }}" "${{ matrix.components.Sub-category }}" "${{ env.COMPONENT_CHANNEL }}" "$(pwd)/input_files/${{ matrix.components.yaml-file }}" "${{ env.COMPONENT_CREATED_AT }}")
           exit_code="$?"
           if [ "$res" != "Updated." ] || [ "$exit_code" -ne 0 ]; then
             echo $res
@@ -189,12 +174,22 @@ jobs:
           files: |
             ${{ steps.update-artifact-yml.outputs.upload_file }}
 
-      - name : Generate artifact yml file
-        if: steps.update-artifact-yml.outputs.upload_file != ''
+      - name : Generate appropriate yml file
+        if: steps.update-release-yml.outputs.updated == 'true' || steps.update-artifact-yml.outputs.updated == 'true'
         working-directory: "bottle-components-repository"
         run: |
           repo=${{ matrix.components.repo }}
-          python "${{ github.workspace }}/tools/MaintainersHelpers/component-generator.py" "components" "${repo%/*}" "${{ env.COMPONENT_NAME }}" "${repo%/*}" "unstable" "${{ fromJSON(steps.artifact.outputs.assets)[0].browser_download_url }}"
+          if [ "${{ env.COMPONENT_CHANNEL }}" = "stable" ]; then
+            release_archive=${{ steps.check-release.outputs.out }}
+            if [[ $release_archive == *".tar.gz" ]] || [[ $release_archive == *".tar.xz" ]] || [[ $release_archive == *".tar.bz2" ]]; then
+              url=${{ fromJSON(steps.check-release.outputs.asset).browser_download_url }}
+            else
+              url=${{ fromJSON(steps.release.outputs.assets)[0].browser_download_url }}
+            fi
+          else
+              url=${{ fromJSON(steps.artifact.outputs.assets)[0].browser_download_url }}
+          fi
+          python "${{ github.workspace }}/tools/MaintainersHelpers/component-generator.py" "components" "${repo%/*}" "${{ env.COMPONENT_NAME }}" "${repo%/*}" "${{ env.COMPONENT_CHANNEL }}" "$url"
           mv "${{ env.COMPONENT_NAME }}.yml" "${{ matrix.components.Category }}/${{ matrix.components.Sub-category }}"
 
       - name : Commit changes
@@ -229,7 +224,6 @@ jobs:
 
       - name: Generate index.yml
         working-directory: "bottle-components-repository"
-        shell: bash {0} 
         run: |
           git checkout ${{ github.ref_name }}
           git config user.email "github-actions[bot]@users.noreply.github.com"
