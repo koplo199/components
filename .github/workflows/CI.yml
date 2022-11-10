@@ -171,9 +171,10 @@ jobs:
         working-directory: "bottle-components-repository"
         run: |
           repo=${{ matrix.components.repo }}
-          url="${{ fromJSON(steps.component.outputs.assets)[0].browser_download_url }}"
-          release_archive="${{ steps.check-release.outputs.out }}"
-          if [ "${{ env.COMPONENT_CHANNEL }}" = "stable" ] && ([[ $release_archive == *".tar.gz" ]] || [[ $release_archive == *".tar.xz" ]] || [[ $release_archive == *".tar.bz2" ]]); then
+          assets_info="${{ steps.component.outputs.assets }}"
+          if [ "$assets_info" != '' ]; then
+            url="${{ fromJSON($assets_info)[0].browser_download_url }}"
+          else
             url="${{ fromJSON(steps.check-release.outputs.asset).browser_download_url }}"
           fi
           python "${{ github.workspace }}/tools/MaintainersHelpers/component-generator.py" "components" "${repo%/*}" "${{ env.COMPONENT_NAME }}" "${repo%/*}" "${{ env.COMPONENT_CHANNEL }}" "$url"
