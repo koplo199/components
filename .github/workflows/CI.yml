@@ -166,22 +166,21 @@ jobs:
             ${{ steps.update-artifact-yml.outputs.upload_file }}
             ${{ steps.update-release-yml.outputs.upload_file }}
 
-      - name: Define ASSET_INFO environment variable
+      - name: Define COMPONENT_URL environment variable
         if: steps.update-release-yml.outputs.updated == 'true' || steps.update-artifact-yml.outputs.updated == 'true'
         run: |
-          echo "ASSET_INFO=${{ steps.component.outputs.assets }}" >> $GITHUB_ENV
+          if [ "${{ steps.component.outputs.assets }}" != "" ]; then
+              echo "COMPONENT_URL=${{ fromJSON(steps.component.outputs.assets)[0].browser_download_url }}" >> $GITHUB_ENV
+          else
+              echo "COMPONENT_URL=${{ fromJSON(steps.check-release.outputs.asset).browser_download_url }}" >> $GITHUB_ENV
+          fi
 
       - name : Generate appropriate yml file
         if: steps.update-release-yml.outputs.updated == 'true' || steps.update-artifact-yml.outputs.updated == 'true'
         working-directory: "bottle-components-repository"
         run: |
           repo=${{ matrix.components.repo }}
-          if [ "${{ env.ASSET_INFO }}" != '' ]; then
-            url="${{ fromJSON(env.ASSET_INFO)[0].browser_download_url }}"
-          else
-            url="${{ fromJSON(steps.check-release.outputs.asset).browser_download_url }}"
-          fi
-          python "${{ github.workspace }}/tools/MaintainersHelpers/component-generator.py" "components" "${repo%/*}" "${{ env.COMPONENT_NAME }}" "${repo%/*}" "${{ env.COMPONENT_CHANNEL }}" "$url"
+          python "${{ github.workspace }}/tools/MaintainersHelpers/component-generator.py" "components" "${repo%/*}" "${{ env.COMPONENT_NAME }}" "${repo%/*}" "${{ env.COMPONENT_CHANNEL }}" "${{ env.COMPONENT_URL }}"
           mv "${{ env.COMPONENT_NAME }}.yml" "${{ matrix.components.Category }}/${{ matrix.components.Sub-category }}"
 
       - name : Commit changes
