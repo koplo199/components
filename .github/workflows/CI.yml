@@ -149,7 +149,7 @@ jobs:
             ${{ env.UPLOAD_FILE }}
 
       - name : Generate appropriate YAML file
-        if: env.UPDATED
+        if: env.UPDATED == 'true'
         working-directory: "bottle-components-repository"
         run: |
           repo=${{ matrix.components.repo }}
@@ -162,7 +162,7 @@ jobs:
           mv "${{ env.NAME }}.yml" "${{ env.CATEGORY }}/${{ env.SUBCATEGORY }}"
 
       - name : Commit changes
-        if: env.UPDATED
+        if: env.UPDATED == 'true'
         working-directory: "bottle-components-repository"
         timeout-minutes: 10
         shell: bash {0}
