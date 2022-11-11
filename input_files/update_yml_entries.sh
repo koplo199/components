@@ -8,12 +8,12 @@ channel="${5-$CHANNEL}"
 filename="${6-$YAML_FILENAME}"
 created_at="${7-$CREATED_AT}"
 
-filename="$(dirname \"$0\")/$filename"
+filename=$(dirname "$0")/$filename
 created_at=$(date -d "$created_at" +%s)
 GITHUB_ENV="${GITHUB_ENV-/dev/null}"
 
 command_wo_sub="{\"$component_name\": {\"Category\":\"$category\", \"Channel\": \"$channel\", \"Date\": \"$created_at\"}}"
-command_w_sub"{\"$component_name\": {\"Category\":\"$category\", \"Sub-category\":\"$subcategory\", \"Channel\": \"$channel\", \"Date\": \"$created_at\"}}"
+command_w_sub="{\"$component_name\": {\"Category\":\"$category\", \"Sub-category\":\"$subcategory\", \"Channel\": \"$channel\", \"Date\": \"$created_at\"}}"
 
 if ! [ -f "$filename" ]; then
     touch $filename
