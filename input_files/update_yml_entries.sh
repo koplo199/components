@@ -52,7 +52,7 @@ latest_channel=$(yq -r ".\"$latest\".Channel" $filename)
 latest_date=$(yq -r ".\"$latest\".Date" $filename)
 
 if [ "$latest_date" = "null" ] || [ "$latest_channel" = "null" ]; then
-    echo "Cannot find latest commit or channel. Something is wrong with the input file : $filename"
+    echo "::error::Cannot find latest commit or channel. Something is wrong with the input file : $filename"
     exit 1
 fi
 
@@ -76,7 +76,7 @@ if [ "$already_exists" != "" ] || ([ "$newer" -eq 0 ] && [ "$channel" = "unstabl
 fi
 
 if [ "$newer" -eq 0 ]; then
-    echo "Something is wrong : this new entry is older than the previous one."
+    echo "::error::Something is wrong : this new entry is older than the previous one."
     exit 1
 fi
 
