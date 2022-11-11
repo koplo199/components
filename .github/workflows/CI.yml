@@ -2,9 +2,8 @@ name: CI
 
 on:
   push:
-    branches:
-      # Branches containing '/' won't be matched
-      - '*'
+    # Only match main branch for now
+    branches: [ "main" ]
   schedule:
     # Check for update every day at 07:07
     - cron:  '7 7 * * *'
@@ -34,7 +33,7 @@ jobs:
           git checkout -B ${{ env.PR_BRANCH }}
           git push -f --set-upstream origin ${{ env.PR_BRANCH }}
 
-  download:
+  pull:
     needs: prepare
     strategy:
       fail-fast: false
@@ -78,37 +77,34 @@ jobs:
           sudo apt-get install python3-pip zstd
           pip3 install yq
 
-      - name: Define release environment variables
+      - name: Define environment variables
         run: |
           lowercase_component_name=$(echo "${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}" | tr "[:upper:]" "[:lower:]")
-          echo "COMPONENT_NAME=$lowercase_component_name" >> $GITHUB_ENV
-          echo "COMPONENT_CHANNEL=stable" >> $GITHUB_ENV
-          echo "COMPONENT_CREATED_AT=${{ fromJSON(steps.check-release.outputs.asset).created_at }}" >> $GITHUB_ENV
+          echo "NAMEPREFIX=$(echo ${{ matrix.components.name-prefix }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+          echo "NAME=$lowercase_component_name" >> $GITHUB_ENV
+          echo "CATEGORY=${{ matrix.components.Category }}" >> $GITHUB_ENV
+          echo "SUBCATEGORY=${{ matrix.components.Sub-category }}" >> $GITHUB_ENV
+          echo "CHANNEL=stable" >> $GITHUB_ENV
+          echo "YAML_FILENAME=${{ matrix.components.yaml-file }}" >> $GITHUB_ENV
+          echo "CREATED_AT=${{ fromJSON(steps.check-release.outputs.asset).created_at }}" >> $GITHUB_ENV
+          echo "UPDATED=false" >> $GITHUB_ENV
 
-      - name: Update component stable input_file entry
-        id: update-release-yml
+
+      - name: Update stable input_file entry
         working-directory: "bottle-components-repository"
         run: |
-          res=$(./input_files/update_yml_entries.sh "$(echo ${{ matrix.components.name-prefix }} | tr '[:upper:]' '[:lower:]')" "${{ env.COMPONENT_NAME }}" "${{ matrix.components.Category }}" "${{ matrix.components.Sub-category }}" "${{ env.COMPONENT_CHANNEL }}" "$(pwd)/input_files/${{ matrix.components.yaml-file }}" "${{ env.COMPONENT_CREATED_AT }}")
-          exit_code="$?"
-          if [ "$res" != "Updated." ] || [ "$exit_code" -ne 0 ]; then
-            echo $res
-            if [ "$res" != "Already up to date." ]; then
-              exit 1
-            fi
-          else
-            echo "updated=true" >> $GITHUB_OUTPUT
-            release_archive=${{ steps.check-release.outputs.out }}
-            if [[ $release_archive == *".tar.zst" ]]; then
-              tar --use-compress-program=unzstd -xvf $release_archive
-              tar -C "${{ env.COMPONENT_NAME }}" -zcvf "${{ env.COMPONENT_NAME }}.tar.gz" $(ls ${{ env.COMPONENT_NAME }})
-              echo "upload_file=$(pwd)/${{ env.COMPONENT_NAME }}.tar.gz" >> $GITHUB_OUTPUT
-            fi
+          # This script can set env.UPDATED to true
+          ./input_files/update_yml_entries.sh
+          release_archive=${{ steps.check-release.outputs.out }}
+          if [ "${{ env.UPDATED }}" = "true" ] && [[ $release_archive == *".tar.zst" ]]; then
+            tar --use-compress-program=unzstd -xvf $release_archive
+            tar -C "${{ env.NAME }}" -zcvf "${{ env.NAME }}.tar.gz" $(ls ${{ env.NAME }})
+            echo "UPLOAD_FILE=$(pwd)/${{ env.NAME }}.tar.gz" >> $GITHUB_ENV
           fi
-      
+
       - name: Check for new artifact
         id: download-artifact
-        if: matrix.components.workflow != '' && steps.update-release-yml.outputs.updated != 'true'
+        if: matrix.components.workflow != '' && env.UPDATED != 'true'
         uses: dawidd6/action-download-artifact@v2
         with:
           github_token: ${{secrets.GITHUB_TOKEN}}
@@ -119,71 +115,63 @@ jobs:
           if_no_artifact_found: warn
           path: artifact
 
-      - name: Define artifact environment variables
-        if: matrix.components.workflow != '' && steps.update-release-yml.outputs.updated != 'true' && steps.download-artifact.outputs.found_artifact == 'true'
+      - name: Update environment variables
+        if: matrix.components.workflow != '' && env.UPDATED != 'true' && steps.download-artifact.outputs.found_artifact == 'true'
         run: |
           commit_sha1="${{ fromJSON(steps.download-artifact.outputs.artifacts)[0].workflow_run.head_sha }}"
           lowercase_component_name=$(echo "${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}-1-${commit_sha1::7}" | tr "[:upper:]" "[:lower:]")
-          echo "COMPONENT_NAME=$lowercase_component_name" >> $GITHUB_ENV
-          echo "COMPONENT_CHANNEL=unstable" >> $GITHUB_ENV
-          echo "COMPONENT_CREATED_AT=${{ fromJSON(steps.download-artifact.outputs.artifacts)[0].created_at }}" >> $GITHUB_ENV
+          echo "NAME=$lowercase_component_name" >> $GITHUB_ENV
+          echo "CHANNEL=unstable" >> $GITHUB_ENV
+          echo "CREATED_AT=${{ fromJSON(steps.download-artifact.outputs.artifacts)[0].created_at }}" >> $GITHUB_ENV
 
-      - name: Update component unstable input_file entry
-        id: update-artifact-yml
-        if: matrix.components.workflow != '' && steps.update-release-yml.outputs.updated != 'true' && steps.download-artifact.outputs.found_artifact == 'true'
+      - name: Update unstable input_file entry
+        if: matrix.components.workflow != '' && env.UPDATED != 'true' && steps.download-artifact.outputs.found_artifact == 'true'
         working-directory: "bottle-components-repository"
         run: |
-          res=$(./input_files/update_yml_entries.sh "$(echo ${{ matrix.components.name-prefix }} | tr '[:upper:]' '[:lower:]')" "${{ env.COMPONENT_NAME }}" "${{ matrix.components.Category }}" "${{ matrix.components.Sub-category }}" "${{ env.COMPONENT_CHANNEL }}" "$(pwd)/input_files/${{ matrix.components.yaml-file }}" "${{ env.COMPONENT_CREATED_AT }}")
-          exit_code="$?"
-          if [ "$res" != "Updated." ] || [ "$exit_code" -ne 0 ]; then
-            echo $res
-            if [ "$res" != "Already up to date." ]; then
-              exit 1
+          # This script can set env.UPDATED to true
+          ./input_files/update_yml_entries.sh
+          if [ "${{ env.UPDATED }}" = "true" ]; then
+            folder=$(find "${{ github.workspace }}/artifact" -name "${{ env.NAMEPREFIX }}*")
+            if [[ "${{ env.NAMEPREFIX }}" == "dxvk"* ]]; then
+              rm -rf "$folder/usr"
             fi
-          else
-            echo "updated=true" >> $GITHUB_OUTPUT
-            folder=$(find "${{ github.workspace }}/artifact" -name "${{ matrix.components.name-prefix }}*")
-            if [[ "${{ matrix.components.name-prefix }}" == "dxvk"* ]]; then
-              rm -rf $folder/usr
-            fi
-            tar -C "$folder" -zcvf "${{ env.COMPONENT_NAME }}.tar.gz" $(ls "$folder")
-            echo "upload_file=$(pwd)/${{ env.COMPONENT_NAME }}.tar.gz" >> $GITHUB_OUTPUT
+            tar -C "$folder" -zcvf "${{ env.NAME }}.tar.gz" $(ls "$folder")
+            echo "UPLOAD_FILE=$(pwd)/${{ env.NAME }}.tar.gz" >> $GITHUB_ENV
           fi
 
-      - name: Upload component
-        id: component
+      - name: Upload component archive
+        id: upload-component
         uses: koplo199/action-gh-release@1.0
-        if: steps.update-artifact-yml.outputs.upload_file != '' || steps.update-release-yml.outputs.upload_file != ''
+        if: env.UPLOAD_FILE != ''
         with:
-          tag_name: "${{ env.COMPONENT_NAME }}"
+          tag_name: "${{ env.NAME }}"
           files: |
-            ${{ steps.update-artifact-yml.outputs.upload_file }}
-            ${{ steps.update-release-yml.outputs.upload_file }}
+            ${{ env.UPLOAD_FILE }}
 
-      - name : Generate appropriate yml file
-        if: steps.update-release-yml.outputs.updated == 'true' || steps.update-artifact-yml.outputs.updated == 'true'
+      - name : Generate appropriate YAML file
+        if: env.UPDATED
         working-directory: "bottle-components-repository"
         run: |
           repo=${{ matrix.components.repo }}
-          if [ "${{ steps.component.outputs.assets }}" != "" ]; then
-            url="${{ steps.component.outputs.assets && fromJSON(steps.component.outputs.assets)[0].browser_download_url }}"
+          if [ "${{ env.UPLOAD_FILE }}" != "" ]; then
+            url="${{ steps.upload-component.outputs.assets && fromJSON(steps.upload-component.outputs.assets)[0].browser_download_url }}"
           else
             url="${{ fromJSON(steps.check-release.outputs.asset).browser_download_url }}"
           fi
-          python "${{ github.workspace }}/tools/MaintainersHelpers/component-generator.py" "components" "${repo%/*}" "${{ env.COMPONENT_NAME }}" "${repo%/*}" "${{ env.COMPONENT_CHANNEL }}" "$url"
-          mv "${{ env.COMPONENT_NAME }}.yml" "${{ matrix.components.Category }}/${{ matrix.components.Sub-category }}"
+          python "${{ github.workspace }}/tools/MaintainersHelpers/component-generator.py" "components" "${repo%/*}" "${{ env.NAME }}" "${repo%/*}" "${{ env.CHANNEL }}" "$url"
+          mv "${{ env.NAME }}.yml" "${{ env.CATEGORY }}/${{ env.SUBCATEGORY }}"
 
       - name : Commit changes
-        if: steps.update-release-yml.outputs.updated == 'true' || steps.update-artifact-yml.outputs.updated == 'true'
+        if: env.UPDATED
         working-directory: "bottle-components-repository"
         timeout-minutes: 10
         shell: bash {0}
         run: |
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git config user.name "github-actions[bot]"
-          git add "${{ matrix.components.Category }}/${{ matrix.components.Sub-category }}/*.yml" "input_files/${{ matrix.components.yaml-file }}"
+          git add "${{ env.CATEGORY }}/${{ env.SUBCATEGORY }}/*.yml" "input_files/${{ env.YAML_FILENAME }}"
           git pull
-          git commit -m "Update ${{ matrix.components.yaml-file }}"
+          git commit -m "Update ${{ env.YAML_FILENAME }}"
           git push
           success=$?
           until [ $success -eq 0 ]; do
@@ -192,8 +180,8 @@ jobs:
             success=$?
           done
 
-  end:
-    needs: download
+  finish:
+    needs: pull
     runs-on: ubuntu-latest
     if: ${{ always() }}
     steps:
