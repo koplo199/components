@@ -140,6 +140,9 @@ jobs:
             echo "UPLOAD_FILE=$(pwd)/${{ env.NAME }}.tar.gz" >> $GITHUB_ENV
           else
             echo "WHAAAAAATS?"
+            echo $GITHUB_ENV
+            echo "${{ env.UPDATED }}"
+            echo "UPDATED=true" >> $GITHUB_ENV
             echo "${{ env.UPDATED }}"
           fi
 
