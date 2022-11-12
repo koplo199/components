@@ -58,7 +58,7 @@ jobs:
           token: ${{secrets.GITHUB_TOKEN}}
           repo: ${{ matrix.components.repo }}
           version: latest
-          file: /${{ matrix.components.name-prefix }}.*[0-9\-_.]+\.tar.*/
+          file: /${{ matrix.components.name-prefix }}.*[0-9\-_]+\.tar.*/
           prefix: ${{ matrix.components.version-prefix }}
 
       - uses: actions/checkout@v3
@@ -167,7 +167,7 @@ jobs:
           else
             url="${{ fromJSON(steps.check-release.outputs.asset).browser_download_url }}"
           fi
-          python "${{ github.workspace }}/tools/MaintainersHelpers/component-generator.py" "components" "${repo%/*}" "${{ env.NAME }}" "${repo%/*}" "${{ env.CHANNEL }}" "$url" "${{ env.NAME }}"
+          python "${{ github.workspace }}/tools/MaintainersHelpers/component-generator.py" "components" "${repo%/*}" "${{ env.NAME }}" "${repo%/*}" "${{ env.CHANNEL }}" "$url" "${{ env.NAME }}.${url##*.}"
           # Components specific tweaks
           if [[ "${{ env.NAME }}" == "wine-ge"* ]]; then
             echo "Post:" >> "${{ env.NAME }}.yml"
