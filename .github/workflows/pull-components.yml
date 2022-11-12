@@ -130,6 +130,7 @@ jobs:
         run: |
           # This script can set env.UPDATED to true
           ./input_files/update_yml_entries.sh
+          source $GITHUB_ENV
           if [ "${{ env.UPDATED }}" = "true" ]; then
             folder=$(find "${{ github.workspace }}/artifact" -name "${{ env.NAMEPREFIX }}*")
             # Components specific tweaks
