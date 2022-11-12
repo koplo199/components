@@ -173,7 +173,7 @@ jobs:
             echo "Post:" >> "${{ env.NAME }}.yml"
             echo -e "- action: rename" >> "${{ env.NAME }}.yml"
             echo -e "  source: lutris-${{ steps.check-release.outputs.version }}" >> "${{ env.NAME }}.yml"
-            echo -e "  dest: ${{ env.NAME }}" >> "${{ env.NAME }}.yml"
+            echo -e "  dest: wine-ge-${NAME##*proton}" >> "${{ env.NAME }}.yml"
           fi
           mv "${{ env.NAME }}.yml" "${{ env.CATEGORY }}/${{ env.SUBCATEGORY }}"
 
