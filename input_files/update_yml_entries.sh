@@ -11,11 +11,7 @@ created_at="${7-$CREATED_AT}"
 filename=$(dirname "$0")/$filename
 created_at=$(date -d "$created_at" +%s)
 
-echo $GITHUB_ENV
-
 GITHUB_ENV=${GITHUB_ENV-/dev/null}
-
-echo $GITHUB_ENV
 
 command_wo_sub="{\"$component_name\": {\"Category\":\"$category\", \"Channel\": \"$channel\", \"Date\": \"$created_at\"}}"
 command_w_sub="{\"$component_name\": {\"Category\":\"$category\", \"Sub-category\":\"$subcategory\", \"Channel\": \"$channel\", \"Date\": \"$created_at\"}}"

@@ -95,8 +95,13 @@ jobs:
         run: |
           # This script can set env.UPDATED to true
           ./input_files/update_yml_entries.sh
+
+      - name: Create release tar archive
+        if: env.UPDATED == 'true'
+        working-directory: "bottle-components-repository"
+        run: |
           release_archive=${{ steps.check-release.outputs.out }}
-          if [ "${{ env.UPDATED }}" = "true" ] && [[ $release_archive == *".tar.zst" ]]; then
+          if [[ $release_archive == *".tar.zst" ]]; then
             tar --use-compress-program=unzstd -xvf $release_archive
             tar -C "${{ env.NAME }}" -zcvf "${{ env.NAME }}.tar.gz" $(ls ${{ env.NAME }})
             echo "UPLOAD_FILE=$(pwd)/${{ env.NAME }}.tar.gz" >> $GITHUB_ENV
@@ -116,7 +121,7 @@ jobs:
           path: artifact
 
       - name: Update environment variables
-        if: matrix.components.workflow != '' && env.UPDATED != 'true' && steps.download-artifact.outputs.found_artifact == 'true'
+        if: env.UPDATED != 'true' && steps.download-artifact.outputs.found_artifact == 'true'
         run: |
           commit_sha1="${{ fromJSON(steps.download-artifact.outputs.artifacts)[0].workflow_run.head_sha }}"
           lowercase_component_name=$(echo "${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}-1-${commit_sha1::7}" | tr "[:upper:]" "[:lower:]")
@@ -125,27 +130,23 @@ jobs:
           echo "CREATED_AT=${{ fromJSON(steps.download-artifact.outputs.artifacts)[0].created_at }}" >> $GITHUB_ENV
 
       - name: Update unstable input_file entry
-        if: matrix.components.workflow != '' && env.UPDATED != 'true' && steps.download-artifact.outputs.found_artifact == 'true'
+        if: env.UPDATED != 'true' && steps.download-artifact.outputs.found_artifact == 'true'
         working-directory: "bottle-components-repository"
         run: |
           # This script can set env.UPDATED to true
           ./input_files/update_yml_entries.sh
-          source $GITHUB_ENV
-          if [ "${{ env.UPDATED }}" = "true" ]; then
-            folder=$(find "${{ github.workspace }}/artifact" -name "${{ env.NAMEPREFIX }}*")
-            # Components specific tweaks
-            if [[ "${{ env.NAMEPREFIX }}" == "dxvk"* ]]; then
-              rm -rf "$folder/usr"
-            fi
-            tar -C "$folder" -zcvf "${{ env.NAME }}.tar.gz" $(ls "$folder")
-            echo "UPLOAD_FILE=$(pwd)/${{ env.NAME }}.tar.gz" >> $GITHUB_ENV
-          else
-            echo "WHAAAAAATS?"
-            echo $GITHUB_ENV
-            echo "${{ env.UPDATED }}"
-            echo "UPDATED=true" >> $GITHUB_ENV
-            echo "${{ env.UPDATED }}"
+
+      - name: Create artifact tar archive
+        if: env.UPDATED == 'true' && steps.download-artifact.outputs.found_artifact == 'true'
+        working-directory: "bottle-components-repository"
+        run: |
+          folder=$(find "${{ github.workspace }}/artifact" -name "${{ env.NAMEPREFIX }}*")
+          # Components specific tweaks
+          if [[ "${{ env.NAMEPREFIX }}" == "dxvk"* ]]; then
+            rm -rf "$folder/usr"
           fi
+          tar -C "$folder" -zcvf "${{ env.NAME }}.tar.gz" $(ls "$folder")
+          echo "UPLOAD_FILE=$(pwd)/${{ env.NAME }}.tar.gz" >> $GITHUB_ENV
 
       - name: Upload component archive
         id: upload-component
