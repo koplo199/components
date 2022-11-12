@@ -1,0 +1,10 @@
+Name: vkd3d-proton-2.7-1-2dc906e
+Provider: HansKristian-Work
+Maintainer: HansKristian-Work
+Channel: unstable
+File:
+- file_name: vkd3d-proton-2.7-1-2dc906e.tar.gz
+  url: https://github.com/koplo199/components/releases/download/vkd3d-proton-2.7-1-2dc906e/vkd3d-proton-2.7-1-2dc906e.tar.gz
+  file_checksum: ddda2c281f6d4a04c86269875c6e199a
+  file_size: 2332351
+  rename: vkd3d-proton-2.7-1-2dc906e.tar.gz
