@@ -183,7 +183,6 @@ jobs:
   finish:
     needs: pull
     runs-on: ubuntu-latest
-    if: ${{ always() }}
     steps:
       - uses: actions/checkout@v3
         with:
@@ -210,3 +209,4 @@ jobs:
           delete-branch: true
           title: "Update available :tada:"
           body: One or more components have been updated!
+          token: ${{ secrets.PAT }}
