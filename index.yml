@@ -1,56 +1,49 @@
+---
+# Runtime
 # -----------------------
-# DO NOT EDIT !!!
-# THIS FILE HAS BEEN GENERATED AUTOMATICALLY
-# DO YOUR MODIFICATION IN THE 'input_files' DIRECTORY INSTEAD
-# -----------------------
-
-# ./input_files/1-runtime.yml
-# -----------------------
-runtime-0.5:
+runtime-0.5: # core component
   Category: runtimes
   Channel: stable
 
-# ./input_files/2-winebridge.yml
+# WineBridge
 # -----------------------
-winebridge-1.1.0:
+winebridge-1.1.0: # core component
   Category: winebridge
   Channel: stable
 
-# ./input_files/3-soda.yml
+# Soda
 # -----------------------
 soda-7.0-7:
-    Category: runners
-    Sub-category: wine
-    Channel: stable
-    Date: 1667427951
+  Category: runners
+  Sub-category: wine
+  Channel: stable
 soda-7.0-4:
-    Category: runners
-    Sub-category: wine
-    Channel: stable
+  Category: runners
+  Sub-category: wine
+  Channel: stable
 soda-7.0-3:
-    Category: runners
-    Sub-category: wine
-    Channel: stable
+  Category: runners
+  Sub-category: wine
+  Channel: stable
 soda-7.0-2:
-    Category: runners
-    Sub-category: wine
-    Channel: stable
+  Category: runners
+  Sub-category: wine
+  Channel: stable
 soda-7.0-1:
-    Category: runners
-    Sub-category: wine
-    Channel: stable
+  Category: runners
+  Sub-category: wine
+  Channel: stable
 soda-7.0:
-    Category: runners
-    Sub-category: wine
-    Channel: stable
+  Category: runners
+  Sub-category: wine
+  Channel: stable
 
-# ./input_files/4-caffe.yml
+# Caffe
 # -----------------------
 caffe-7.20:
   Category: runners
   Sub-category: wine
   Channel: stable
-  Date: 1667428188
 caffe-7.18:
   Category: runners
   Sub-category: wine
@@ -108,128 +101,122 @@ caffe-6.23:
   Sub-category: wine
   Channel: stable
 
-# ./input_files/5-wine-GE-Proton.yml
+# Wine GE
 # -----------------------
-wine-ge-proton7-34:
+wine-ge-7-32:
+  Category: runners
+  Sub-category: wine
+  Channel: unstable
+wine-ge-7-31:
   Category: runners
   Sub-category: wine
   Channel: stable
-  Date: '1667717572'
-wine-ge-proton7-32:
+wine-ge-7-29:
   Category: runners
   Sub-category: wine
   Channel: stable
-  Date: '0'
-wine-ge-proton7-31:
+wine-ge-7-28:
   Category: runners
   Sub-category: wine
   Channel: stable
-wine-ge-proton7-29:
+wine-ge-7-27:
   Category: runners
   Sub-category: wine
   Channel: stable
-wine-ge-proton7-28:
+wine-ge-7-26:
   Category: runners
   Sub-category: wine
   Channel: stable
-wine-ge-proton7-27:
+wine-ge-7-25:
   Category: runners
   Sub-category: wine
   Channel: stable
-wine-ge-proton7-26:
+wine-ge-7-24:
   Category: runners
   Sub-category: wine
   Channel: stable
-wine-ge-proton7-25:
+wine-ge-7-23:
   Category: runners
   Sub-category: wine
   Channel: stable
-wine-ge-proton7-24:
+wine-ge-7-22:
   Category: runners
   Sub-category: wine
   Channel: stable
-wine-ge-proton7-23:
+wine-ge-7-21:
   Category: runners
   Sub-category: wine
   Channel: stable
-wine-ge-proton7-22:
+wine-ge-7-20:
   Category: runners
   Sub-category: wine
   Channel: stable
-wine-ge-proton7-21:
+wine-ge-7-19:
   Category: runners
   Sub-category: wine
   Channel: stable
-wine-ge-proton7-20:
+wine-ge-7-18:
   Category: runners
   Sub-category: wine
   Channel: stable
-wine-ge-proton7-19:
+wine-ge-7-17:
   Category: runners
   Sub-category: wine
   Channel: stable
-wine-ge-proton7-18:
+wine-ge-7-16:
   Category: runners
   Sub-category: wine
   Channel: stable
-wine-ge-proton7-17:
+wine-ge-7-15:
   Category: runners
   Sub-category: wine
   Channel: stable
-wine-ge-proton7-16:
+wine-ge-7-14:
   Category: runners
   Sub-category: wine
   Channel: stable
-wine-ge-proton7-15:
+wine-ge-7-13:
   Category: runners
   Sub-category: wine
   Channel: stable
-wine-ge-proton7-14:
+wine-ge-7-12:
   Category: runners
   Sub-category: wine
   Channel: stable
-wine-ge-proton7-13:
+wine-ge-7-11:
   Category: runners
   Sub-category: wine
   Channel: stable
-wine-ge-proton7-12:
+wine-ge-7-10:
   Category: runners
   Sub-category: wine
   Channel: stable
-wine-ge-proton7-11:
+wine-ge-7-9:
   Category: runners
   Sub-category: wine
   Channel: stable
-wine-ge-proton7-10:
+wine-ge-7-8:
   Category: runners
   Sub-category: wine
   Channel: stable
-wine-ge-proton7-9:
+wine-ge-7-7:
   Category: runners
   Sub-category: wine
   Channel: stable
-wine-ge-proton7-8:
+wine-ge-7-6:
   Category: runners
   Sub-category: wine
   Channel: stable
-wine-ge-proton7-7:
+wine-ge-7-5:
   Category: runners
   Sub-category: wine
   Channel: stable
-wine-ge-proton7-6:
-  Category: runners
-  Sub-category: wine
-  Channel: stable
-wine-ge-proton7-5:
-  Category: runners
-  Sub-category: wine
-  Channel: stable
-wine-ge-proton7-1:
+wine-ge-7-1:
   Category: runners
   Sub-category: wine
   Channel: stable
 
-# ./input_files/6-lutris.yml
+# Lutris
 # -----------------------
 lutris-7.2-2:
   Category: runners
@@ -312,7 +299,7 @@ lutris-5.21:
   Sub-category: wine
   Channel: stable
 
-# ./input_files/7-lutris-ge.yml
+# Lutris GE
 # -----------------------
 lutris-ge-lol-7.0-5:
   Category: runners
@@ -363,7 +350,7 @@ lutris-ge-7.14-GE-1-LoL:
   Sub-category: wine
   Channel: stable
 
-# ./input_files/8-vaniglia.yml
+# Vaniglia
 # -----------------------
 vaniglia-7.18:
   Category: runners
@@ -410,7 +397,7 @@ vaniglia-6.18:
   Sub-category: wine
   Channel: stable
 
-# ./input_files/9-vaniglia-cx.yml
+# Vaniglia CX
 # -----------------------
 vaniglia-21.2.0-cx:
   Category: runners
@@ -421,128 +408,113 @@ vaniglia-21.1.0-cx:
   Sub-category: wine
   Channel: unstable
 
-# ./input_files/10-GE-Proton.yml
+# Proton GE
 # -----------------------
-ge-proton7-41:
+GE-Proton7-37:
   Category: runners
   Sub-category: proton
   Channel: stable
-  Date: '1667865399'
-ge-proton7-39:
+GE-Proton7-35:
   Category: runners
   Sub-category: proton
   Channel: stable
-  Date: '1667716250'
-ge-proton7-38:
+GE-Proton7-34:
   Category: runners
   Sub-category: proton
   Channel: stable
-  Date: 0
-ge-proton7-37:
+GE-Proton7-33:
   Category: runners
   Sub-category: proton
   Channel: stable
-ge-proton7-35:
+GE-Proton7-31:
   Category: runners
   Sub-category: proton
   Channel: stable
-ge-proton7-34:
+GE-Proton7-30:
   Category: runners
   Sub-category: proton
   Channel: stable
-ge-proton7-33:
+GE-Proton7-29:
   Category: runners
   Sub-category: proton
   Channel: stable
-ge-proton7-31:
+GE-Proton7-28:
   Category: runners
   Sub-category: proton
   Channel: stable
-ge-proton7-30:
+GE-Proton7-27:
   Category: runners
   Sub-category: proton
   Channel: stable
-ge-proton7-29:
+GE-Proton7-26:
   Category: runners
   Sub-category: proton
   Channel: stable
-ge-proton7-28:
+GE-Proton7-25:
   Category: runners
   Sub-category: proton
   Channel: stable
-ge-proton7-27:
+GE-Proton7-24:
   Category: runners
   Sub-category: proton
   Channel: stable
-ge-proton7-26:
+GE-Proton7-23:
   Category: runners
   Sub-category: proton
   Channel: stable
-ge-proton7-25:
+GE-Proton7-22:
   Category: runners
   Sub-category: proton
   Channel: stable
-ge-proton7-24:
+GE-Proton7-21:
   Category: runners
   Sub-category: proton
   Channel: stable
-ge-proton7-23:
+GE-Proton7-20:
   Category: runners
   Sub-category: proton
   Channel: stable
-ge-proton7-22:
+GE-Proton7-19:
   Category: runners
   Sub-category: proton
   Channel: stable
-ge-proton7-21:
+GE-Proton7-18:
   Category: runners
   Sub-category: proton
   Channel: stable
-ge-proton7-20:
+GE-Proton7-17:
   Category: runners
   Sub-category: proton
   Channel: stable
-ge-proton7-19:
+GE-Proton7-16:
   Category: runners
   Sub-category: proton
   Channel: stable
-ge-proton7-18:
+GE-Proton7-15:
   Category: runners
   Sub-category: proton
   Channel: stable
-ge-proton7-17:
+GE-Proton7-14:
   Category: runners
   Sub-category: proton
   Channel: stable
-ge-proton7-16:
+GE-Proton7-13:
   Category: runners
   Sub-category: proton
   Channel: stable
-ge-proton7-15:
+GE-Proton7-10:
   Category: runners
   Sub-category: proton
   Channel: stable
-ge-proton7-14:
+GE-Proton7-9:
   Category: runners
   Sub-category: proton
   Channel: stable
-ge-proton7-13:
+GE-Proton7-8:
   Category: runners
   Sub-category: proton
   Channel: stable
-ge-proton7-10:
-  Category: runners
-  Sub-category: proton
-  Channel: stable
-ge-proton7-9:
-  Category: runners
-  Sub-category: proton
-  Channel: stable
-ge-proton7-8:
-  Category: runners
-  Sub-category: proton
-  Channel: stable
-ge-proton7-4:
+GE-Proton7-4:
   Category: runners
   Sub-category: proton
   Channel: stable
@@ -579,7 +551,7 @@ Proton-4.11-GE-1:
   Sub-category: proton
   Channel: stable
 
-# ./input_files/11-kron4ek.yml
+# Kron4ek
 # -----------------------
 kron4ek-wine-7.20-amd64:
   Category: runners
@@ -1262,23 +1234,18 @@ kron4ek-wine-6.3-proton-experimental-1b31393-x86:
   Sub-category: proton
   Channel: stable
 
-# ./input_files/12-w3c.yml
+# W3c
 # -----------------------
 w3c-6.19:
   Category: runners
   Sub-category: wine
   Channel: stable
 
-# ./input_files/13-vkd3d-proton.yml
+# VKD3D
 # -----------------------
-vkd3d-proton-2.7-1-2dc906e:
-  Category: vkd3d
-  Channel: unstable
-  Date: '1668087227'
 vkd3d-proton-2.7:
   Category: vkd3d
   Channel: stable
-  Date: 1666883230
 vkd3d-proton-2.6:
   Category: vkd3d
   Channel: stable
@@ -1286,16 +1253,8 @@ vkd3d-proton-2.5:
   Category: vkd3d
   Channel: stable
 
-# ./input_files/14-dxvk.yml
+# DXVK
 # -----------------------
-dxvk-2.0:
-  Category: dxvk
-  Channel: stable
-  Date: '1668088634'
-dxvk-1.10.3:
-  Category: dxvk
-  Channel: stable
-  Date: 1659452719
 dxvk-1.10.2:
   Category: dxvk
   Channel: stable
@@ -1324,16 +1283,11 @@ dxvk-1.7.3:
   Category: dxvk
   Channel: stable
 
-# ./input_files/15-dxvk-async.yml
+# DXVK Async
 # -----------------------
-dxvk-async-2.0:
-  Category: dxvk
-  Channel: stable
-  Date: '1668169011'
 dxvk-async-1.10.3:
   Category: dxvk
   Channel: stable
-  Date: 1659536072
 dxvk-async-1.10.2:
   Category: dxvk
   Channel: stable
@@ -1347,16 +1301,11 @@ dxvk-async-1.9.4:
   Category: dxvk
   Channel: stable
 
-# ./input_files/16-dxvk-nvapi.yml
+# DXVK Nvapi
 # -----------------------
-dxvk-nvapi-v0.5.4-1-d180ab3:
-  Category: nvapi
-  Channel: unstable
-  Date: '1668262681'
 dxvk-nvapi-v0.5.4:
   Category: nvapi
   Channel: stable
-  Date: 1649403018
 dxvk-nvapi-v0.5.3:
   Category: nvapi
   Channel: stable
@@ -1370,12 +1319,8 @@ dxvk-nvapi-v0.4:
   Category: nvapi
   Channel: stable
 
-# ./input_files/17-latencyflex.yml
+# LatencyFleX
 # -----------------------
-latencyflex-v0.1.1:
-  Category: latencyflex
-  Channel: stable
-  Date: 1665280513
 latencyflex-v0.1.0:
   Category: latencyflex
   Channel: stable
