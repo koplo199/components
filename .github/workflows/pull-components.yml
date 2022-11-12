@@ -53,7 +53,7 @@ jobs:
     steps:
       - name: Check for new release
         id: check-release
-        uses: koplo199/actions-download-asset@1.0
+        uses: koplo199/actions-download-asset@master
         with:
           token: ${{secrets.GITHUB_TOKEN}}
           repo: ${{ matrix.components.repo }}
@@ -110,7 +110,7 @@ jobs:
       - name: Check for new artifact
         id: download-artifact
         if: matrix.components.workflow != '' && env.UPDATED != 'true'
-        uses: koplo199/action-download-artifact@1.0
+        uses: koplo199/action-download-artifact@master
         with:
           github_token: ${{secrets.GITHUB_TOKEN}}
           workflow: ${{ matrix.components.workflow }}
@@ -150,7 +150,7 @@ jobs:
 
       - name: Upload component archive
         id: upload-component
-        uses: koplo199/action-gh-release@1.0
+        uses: koplo199/action-gh-release@master
         if: env.UPLOAD_FILE != ''
         with:
           tag_name: "${{ env.NAME }}"
