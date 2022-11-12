@@ -1,0 +1,9 @@
+Name: dxvk-nvapi-v0.5.4-1-d180ab3
+Provider: jp7677
+Maintainer: jp7677
+Channel: unstable
+File:
+- file_name: dxvk-nvapi-v0.5.4-1-d180ab3.tar.gz
+  url: https://github.com/koplo199/components/releases/download/dxvk-nvapi-v0.5.4-1-d180ab3/dxvk-nvapi-v0.5.4-1-d180ab3.tar.gz
+  file_checksum: f5dcf88936755c8ea5dc3530c9c3148f
+  file_size: 2314872
