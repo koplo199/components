@@ -7,8 +7,6 @@ on:
 jobs:
   auto-approve:
     runs-on: ubuntu-latest
-    permissions:
-      pull-requests: write
     if: github.actor == 'koplo199'
     steps:
       - uses: hmarr/auto-approve-action@v3
