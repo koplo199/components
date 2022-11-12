@@ -210,3 +210,4 @@ jobs:
           title: "Update available :tada:"
           body: One or more components have been updated!
           token: ${{ secrets.PAT }}
+          labels: auto-update

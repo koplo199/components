@@ -1,6 +1,8 @@
 name: Accept CI PR
 
-on: pull_request_target
+on:
+  pull_request_target:
+    types: [labeled]
 
 jobs:
   auto-approve:
@@ -10,3 +12,6 @@ jobs:
     if: github.actor == 'koplo199'
     steps:
       - uses: hmarr/auto-approve-action@v3
+      - uses: alexwilson/enable-github-automerge-action@main
+        with:
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
