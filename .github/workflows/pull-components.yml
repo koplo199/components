@@ -132,6 +132,7 @@ jobs:
           ./input_files/update_yml_entries.sh
           if [ "${{ env.UPDATED }}" = "true" ]; then
             folder=$(find "${{ github.workspace }}/artifact" -name "${{ env.NAMEPREFIX }}*")
+            # Components specific tweaks
             if [[ "${{ env.NAMEPREFIX }}" == "dxvk"* ]]; then
               rm -rf "$folder/usr"
             fi
@@ -159,6 +160,12 @@ jobs:
             url="${{ fromJSON(steps.check-release.outputs.asset).browser_download_url }}"
           fi
           python "${{ github.workspace }}/tools/MaintainersHelpers/component-generator.py" "components" "${repo%/*}" "${{ env.NAME }}" "${repo%/*}" "${{ env.CHANNEL }}" "$url"
+          # Components specific tweaks
+          if [[ "${{ env.NAME }}" == "wine-ge"* ]]; then
+            echo "Post:" >> "${{ env.NAME }}.yml"
+            echo "source: lutris-${{ steps.check-release.outputs.version }}" >> "${{ env.NAME }}.yml"
+            echo "dest: ${{ env.NAME }}" >> "${{ env.NAME }}.yml"
+          fi
           mv "${{ env.NAME }}.yml" "${{ env.CATEGORY }}/${{ env.SUBCATEGORY }}"
 
       - name : Commit changes
