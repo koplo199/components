@@ -1,4 +1,4 @@
-name: Accept github-actions[bot] PR
+name: Accept CI PR
 
 on: pull_request_target
 
@@ -7,6 +7,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
-    if: github.actor == 'github-actions[bot]'
+    if: github.actor == 'koplo199'
     steps:
       - uses: hmarr/auto-approve-action@v3
