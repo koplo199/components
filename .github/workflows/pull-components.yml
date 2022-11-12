@@ -217,7 +217,9 @@ jobs:
         with:
           pull-request-number: ${{ steps.cpr.outputs.pull-request-number }}
           merge-method: squash
+          token: ${{secrets.GITHUB_TOKEN}}
 
       - uses: hmarr/auto-approve-action@v3
+        if: steps.cpr.outputs.pull-request-operation == 'created'
         with:
           pull-request-number: ${{ steps.cpr.outputs.pull-request-number }}
