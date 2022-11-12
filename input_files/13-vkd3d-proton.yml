@@ -1,3 +1,7 @@
+vkd3d-proton-2.7-1-2dc906e:
+  Category: vkd3d
+  Channel: unstable
+  Date: '1668087227'
 vkd3d-proton-2.7:
   Category: vkd3d
   Channel: stable
