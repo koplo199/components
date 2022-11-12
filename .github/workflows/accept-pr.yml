@@ -7,9 +7,8 @@ on:
 jobs:
   auto-approve:
     runs-on: ubuntu-latest
-    if: github.actor == 'koplo199'
+    permissions:
+      pull-requests: write
+    if: github.actor == 'koplo1999'
     steps:
       - uses: hmarr/auto-approve-action@v3
-      - uses: alexwilson/enable-github-automerge-action@main
-        with:
-          github-token: "${{ secrets.GITHUB_TOKEN }}"
