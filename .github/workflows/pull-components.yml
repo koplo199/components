@@ -215,7 +215,7 @@ jobs:
           git merge ${{ env.PR_BRANCH }}
           ./generate_index.sh
           git add index.yml
-          git commit -m "Generate index.yml"
+          git commit -m "Generate index.yml" || true
 
       - name: Create Pull Request
         id: cpr
