@@ -138,6 +138,9 @@ jobs:
             fi
             tar -C "$folder" -zcvf "${{ env.NAME }}.tar.gz" $(ls "$folder")
             echo "UPLOAD_FILE=$(pwd)/${{ env.NAME }}.tar.gz" >> $GITHUB_ENV
+          else
+            echo "WHAAAAAATS?"
+            echo "${{ env.UPDATED }}
           fi
 
       - name: Upload component archive
