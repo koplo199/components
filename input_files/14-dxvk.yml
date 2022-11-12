@@ -1,7 +1,7 @@
-dxvk-2.0:
+dxvk-1.10.3-1-d8933ca:
   Category: dxvk
-  Channel: stable
-  Date: '1668088634'
+  Channel: unstable
+  Date: '1667764371'
 dxvk-1.10.3:
   Category: dxvk
   Channel: stable
