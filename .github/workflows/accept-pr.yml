@@ -9,6 +9,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
-    if: github.actor == 'koplo1999'
+    if: github.actor == 'koplo199'
     steps:
       - uses: hmarr/auto-approve-action@v3
