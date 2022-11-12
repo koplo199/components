@@ -164,10 +164,12 @@ jobs:
           repo=${{ matrix.components.repo }}
           if [ "${{ env.UPLOAD_FILE }}" != "" ]; then
             url="${{ steps.upload-component.outputs.assets && fromJSON(steps.upload-component.outputs.assets)[0].browser_download_url }}"
+            path="${{ env.UPLOAD_FILE }}"
           else
             url="${{ fromJSON(steps.check-release.outputs.asset).browser_download_url }}"
+            path="${{ steps.check-release.outputs.out }}"
           fi
-          python "${{ github.workspace }}/tools/MaintainersHelpers/component-generator.py" "components" "${repo%/*}" "${{ env.NAME }}" "${repo%/*}" "${{ env.CHANNEL }}" "$url"
+          python "${{ github.workspace }}/tools/MaintainersHelpers/component-generator.py" "components" "${repo%/*}" "${{ env.NAME }}" "${repo%/*}" "${{ env.CHANNEL }}" "$url" "$path"
           # Components specific tweaks
           if [[ "${{ env.NAME }}" == "wine-ge"* ]]; then
             echo "Post:" >> "${{ env.NAME }}.yml"
