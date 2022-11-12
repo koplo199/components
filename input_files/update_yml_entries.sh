@@ -13,7 +13,7 @@ created_at=$(date -d "$created_at" +%s)
 
 echo $GITHUB_ENV
 
-GITHUB_ENV="${GITHUB_ENV-/dev/null}"
+GITHUB_ENV=${GITHUB_ENV-/dev/null}
 
 echo $GITHUB_ENV
 
