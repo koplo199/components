@@ -167,12 +167,13 @@ jobs:
           else
             url="${{ fromJSON(steps.check-release.outputs.asset).browser_download_url }}"
           fi
-          python "${{ github.workspace }}/tools/MaintainersHelpers/component-generator.py" "components" "${repo%/*}" "${{ env.NAME }}" "${repo%/*}" "${{ env.CHANNEL }}" "$url" "${{ env.NAME }}.tar${url##*tar}"
+          python "${{ github.workspace }}/tools/MaintainersHelpers/component-generator.py" "components" "${repo%/*}" "${{ env.NAME }}" "${repo%/*}" "${{ env.CHANNEL }}" "$url"
           # Components specific tweaks
           if [[ "${{ env.NAME }}" == "wine-ge"* ]]; then
             echo "Post:" >> "${{ env.NAME }}.yml"
-            echo "source: lutris-${{ steps.check-release.outputs.version }}" >> "${{ env.NAME }}.yml"
-            echo "dest: ${{ env.NAME }}" >> "${{ env.NAME }}.yml"
+            echo -e "- action: rename" >> "${{ env.NAME }}.yml"
+            echo -e "  source: lutris-${{ steps.check-release.outputs.version }}" >> "${{ env.NAME }}.yml"
+            echo -e "  dest: ${{ env.NAME }}" >> "${{ env.NAME }}.yml"
           fi
           mv "${{ env.NAME }}.yml" "${{ env.CATEGORY }}/${{ env.SUBCATEGORY }}"
 
