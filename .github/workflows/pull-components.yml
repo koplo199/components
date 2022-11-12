@@ -159,7 +159,7 @@ jobs:
           else
             url="${{ fromJSON(steps.check-release.outputs.asset).browser_download_url }}"
           fi
-          python "${{ github.workspace }}/tools/MaintainersHelpers/component-generator.py" "components" "${repo%/*}" "${{ env.NAME }}" "${repo%/*}" "${{ env.CHANNEL }}" "$url"
+          python "${{ github.workspace }}/tools/MaintainersHelpers/component-generator.py" "components" "${repo%/*}" "${{ env.NAME }}" "${repo%/*}" "${{ env.CHANNEL }}" "$url" "${{ env.NAME }}"
           # Components specific tweaks
           if [[ "${{ env.NAME }}" == "wine-ge"* ]]; then
             echo "Post:" >> "${{ env.NAME }}.yml"
