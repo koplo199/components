@@ -110,7 +110,7 @@ jobs:
       - name: Check for new artifact
         id: download-artifact
         if: matrix.components.workflow != '' && env.UPDATED != 'true'
-        uses: koplo199/action-download-artifact@master
+        uses: dawidd6/action-download-artifact@master
         with:
           github_token: ${{secrets.GITHUB_TOKEN}}
           workflow: ${{ matrix.components.workflow }}
