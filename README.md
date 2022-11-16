@@ -7,7 +7,6 @@ With a centralized repository we can provide some data such as the checksum, whi
 
 
 ## How to contribute
-
 To propose new components, it is necessary to open a [Pull Request](https://github.com/bottlesdevs/components/pulls) with the manifest of the component we want to add, here are some examples of manifest:
 - [caffe-7.2](https://github.com/bottlesdevs/components/blob/main/runners/wine/caffe-7.2.yml)
 - [Proton-5.21-GE-1](https://github.com/bottlesdevs/components/blob/main/runners/proton/Proton-5.21-GE-1.yml)
@@ -17,7 +16,6 @@ To propose new components, it is necessary to open a [Pull Request](https://gith
 To do it, there is currently two methods.
 
 ### 1 - Add an entry to the CI (prefered method)
-
 For most components, new stable versions (and experimental builds if they exist) are automatically pulled. This is accomplished by the [pull-components.yml](https://github.com/koplo199/components/blob/main/.github/workflows/pull-components.yml) workflow, where components are described in the following format:
 
 ```yaml
@@ -40,7 +38,6 @@ where:
 - **Category** and **Sub-category** are repectively the Category and Sub-category as described in the **yaml-file** (e.g. [14-dxvk.yml](https://github.com/koplo199/components/blob/main/input_files/14-dxvk.yml))
 
 ### 2 - Manually (legacy method)
-
 Each poster must follow the following layout:
 ```yaml
 Name: caffe-7.2
