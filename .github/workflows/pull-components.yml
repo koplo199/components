@@ -198,6 +198,7 @@ jobs:
   finish:
     permissions:
       pull-requests: write
+      checks: write
     needs: pull
     runs-on: ubuntu-latest
     steps:
