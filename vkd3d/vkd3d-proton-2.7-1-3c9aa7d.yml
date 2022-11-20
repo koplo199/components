@@ -1,0 +1,10 @@
+Name: vkd3d-proton-2.7-1-3c9aa7d
+Provider: HansKristian-Work
+Maintainer: HansKristian-Work
+Channel: unstable
+File:
+- file_name: vkd3d-proton-2.7-1-3c9aa7d.tar.gz
+  url: https://github.com/koplo199/components/releases/download/vkd3d-proton-2.7-1-3c9aa7d/vkd3d-proton-2.7-1-3c9aa7d.tar.gz
+  file_checksum: aeca4ae77e81a018b42a2d6c59ea3cdc
+  file_size: 2335859
+  rename: vkd3d-proton-2.7-1-3c9aa7d.tar.gz
