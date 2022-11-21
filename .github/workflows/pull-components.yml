@@ -50,7 +50,7 @@ jobs:
     steps:
       - name: Check for new release
         id: check-release
-        uses: bottlesdevs/actions-download-asset@master
+        uses: koplo199/actions-download-asset@master
         with:
           token: ${{secrets.GITHUB_TOKEN}}
           repo: ${{ matrix.components.repo }}
@@ -147,7 +147,7 @@ jobs:
 
       - name: Upload component archive
         id: upload-component
-        uses: bottlesdevs/action-gh-release@master
+        uses: softprops/action-gh-release@v1
         if: env.UPLOAD_FILE != ''
         with:
           tag_name: "${{ env.NAME }}"
