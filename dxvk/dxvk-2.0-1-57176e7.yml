@@ -1,0 +1,10 @@
+Name: dxvk-2.0-1-57176e7
+Provider: doitsujin
+Maintainer: doitsujin
+Channel: unstable
+File:
+- file_name: dxvk-2.0-1-57176e7.tar.gz
+  url: https://github.com/koplo199/components/releases/download/dxvk-2.0-1-57176e7/dxvk-2.0-1-57176e7.tar.gz
+  file_checksum: afa978f55e3126ac559c8130a50e94cd
+  file_size: 7804745
+  rename: dxvk-2.0-1-57176e7.tar.gz
