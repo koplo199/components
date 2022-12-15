@@ -1,0 +1,10 @@
+Name: dxvk-2.0-1-c55c093
+Provider: doitsujin
+Maintainer: doitsujin
+Channel: unstable
+File:
+- file_name: dxvk-2.0-1-c55c093.tar.gz
+  url: https://github.com/koplo199/components/releases/download/dxvk-2.0-1-c55c093/dxvk-2.0-1-c55c093.tar.gz
+  file_checksum: ca69a2a7791bd7827a48b0e3e5c2dca0
+  file_size: 7803666
+  rename: dxvk-2.0-1-c55c093.tar.gz
