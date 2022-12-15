@@ -1,0 +1,10 @@
+Name: vkd3d-proton-2.7-1-d0580cb
+Provider: HansKristian-Work
+Maintainer: HansKristian-Work
+Channel: unstable
+File:
+- file_name: vkd3d-proton-2.7-1-d0580cb.tar.gz
+  url: https://github.com/koplo199/components/releases/download/vkd3d-proton-2.7-1-d0580cb/vkd3d-proton-2.7-1-d0580cb.tar.gz
+  file_checksum: 3e42cb3c8de4f11a921dd04fea9342e0
+  file_size: 2379689
+  rename: vkd3d-proton-2.7-1-d0580cb.tar.gz
