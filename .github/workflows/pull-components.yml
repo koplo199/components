@@ -130,6 +130,7 @@ jobs:
             echo "UPLOAD_FILE=$(pwd)/${{ env.NAME }}.tar.gz" >> $GITHUB_ENV
           else
             curl -fsSLO "$release_archive_url"
+            mkdir "${{ env.NAME }}"
             tar -xvf $release_archive_name --directory "${{ env.NAME }}"
             tar -zcvf "${{ env.NAME }}.tar.gz" "${{ env.NAME }}"
             echo "UPLOAD_FILE=$(pwd)/${{ env.NAME }}.tar.gz" >> $GITHUB_ENV
