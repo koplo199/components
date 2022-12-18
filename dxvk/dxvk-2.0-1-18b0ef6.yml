@@ -4,7 +4,7 @@ Maintainer: doitsujin
 Channel: unstable
 File:
 - file_name: dxvk-2.0-1-18b0ef6.tar.gz
-  url: https://github.com/bottlesdevs/components/releases/download/dxvk-2.0-1-18b0ef6/dxvk-2.0-1-18b0ef6.tar.gz
-  file_checksum: f7121c4c7bebc257fbb1626690a7dd06
-  file_size: 7805255
+  url: https://github.com/koplo199/components/releases/download/dxvk-2.0-1-18b0ef6/dxvk-2.0-1-18b0ef6.tar.gz
+  file_checksum: a05c7b1fa6f3053febd1669aadec2e54
+  file_size: 7804598
   rename: dxvk-2.0-1-18b0ef6.tar.gz
