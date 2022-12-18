@@ -42,11 +42,17 @@ update_entry () {
 
 latest=$(yq -r 'path(.[])[0]' $filename | grep -m1 "$nameprefix")
 
+echo mdrrr
+echo "$latest"
+echo mdrrr 
+
 if [ -z "$latest" ]; then
     create_entry
     echo "Updated."
     echo "UPDATED=true" >> $GITHUB_ENV
     exit 0
+else 
+    echo looolll
 fi
 
 latest_channel=$(yq -r ".\"$latest\".Channel" $filename)
