@@ -1,0 +1,10 @@
+Name: dxvk-2.0-1-f94b42f
+Provider: doitsujin
+Maintainer: doitsujin
+Channel: unstable
+File:
+- file_name: dxvk-2.0-1-f94b42f.tar.gz
+  url: https://github.com/koplo199/components/releases/download/dxvk-2.0-1-f94b42f/dxvk-2.0-1-f94b42f.tar.gz
+  file_checksum: 3ce9667ed49bac1be4c77be3690d3e9b
+  file_size: 7800714
+  rename: dxvk-2.0-1-f94b42f.tar.gz
