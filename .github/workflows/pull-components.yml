@@ -84,20 +84,25 @@ jobs:
             echo "asset=$asset_json" >> $GITHUB_OUTPUT
             echo "version=${latest_release#${{ matrix.components.version-prefix }}}" >> $GITHUB_OUTPUT
           fi
+          echo "sucess=$found" >> $GITHUB_OUTPUT
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - uses: actions/checkout@v3
+        # Need this 'if' every time because of : https://github.com/actions/runner/issues/662
+        if: steps.check-release.outputs.sucess == 'true'
         with:
           path: "bottle-components-repository"
           ref: ${{ env.PR_BRANCH }}
 
       - uses: actions/checkout@v3
+        if: steps.check-release.outputs.sucess == 'true'
         with:
           repository: bottlesdevs/tools
           path: "tools"
 
       - name: Define environment variables
+        if: steps.check-release.outputs.sucess == 'true'
         run: |
           lowercase_component_name=$(echo "${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}" | tr "[:upper:]" "[:lower:]")
           echo "NAMEPREFIX=$(echo ${{ matrix.components.name-prefix }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
@@ -111,13 +116,14 @@ jobs:
 
 
       - name: Update stable input_file entry
+        if: steps.check-release.outputs.sucess == 'true'
         working-directory: "bottle-components-repository"
         run: |
           # This script can set env.UPDATED to true
           ./input_files/update_yml_entries.sh
 
       - name: Create release tar archive
-        if: env.UPDATED == 'true'
+        if: steps.check-release.outputs.sucess == 'true' && env.UPDATED == 'true'
         working-directory: "bottle-components-repository"
         run: |
           release_archive_url=${{ fromJSON(steps.check-release.outputs.asset).url }}
@@ -137,7 +143,7 @@ jobs:
 
       - name: Check for new artifact
         id: download-artifact
-        if: matrix.components.workflow != '' && env.UPDATED != 'true'
+        if: steps.check-release.outputs.sucess == 'true' && matrix.components.workflow != '' && env.UPDATED != 'true'
         uses: dawidd6/action-download-artifact@v2
         with:
           github_token: ${{secrets.GITHUB_TOKEN}}
@@ -149,7 +155,7 @@ jobs:
           path: artifact
 
       - name: Update environment variables
-        if: env.UPDATED != 'true' && steps.download-artifact.outputs.found_artifact == 'true'
+        if: steps.check-release.outputs.sucess == 'true' && env.UPDATED != 'true' && steps.download-artifact.outputs.found_artifact == 'true'
         run: |
           commit_sha1="${{ fromJSON(steps.download-artifact.outputs.artifacts)[0].workflow_run.head_sha }}"
           lowercase_component_name=$(echo "${{ matrix.components.name-prefix }}${{ steps.check-release.outputs.version }}-1-${commit_sha1::7}" | tr "[:upper:]" "[:lower:]")
@@ -158,14 +164,14 @@ jobs:
           echo "CREATED_AT=${{ fromJSON(steps.download-artifact.outputs.artifacts)[0].created_at }}" >> $GITHUB_ENV
 
       - name: Update unstable input_file entry
-        if: env.UPDATED != 'true' && steps.download-artifact.outputs.found_artifact == 'true'
+        if: steps.check-release.outputs.sucess == 'true' && env.UPDATED != 'true' && steps.download-artifact.outputs.found_artifact == 'true'
         working-directory: "bottle-components-repository"
         run: |
           # This script can set env.UPDATED to true
           ./input_files/update_yml_entries.sh
 
       - name: Create artifact tar archive
-        if: env.UPDATED == 'true' && steps.download-artifact.outputs.found_artifact == 'true'
+        if: steps.check-release.outputs.sucess == 'true' && env.UPDATED == 'true' && steps.download-artifact.outputs.found_artifact == 'true'
         working-directory: "bottle-components-repository"
         run: |
           folder=$(find "${{ github.workspace }}/artifact" -name "${{ env.NAMEPREFIX }}*")
@@ -180,15 +186,15 @@ jobs:
 
       - name: Upload component archive
         id: upload-component
+        if: steps.check-release.outputs.sucess == 'true' && env.UPLOAD_FILE != ''
         uses: softprops/action-gh-release@v1
-        if: env.UPLOAD_FILE != ''
         with:
           tag_name: "${{ env.NAME }}"
           files: |
             ${{ env.UPLOAD_FILE }}
 
       - name : Generate appropriate YAML file
-        if: env.UPDATED == 'true'
+        if: steps.check-release.outputs.sucess == 'true' && env.UPDATED == 'true'
         working-directory: "bottle-components-repository"
         run: |
           repo=${{ matrix.components.repo }}
@@ -209,7 +215,7 @@ jobs:
           mv "${{ env.NAME }}.yml" "${{ env.CATEGORY }}/${{ env.SUBCATEGORY }}"
 
       - name : Commit changes
-        if: env.UPDATED == 'true'
+        if: steps.check-release.outputs.sucess == 'true' && env.UPDATED == 'true'
         working-directory: "bottle-components-repository"
         timeout-minutes: 10
         shell: bash {0}
