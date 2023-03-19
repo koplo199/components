@@ -78,7 +78,7 @@ jobs:
             fi
           done
           if [ "$found" = false ]; then
-            echo "::warning::Cannot find asset name begining by: ${{ matrix.components.name-prefix }}"
+            echo "::error::Cannot find asset name begining by: ${{ matrix.components.name-prefix }}"
           else
             asset_json=$(gh release view "$latest_release" --json assets -q ".[] | .[$i]" -R ${{ matrix.components.repo }})
             echo "asset=$asset_json" >> $GITHUB_OUTPUT
@@ -236,6 +236,7 @@ jobs:
   finish:
     needs: pull
     runs-on: ubuntu-latest
+    if: always()
     steps:
       - uses: actions/checkout@v3
         with:
