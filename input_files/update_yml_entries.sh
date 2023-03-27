@@ -82,8 +82,11 @@ if [ "$newer" -eq 0 ]; then
     exit 1
 fi
 
+echo 1
 if [ "$channel" = "unstable" ] && [ "$latest_channel" = "unstable" ]; then
+echo 2
     if [[ $latest =~ .*-([[:digit:]])-([[:alnum:]]{7}) ]]; then
+        echo 3
         revision="${BASH_REMATCH[1]}"
         commit_sha="${BASH_REMATCH[2]}"
         ((updated_revision=$revision+1))
