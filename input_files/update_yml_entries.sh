@@ -89,6 +89,7 @@ if [ "$channel" = "unstable" ] && [ "$latest_channel" = "unstable" ]; then
         ((updated_revision=$revision+1))
         echo $revision
         echo $updated_revision
+        echo $commit_sha
         echo $component_name
         component_name=${component_name/-$revision-$commit_sha/-$updated_revision-$commit_sha}
         echo $component_name
