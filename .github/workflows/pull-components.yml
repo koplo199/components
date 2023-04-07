@@ -52,7 +52,19 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install python3-pip zstd gawk gh
-          pip3 install yq
+
+      - uses: actions/checkout@v3
+        with:
+          path: "bottle-components-repository"
+          ref: ${{ env.PR_BRANCH }}
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.x' 
+          cache: 'pip'
+          cache-dependency-path: 'bottle-components-repository/input_files/requirements-dev.txt'
+
+      - run: pip install -r bottle-components-repository/input_files/requirements-dev.txt
 
       - name: Check for new release
         id: check-release
@@ -83,11 +95,6 @@ jobs:
           fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - uses: actions/checkout@v3
-        with:
-          path: "bottle-components-repository"
-          ref: ${{ env.PR_BRANCH }}
 
       - uses: actions/checkout@v3
         with:
