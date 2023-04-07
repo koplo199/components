@@ -52,7 +52,13 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install python3-pip zstd gawk gh
-          pip3 install yq
+
+      - uses: actions/setup-python@v4
+        with:
+          cache: 'pip'
+          cache-dependency-path: 'input_files/requirements-dev.txt'
+
+      - run: pip install -r input_files/requirements-dev.txt
 
       - name: Check for new release
         id: check-release
