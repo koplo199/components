@@ -1,0 +1,10 @@
+Name: ge-proton7-54
+Provider: GloriousEggroll
+Maintainer: GloriousEggroll
+Channel: stable
+File:
+- file_name: GE-Proton7-54.tar.gz
+  url: https://github.com/GloriousEggroll/proton-ge-custom/releases/download/GE-Proton7-54/GE-Proton7-54.tar.gz
+  file_checksum: 4e7f889929daa59566ca899ab53eeb7d
+  file_size: 414903154
+  rename: GE-Proton7-54.tar.gz
