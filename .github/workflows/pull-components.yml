@@ -237,9 +237,11 @@ jobs:
           python "${{ github.workspace }}/tools/MaintainersHelpers/component-generator.py" "components" "${repo%/*}" "$name" "${repo%/*}" "${{ env.CHANNEL }}" "$url" $path
           # Components specific tweaks
           if [[ "$repo" == "GloriousEggroll/wine-ge-custom" ]]; then
+            source="${url##*/wine-}"
+            source="${source%.tar*}"
             echo "Post:" >> "$name.yml"
             echo -e "- action: rename" >> "$name.yml"
-            echo -e "  source: lutris-${{ steps.check-release.outputs.version }}" >> "$name.yml"
+            echo -e "  source: $source" >> "$name.yml"
             echo -e "  dest: $name" >> "$name.yml"
           elif [[ "$repo" == "Kron4ek/Wine-Builds" ]]; then
             echo "Post:" >> "$name.yml"
