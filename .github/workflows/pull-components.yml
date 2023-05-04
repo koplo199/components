@@ -8,10 +8,11 @@ on:
   workflow_dispatch:
 
 env:
-  PR_BRANCH: ci/${{ github.ref_name }}
+  WORKING_BRANCH: ci/${{ github.ref_name }}
+  PR_BRANCH: pr/ci/${{ github.ref_name }}
 
 concurrency: 
-  # Github Actions does not support ${{ env.PR_BRANCH }} as group name...
+  # Github Actions does not support ${{ env.WORKING_BRANCH }} as group name...
   group: ci/${{ github.ref_name }}
 
 jobs:
@@ -23,17 +24,23 @@ jobs:
           path: "bottle-components-repository"
           ref: ${{ github.ref_name }}
       
-      - name: Create or reset ${{ env.PR_BRANCH }}
+      - name: Create or reset ${{ env.WORKING_BRANCH }}
         working-directory: "bottle-components-repository"
         run: |
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git config user.name "github-actions[bot]"
-          git checkout -B ${{ env.PR_BRANCH }}
+          pr_already_exists=$(gh pr list --app 'github-actions' --head ${{ env.PR_BRANCH }} --base ${{ github.ref_name }} --state 'open' --json number --jq '.[] | .[]')
+          if ! [ -z "$pr_already_exists" ]; then
+            exit 0
+          fi
+          git checkout -B ${{ env.WORKING_BRANCH }}
           mkdir patch_dir
           touch patch_dir/.gitkeep
           git add patch_dir/.gitkeep
           git commit -m "Add .gitkeep file"
-          git push -f --set-upstream origin ${{ env.PR_BRANCH }}
+          git push -f --set-upstream origin ${{ env.WORKING_BRANCH }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   pull:
     needs: prepare
@@ -59,7 +66,7 @@ jobs:
       - uses: actions/checkout@v3
         with:
           path: "bottle-components-repository"
-          ref: ${{ env.PR_BRANCH }}
+          ref: ${{ env.WORKING_BRANCH }}
 
       - uses: actions/setup-python@v4
         with:
@@ -272,7 +279,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git add "${{ env.CATEGORY }}/${{ env.SUBCATEGORY }}/${{ env.NAME }}.yml" "input_files/${{ env.YAML_FILENAME }}"
           git commit -m "Add ${{ env.NAME }}"
-          git diff HEAD~1 HEAD > patch_dir/"${{ matrix.components.order }}-${{ env.NAME }}.patch"
+          git diff HEAD~1 HEAD > patch_dir/"${{ matrix.components.order }}-${{ env.CREATED_AT }}-${{ env.NAME }}.patch"
           git reset --hard HEAD~1
           git add patch_dir/*.patch
           git pull
@@ -293,16 +300,17 @@ jobs:
       - uses: actions/checkout@v3
         with:
           path: "bottle-components-repository"
-          ref: ${{ env.PR_BRANCH }}
+          ref: ${{ env.WORKING_BRANCH }}
           fetch-depth: 0
 
       - name: Generate index.yml
         working-directory: "bottle-components-repository"
+        shell: bash {0}
         run: |
           git checkout ${{ github.ref_name }}
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git config user.name "github-actions[bot]"
-          git merge ${{ env.PR_BRANCH }} --no-commit --no-ff
+          git merge ${{ env.WORKING_BRANCH }} --no-commit --no-ff
           git reset
           readarray -d '' entries < <(printf '%s\0' patch_dir/*.patch | sort -zV)
           for entry in "${entries[@]}"; do
@@ -320,10 +328,10 @@ jobs:
         working-directory: "bottle-components-repository"
         shell: bash {0}
         run: |
-          git checkout -B pr/${{ env.PR_BRANCH }}
-          git push -f --set-upstream origin pr/${{ env.PR_BRANCH }}
+          git checkout -B ${{ env.PR_BRANCH }}
+          git push -f --set-upstream origin ${{ env.PR_BRANCH }}
 
-          gh_output=$(gh pr create --title "Update available :tada:" --body "One or more components have been updated!" --head pr/${{ env.PR_BRANCH }} --base ${{ github.ref_name }})
+          gh_output=$(gh pr create --title "Update available :tada:" --body "One or more components have been updated!" --head ${{ env.PR_BRANCH }} --base ${{ github.ref_name }})
           echo "PR_CREATED=$([ $? -eq 0 ] && echo true || echo false)" >> $GITHUB_OUTPUT
           pr_number=$($gh_output | tail -n1)
           echo "PR_NUMBER=${pr_number#https://github.com/${{ github.repository }}/pull/}" >> $GITHUB_OUTPUT
