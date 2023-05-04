@@ -1,0 +1,10 @@
+Name: dxvk-2.1-2-b357d16
+Provider: doitsujin
+Maintainer: doitsujin
+Channel: unstable
+File:
+- file_name: dxvk-2.1-2-b357d16.tar.gz
+  url: https://github.com/koplo199/components/releases/download/dxvk-2.1-2-b357d16/dxvk-2.1-2-b357d16.tar.gz
+  file_checksum: 5bbd0f61a0a02605563ce0287da8ea97
+  file_size: 7932508
+  rename: dxvk-2.1-2-b357d16.tar.gz
