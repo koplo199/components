@@ -1,0 +1,33 @@
+diff --git a/input_files/10-GE-Proton.yml b/input_files/10-GE-Proton.yml
+index 691385c..f7b692e 100644
+--- a/input_files/10-GE-Proton.yml
++++ b/input_files/10-GE-Proton.yml
+@@ -1,3 +1,8 @@
++ge-proton8-14:
++  Category: runners
++  Sub-category: proton
++  Channel: stable
++  Date: '1693595016'
+ ge-proton8-13:
+   Category: runners
+   Sub-category: proton
+diff --git a/runners/proton/ge-proton8-14.yml b/runners/proton/ge-proton8-14.yml
+new file mode 100644
+index 0000000..66efcaf
+--- /dev/null
++++ b/runners/proton/ge-proton8-14.yml
+@@ -0,0 +1,14 @@
++Name: ge-proton8-14
++Provider: GloriousEggroll
++Maintainer: CI
++Channel: stable
++File:
++- file_name: GE-Proton8-14.tar.gz
++  url: https://github.com/GloriousEggroll/proton-ge-custom/releases/download/GE-Proton8-14/GE-Proton8-14.tar.gz
++  file_checksum: 3c24590de161c376be58c5a38bd65357
++  file_size: 443044180
++  rename: GE-Proton8-14.tar.gz
++Post:
++- action: rename
++  source: GE-Proton8-14
++  dest: ge-proton8-14
