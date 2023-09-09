@@ -1,0 +1,31 @@
+diff --git a/input_files/16-dxvk-nvapi.yml b/input_files/16-dxvk-nvapi.yml
+index cd68b61..cd497b3 100644
+--- a/input_files/16-dxvk-nvapi.yml
++++ b/input_files/16-dxvk-nvapi.yml
+@@ -1,7 +1,7 @@
+-dxvk-nvapi-v0.6.3-4-26452ea:
++dxvk-nvapi-v0.6.4:
+   Category: nvapi
+-  Channel: unstable
+-  Date: '1692737701'
++  Channel: stable
++  Date: '1694242161'
+ dxvk-nvapi-v0.6.3:
+   Category: nvapi
+   Channel: stable
+diff --git a/nvapi/dxvk-nvapi-v0.6.4.yml b/nvapi/dxvk-nvapi-v0.6.4.yml
+new file mode 100644
+index 0000000..9c6e938
+--- /dev/null
++++ b/nvapi/dxvk-nvapi-v0.6.4.yml
+@@ -0,0 +1,10 @@
++Name: dxvk-nvapi-v0.6.4
++Provider: jp7677
++Maintainer: CI
++Channel: stable
++File:
++- file_name: dxvk-nvapi-v0.6.4.tar.gz
++  url: https://github.com/koplo199/components/releases/download/dxvk-nvapi-v0.6.4/dxvk-nvapi-v0.6.4.tar.gz
++  file_checksum: e7dceddfc2ed81c7fe41dd76b5be5826
++  file_size: 2592567
++  rename: dxvk-nvapi-v0.6.4.tar.gz
