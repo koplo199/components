@@ -1,0 +1,31 @@
+diff --git a/input_files/13-vkd3d-proton.yml b/input_files/13-vkd3d-proton.yml
+index 407064c..13c6641 100644
+--- a/input_files/13-vkd3d-proton.yml
++++ b/input_files/13-vkd3d-proton.yml
+@@ -1,7 +1,7 @@
+-vkd3d-proton-2.9-6-c10f889:
++vkd3d-proton-2.10:
+   Category: vkd3d
+-  Channel: unstable
+-  Date: '1694016894'
++  Channel: stable
++  Date: '1694440369'
+ vkd3d-proton-2.9:
+   Category: vkd3d
+   Channel: stable
+diff --git a/vkd3d/vkd3d-proton-2.10.yml b/vkd3d/vkd3d-proton-2.10.yml
+new file mode 100644
+index 0000000..c0870de
+--- /dev/null
++++ b/vkd3d/vkd3d-proton-2.10.yml
+@@ -0,0 +1,10 @@
++Name: vkd3d-proton-2.10
++Provider: HansKristian-Work
++Maintainer: CI
++Channel: stable
++File:
++- file_name: vkd3d-proton-2.10.tar.gz
++  url: https://github.com/koplo199/components/releases/download/vkd3d-proton-2.10/vkd3d-proton-2.10.tar.gz
++  file_checksum: c255be97d3e088b2ea6713ee5be3c19f
++  file_size: 2557788
++  rename: vkd3d-proton-2.10.tar.gz
