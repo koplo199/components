@@ -1,0 +1,28 @@
+diff --git a/dxvk/dxvk-2.3-1-494f7fd.yml b/dxvk/dxvk-2.3-1-494f7fd.yml
+new file mode 100644
+index 0000000..963bde2
+--- /dev/null
++++ b/dxvk/dxvk-2.3-1-494f7fd.yml
+@@ -0,0 +1,10 @@
++Name: dxvk-2.3-1-494f7fd
++Provider: doitsujin
++Maintainer: CI
++Channel: unstable
++File:
++- file_name: dxvk-2.3-1-494f7fd.tar.gz
++  url: https://github.com/koplo199/components/releases/download/dxvk-2.3-1-494f7fd/dxvk-2.3-1-494f7fd.tar.gz
++  file_checksum: d3c898566ca7fa9cafac2bf00a219a43
++  file_size: 8188290
++  rename: dxvk-2.3-1-494f7fd.tar.gz
+diff --git a/input_files/14-dxvk.yml b/input_files/14-dxvk.yml
+index ed02f34..c6aab8c 100644
+--- a/input_files/14-dxvk.yml
++++ b/input_files/14-dxvk.yml
+@@ -1,3 +1,7 @@
++dxvk-2.3-1-494f7fd:
++  Category: dxvk
++  Channel: unstable
++  Date: '1695155115'
+ dxvk-2.3:
+   Category: dxvk
+   Channel: stable
