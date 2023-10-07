@@ -1,0 +1,30 @@
+diff --git a/dxvk/dxvk-2.3-2-4d97468.yml b/dxvk/dxvk-2.3-2-4d97468.yml
+new file mode 100644
+index 0000000..81473c6
+--- /dev/null
++++ b/dxvk/dxvk-2.3-2-4d97468.yml
+@@ -0,0 +1,10 @@
++Name: dxvk-2.3-2-4d97468
++Provider: doitsujin
++Maintainer: CI
++Channel: unstable
++File:
++- file_name: dxvk-2.3-2-4d97468.tar.gz
++  url: https://github.com/koplo199/components/releases/download/dxvk-2.3-2-4d97468/dxvk-2.3-2-4d97468.tar.gz
++  file_checksum: 046b6d8d04f751b0e134db6c04fb922a
++  file_size: 8188945
++  rename: dxvk-2.3-2-4d97468.tar.gz
+diff --git a/input_files/14-dxvk.yml b/input_files/14-dxvk.yml
+index c6aab8c..322f76c 100644
+--- a/input_files/14-dxvk.yml
++++ b/input_files/14-dxvk.yml
+@@ -1,7 +1,7 @@
+-dxvk-2.3-1-494f7fd:
++dxvk-2.3-2-4d97468:
+   Category: dxvk
+   Channel: unstable
+-  Date: '1695155115'
++  Date: '1696593942'
+ dxvk-2.3:
+   Category: dxvk
+   Channel: stable
