@@ -1,0 +1,10 @@
+Name: vkd3d-proton-2.10-1-76d3ca1
+Provider: HansKristian-Work
+Maintainer: CI
+Channel: unstable
+File:
+- file_name: vkd3d-proton-2.10-1-76d3ca1.tar.gz
+  url: https://github.com/koplo199/components/releases/download/vkd3d-proton-2.10-1-76d3ca1/vkd3d-proton-2.10-1-76d3ca1.tar.gz
+  file_checksum: 29336e1ec22293559c4e656ca6620bf3
+  file_size: 2564003
+  rename: vkd3d-proton-2.10-1-76d3ca1.tar.gz
