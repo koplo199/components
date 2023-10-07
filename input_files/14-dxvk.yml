@@ -1,7 +1,11 @@
-dxvk-2.2-6-4ae542e:
+dxvk-2.3-2-4d97468:
   Category: dxvk
   Channel: unstable
-  Date: '1692051870'
+  Date: '1696593942'
+dxvk-2.3:
+  Category: dxvk
+  Channel: stable
+  Date: '1693843406'
 dxvk-2.2:
   Category: dxvk
   Channel: stable

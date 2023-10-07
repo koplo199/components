@@ -1,0 +1,10 @@
+Name: dxvk-2.2-7-7e10021
+Provider: doitsujin
+Maintainer: CI
+Channel: unstable
+File:
+- file_name: dxvk-2.2-7-7e10021.tar.gz
+  url: https://github.com/koplo199/components/releases/download/dxvk-2.2-7-7e10021/dxvk-2.2-7-7e10021.tar.gz
+  file_checksum: f6f1f2949c0e39a8274cd73fd0497e06
+  file_size: 8187582
+  rename: dxvk-2.2-7-7e10021.tar.gz

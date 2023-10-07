@@ -1,3 +1,18 @@
+wine-ge-proton8-17:
+  Category: runners
+  Sub-category: wine
+  Channel: stable
+  Date: '1695631876'
+wine-ge-proton8-16:
+  Category: runners
+  Sub-category: wine
+  Channel: stable
+  Date: '1695540967'
+wine-ge-proton8-15:
+  Category: runners
+  Sub-category: wine
+  Channel: stable
+  Date: '1694969662'
 wine-ge-proton8-14:
   Category: runners
   Sub-category: wine

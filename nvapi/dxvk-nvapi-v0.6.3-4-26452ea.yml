@@ -1,0 +1,10 @@
+Name: dxvk-nvapi-v0.6.3-4-26452ea
+Provider: jp7677
+Maintainer: CI
+Channel: unstable
+File:
+- file_name: dxvk-nvapi-v0.6.3-4-26452ea.tar.gz
+  url: https://github.com/koplo199/components/releases/download/dxvk-nvapi-v0.6.3-4-26452ea/dxvk-nvapi-v0.6.3-4-26452ea.tar.gz
+  file_checksum: ba2d52f4a676cd89a740db8be962234c
+  file_size: 2563772
+  rename: dxvk-nvapi-v0.6.3-4-26452ea.tar.gz
