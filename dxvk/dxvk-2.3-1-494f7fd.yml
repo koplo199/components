@@ -1,0 +1,10 @@
+Name: dxvk-2.3-1-494f7fd
+Provider: doitsujin
+Maintainer: CI
+Channel: unstable
+File:
+- file_name: dxvk-2.3-1-494f7fd.tar.gz
+  url: https://github.com/koplo199/components/releases/download/dxvk-2.3-1-494f7fd/dxvk-2.3-1-494f7fd.tar.gz
+  file_checksum: d3c898566ca7fa9cafac2bf00a219a43
+  file_size: 8188290
+  rename: dxvk-2.3-1-494f7fd.tar.gz
