@@ -1,0 +1,33 @@
+diff --git a/input_files/5-wine-GE-Proton.yml b/input_files/5-wine-GE-Proton.yml
+index 8f160f1..f466b1d 100644
+--- a/input_files/5-wine-GE-Proton.yml
++++ b/input_files/5-wine-GE-Proton.yml
+@@ -1,3 +1,8 @@
++wine-ge-proton8-18:
++  Category: runners
++  Sub-category: wine
++  Channel: stable
++  Date: '1697346788'
+ wine-ge-proton8-17:
+   Category: runners
+   Sub-category: wine
+diff --git a/runners/wine/wine-ge-proton8-18.yml b/runners/wine/wine-ge-proton8-18.yml
+new file mode 100644
+index 0000000..fe1f162
+--- /dev/null
++++ b/runners/wine/wine-ge-proton8-18.yml
+@@ -0,0 +1,14 @@
++Name: wine-ge-proton8-18
++Provider: GloriousEggroll
++Maintainer: CI
++Channel: stable
++File:
++- file_name: wine-lutris-GE-Proton8-18-x86_64.tar.xz
++  url: https://github.com/GloriousEggroll/wine-ge-custom/releases/download/GE-Proton8-18/wine-lutris-GE-Proton8-18-x86_64.tar.xz
++  file_checksum: cb0014446f65788025afe60293a54f20
++  file_size: 317934476
++  rename: wine-lutris-GE-Proton8-18-x86_64.tar.xz
++Post:
++- action: rename
++  source: lutris-GE-Proton8-18
++  dest: wine-ge-proton8-18
