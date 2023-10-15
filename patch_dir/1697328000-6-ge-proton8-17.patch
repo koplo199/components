@@ -1,0 +1,33 @@
+diff --git a/input_files/10-GE-Proton.yml b/input_files/10-GE-Proton.yml
+index e75e21c..ba2a5bb 100644
+--- a/input_files/10-GE-Proton.yml
++++ b/input_files/10-GE-Proton.yml
+@@ -1,3 +1,8 @@
++ge-proton8-17:
++  Category: runners
++  Sub-category: proton
++  Channel: stable
++  Date: '1697345261'
+ ge-proton8-16:
+   Category: runners
+   Sub-category: proton
+diff --git a/runners/proton/ge-proton8-17.yml b/runners/proton/ge-proton8-17.yml
+new file mode 100644
+index 0000000..1879c67
+--- /dev/null
++++ b/runners/proton/ge-proton8-17.yml
+@@ -0,0 +1,14 @@
++Name: ge-proton8-17
++Provider: GloriousEggroll
++Maintainer: CI
++Channel: stable
++File:
++- file_name: GE-Proton8-17.tar.gz
++  url: https://github.com/GloriousEggroll/proton-ge-custom/releases/download/GE-Proton8-17/GE-Proton8-17.tar.gz
++  file_checksum: a7f5856fc5d7d9dacfc280cfd3db7390
++  file_size: 442487715
++  rename: GE-Proton8-17.tar.gz
++Post:
++- action: rename
++  source: GE-Proton8-17
++  dest: ge-proton8-17
