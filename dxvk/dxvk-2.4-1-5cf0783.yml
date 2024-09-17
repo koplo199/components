@@ -1,0 +1,10 @@
+Name: dxvk-2.4-1-5cf0783
+Provider: doitsujin
+Maintainer: CI
+Channel: unstable
+File:
+- file_name: dxvk-2.4-1-5cf0783.tar.gz
+  url: https://github.com/koplo199/components/releases/download/dxvk-2.4-1-5cf0783/dxvk-2.4-1-5cf0783.tar.gz
+  file_checksum: 9631997fad81635a514489c79e4c32b1
+  file_size: 9237865
+  rename: dxvk-2.4-1-5cf0783.tar.gz
