@@ -1,0 +1,10 @@
+Name: dxvk-2.4-1-f3fa4b1
+Provider: doitsujin
+Maintainer: CI
+Channel: unstable
+File:
+- file_name: dxvk-2.4-1-f3fa4b1.tar.gz
+  url: https://github.com/koplo199/components/releases/download/dxvk-2.4-1-f3fa4b1/dxvk-2.4-1-f3fa4b1.tar.gz
+  file_checksum: f0d41cb7676eb726bb44543c3dc43f54
+  file_size: 9231954
+  rename: dxvk-2.4-1-f3fa4b1.tar.gz
